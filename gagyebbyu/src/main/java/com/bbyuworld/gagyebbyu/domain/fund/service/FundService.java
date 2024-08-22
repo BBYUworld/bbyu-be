@@ -31,7 +31,11 @@ public class FundService {
 	public void createFund(long coupleId, FundCreateDto fundCreateDto) {
 		Couple couple = coupleRepository.findById(coupleId)
 			.orElseThrow(() -> new DataNotFoundException((ErrorCode.COUPLE_NOT_FOUND)));
-		
+
 		fundRepository.save(fundCreateDto.toEntity(couple));
+	}
+
+	public void deleteFund(long fundId) {
+		fundRepository.deleteById(fundId);
 	}
 }
