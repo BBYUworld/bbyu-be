@@ -19,4 +19,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .where(user.userId.eq(userId))
                 .fetchOne();
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return queryFactory.selectFrom(user)
+                .where(user.email.eq(email))
+                .fetchOne();
+    }
 }

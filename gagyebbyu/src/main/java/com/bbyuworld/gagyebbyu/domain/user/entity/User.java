@@ -55,6 +55,9 @@ public class User {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
+	@Column(nullable = false, length=100)
+	private String password;
+
 	@Column(length = 100)
 	private String nickname;
 
@@ -70,7 +73,7 @@ public class User {
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Integer monthlyTargetAmount,
-		String refreshToken, String accessToken, Long coupleId) {
+		String refreshToken, String accessToken, Long coupleId, String password) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -80,6 +83,7 @@ public class User {
 		this.phone = phone;
 		this.isLogin = isLogin;
 		this.email = email;
+		this.password=password;
 		this.nickname = nickname;
 		this.monthlyTargetAmount = monthlyTargetAmount;
 		this.refreshToken = refreshToken;
@@ -100,6 +104,7 @@ public class User {
 				.phone(this.phone)
 				.isLogin(this.isLogin)
 				.email(this.email)
+				.password(this.password)
 				.nickname(this.nickname)
 				.monthlyTargetAmount(this.monthlyTargetAmount)
 				.refreshToken(this.refreshToken)

@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestBody UserDto user){
-
+        System.out.println("user = "+user);
+        return "no";
     }
 }
