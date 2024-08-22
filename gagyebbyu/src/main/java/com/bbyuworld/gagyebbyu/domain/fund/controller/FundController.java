@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.fund.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundTransactionCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundOverViewDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundStatusDto;
+import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundTransactionDto;
 import com.bbyuworld.gagyebbyu.domain.fund.service.FundService;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +74,16 @@ public class FundController {
 		// UserContext.getUserId()
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(fundService.createFundTransaction(fundId, 1, fundTransactionCreateDto));
+	}
+
+	/**
+	 * 펀딩 입출금 기록 조회
+	 * @param fundId
+	 * @return
+	 */
+	@GetMapping(path = "transaction/{fundId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<FundTransactionDto>> getFundTransaction(@PathVariable long fundId) {
+		return ResponseEntity.ok(fundService.getFundTransaction(fundId));
 	}
 
 }

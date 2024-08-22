@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 public class FundTransactionCreateDto {
 
 	private long amount;
-	private String type;
+	private TransactionType type;
 
 	public FundTransaction toEntity(User user, Fund fund) {
 		return FundTransaction.builder()
 			.user(user)
 			.couple(fund.getCouple())
 			.amount(amount)
-			.type(TransactionType.getType(type))
+			.type(type)
 			.fund(fund)
 			.build();
 	}
