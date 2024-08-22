@@ -12,7 +12,6 @@ public final class FundCreateDto {
 
 	private String goal;
 	private long targetAmount;
-	private long currentAmount;
 
 	public Fund toEntity(Couple couple) {
 		return Fund.builder()
