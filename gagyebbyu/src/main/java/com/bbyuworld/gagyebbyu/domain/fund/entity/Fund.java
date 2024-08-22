@@ -60,4 +60,8 @@ public class Fund {
 		this.emergency = 0;
 	}
 
+	public void updateFund(long money) {
+		currentAmount += money;
+	}
+
 }
