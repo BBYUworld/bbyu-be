@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundTransactionCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundOverViewDto;
+import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundStatusDto;
 import com.bbyuworld.gagyebbyu.domain.fund.service.FundService;
 
 import lombok.RequiredArgsConstructor;
@@ -65,11 +66,11 @@ public class FundController {
 	 */
 	@PostMapping(path = "/transaction/{fundId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	// @RequireJwtToken 동길오빠 코드 풀 받으면 수정~
-	public ResponseEntity<Void> createFundTransaction(@PathVariable long fundId,
+	public ResponseEntity<FundStatusDto> createFundTransaction(@PathVariable long fundId,
 		@RequestBody FundTransactionCreateDto fundTransactionCreateDto) {
 		// UserContext.getUserId()
-		fundService.createFundTransaction(fundId, 1, fundTransactionCreateDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(fundService.createFundTransaction(fundId, 1, fundTransactionCreateDto));
 	}
 
 }

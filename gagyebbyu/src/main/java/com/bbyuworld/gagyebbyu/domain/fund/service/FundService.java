@@ -7,6 +7,7 @@ import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundTransactionCreateDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundOverViewDto;
+import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundStatusDto;
 import com.bbyuworld.gagyebbyu.domain.fund.entity.Fund;
 import com.bbyuworld.gagyebbyu.domain.fund.repository.FundRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.repository.FundTransactionRepository;
@@ -27,9 +28,10 @@ public class FundService {
 	private final CoupleRepository coupleRepository;
 	private final UserRepository userRepository;
 	private final FundTransactionRepository fundTransactionRepository;
+	private final FundValidService fundValidService;
 
 	public FundOverViewDto getFund(long coupleId) {
-		Fund fund = fundRepository.findByCouple_CoupleId(coupleId)
+		Fund fund = fundRepository.findByCouple_CoupleIdAndIsEndedIsFalse(coupleId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_EXIST));
 
 		return FundOverViewDto.from(fund);
@@ -49,7 +51,8 @@ public class FundService {
 	}
 
 	@Transactional
-	public void createFundTransaction(long fundId, long userId, FundTransactionCreateDto fundTransactionCreateDto) {
+	public FundStatusDto createFundTransaction(long fundId, long userId,
+		FundTransactionCreateDto fundTransactionCreateDto) {
 		Fund fund = fundRepository.findById(fundId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_FOUND));
 
@@ -59,5 +62,10 @@ public class FundService {
 		fundTransactionRepository.save(fundTransactionCreateDto.toEntity(user, fund));
 
 		fund.updateFund(fundTransactionCreateDto.getAmount());
+
+		fundValidService.isAchievedFund(fund);
+
+		return FundStatusDto.from(fund);
+
 	}
 }
