@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.user.entity;
 
+import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -84,5 +85,63 @@ public class User {
 		this.refreshToken = refreshToken;
 		this.accessToken = accessToken;
 		this.coupleId = coupleId;
+	}
+
+	public UserDto toDto() {
+		return UserDto.builder()
+				.userId(this.userId)
+				.coupleId(this.coupleId)
+				.name(this.name)
+				.gender(this.gender)
+				.age(this.age)
+				.monthlyIncome(this.monthlyIncome)
+				.ratingName(this.ratingName)
+				.isDeleted(this.isDeleted)
+				.phone(this.phone)
+				.isLogin(this.isLogin)
+				.email(this.email)
+				.nickname(this.nickname)
+				.monthlyTargetAmount(this.monthlyTargetAmount)
+				.refreshToken(this.refreshToken)
+				.accessToken(this.accessToken)
+				.build();
+	}
+
+	// Converts UserDto to User entity
+	public static User fromDto(UserDto userDto) {
+		return User.builder()
+				.coupleId(userDto.getCoupleId())
+				.name(userDto.getName())
+				.gender(userDto.getGender())
+				.age(userDto.getAge())
+				.monthlyIncome(userDto.getMonthlyIncome())
+				.ratingName(userDto.getRatingName())
+				.isDeleted(userDto.isDeleted())
+				.phone(userDto.getPhone())
+				.isLogin(userDto.isLogin())
+				.email(userDto.getEmail())
+				.nickname(userDto.getNickname())
+				.monthlyTargetAmount(userDto.getMonthlyTargetAmount())
+				.refreshToken(userDto.getRefreshToken())
+				.accessToken(userDto.getAccessToken())
+				.build();
+	}
+
+	// Updates User entity's properties from a UserDto
+	public void setProperties(UserDto userDto) {
+//		if (userDto.getCoupleId != null) this.coupleId = userDto.getCoupleId();
+		if (userDto.getName() != null) this.name = userDto.getName();
+		if (userDto.getGender() != null) this.gender = userDto.getGender();
+		if (userDto.getAge() != null) this.age = userDto.getAge();
+		if (userDto.getMonthlyIncome() != null) this.monthlyIncome = userDto.getMonthlyIncome();
+		if (userDto.getRatingName() != null) this.ratingName = userDto.getRatingName();
+		this.isDeleted = userDto.isDeleted();
+		if (userDto.getPhone() != null) this.phone = userDto.getPhone();
+		this.isLogin = userDto.isLogin();
+		if (userDto.getEmail() != null) this.email = userDto.getEmail();
+		if (userDto.getNickname() != null) this.nickname = userDto.getNickname();
+		if (userDto.getMonthlyTargetAmount() != null) this.monthlyTargetAmount = userDto.getMonthlyTargetAmount();
+		if (userDto.getRefreshToken() != null) this.refreshToken = userDto.getRefreshToken();
+		if (userDto.getAccessToken() != null) this.accessToken = userDto.getAccessToken();
 	}
 }
