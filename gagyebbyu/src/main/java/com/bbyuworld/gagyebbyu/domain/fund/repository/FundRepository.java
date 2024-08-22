@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.entity.Fund;
 
 public interface FundRepository extends JpaRepository<Fund, Long> {
-	Optional<Fund> findByCoupleId(long coupleId);
+	Optional<Fund> findByCouple_CoupleId(long coupleId);
 }

@@ -1,5 +1,8 @@
 package com.bbyuworld.gagyebbyu.domain.fund.dto.request;
 
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.fund.entity.Fund;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,11 +14,11 @@ public final class FundCreateDto {
 	private long targetAmount;
 	private long currentAmount;
 
-	// public Fund toEntity(Couple couple) {
-	// 	return Fund.builder()
-	// 		.couple(couple)
-	// 		.goal(goal)
-	// 		.targetAmount(targetAmount)
-	// 		.build();
-	// }
+	public Fund toEntity(Couple couple) {
+		return Fund.builder()
+			.couple(couple)
+			.goal(goal)
+			.targetAmount(targetAmount)
+			.build();
+	}
 }

@@ -18,7 +18,7 @@ public class FundService {
 	private final FundRepository fundRepository;
 
 	public FundOverViewDto getFund(long coupleId) {
-		Fund fund = fundRepository.findByCoupleId(coupleId)
+		Fund fund = fundRepository.findByCouple_CoupleId(coupleId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_FOUND));
 
 		return FundOverViewDto.from(fund);

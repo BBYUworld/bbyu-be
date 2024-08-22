@@ -2,13 +2,18 @@ package com.bbyuworld.gagyebbyu.domain.fund.entity;
 
 import java.time.LocalDateTime;
 
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,9 +27,9 @@ public class Fund {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long fundId;
 
-	// @ManyToOne
-	// @JoinColumn(name="couple_id", nullable = false)
-	// private Couple couple;
+	@ManyToOne
+	@JoinColumn(name = "couple_id", nullable = false)
+	private Couple couple;
 
 	@Column(name = "goal", nullable = false)
 	private String goal;
@@ -44,15 +49,15 @@ public class Fund {
 	@Column(name = "emergency", nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int emergency;
 
-	// @Builder
-	// public Fund(Couple couple, String goal, long targetAmount, int emergency) {
-	// 	this.couple = couple;
-	// 	this.goal = goal;
-	// 	this.targetAmount = targetAmount;
-	// 	this.startDate = LocalDateTime.now();
-	// 	this.endDate = LocalDateTime.now();
-	// 	this.currentAmount = 0L;
-	// 	this.emergency = 0;
-	// }
+	@Builder
+	public Fund(Couple couple, String goal, long targetAmount, int emergency) {
+		this.couple = couple;
+		this.goal = goal;
+		this.targetAmount = targetAmount;
+		this.startDate = LocalDateTime.now();
+		this.endDate = LocalDateTime.now();
+		this.currentAmount = 0L;
+		this.emergency = 0;
+	}
 
 }
