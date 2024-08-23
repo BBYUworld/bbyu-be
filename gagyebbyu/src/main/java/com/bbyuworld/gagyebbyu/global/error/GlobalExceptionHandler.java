@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.global.error;
 
+import com.bbyuworld.gagyebbyu.global.error.type.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +29,10 @@ public class GlobalExceptionHandler {
 	private ResponseEntity<AcceptedResponse> createAcceptedResponse(AcceptedCode acceptedCode) {
 		return new ResponseEntity<>(AcceptedResponse.of(acceptedCode.getCode(), acceptedCode.getMessage()),
 			acceptedCode.getHttpStatus());
+	}
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException e) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 
 	@ExceptionHandler(UserNotFoundException.class)
