@@ -31,7 +31,13 @@ public enum ErrorCode {
 	 * Fund
 	 */
 	FUND_NOT_FOUND(BAD_REQUEST, "FUND-000", "fundId에 해당하는 Fund가 존재하지 않습니다."),
-	FUND_NOT_EXIST(BAD_REQUEST, "FUND-001", "부부가 생성한 Fund가 없습니다.");
+	FUND_NOT_EXIST(BAD_REQUEST, "FUND-001", "부부가 생성한 Fund가 없습니다."),
+	FUND_EXCEED_EMERGENCY(BAD_REQUEST, "FUND-002", "최대 긴급 출금 횟수를 초과하였습니다."),
+
+	/**
+	 * Expense
+	 */
+	EXPENSE_NOT_FOUND(BAD_REQUEST, "EXPENSE-000", "expenseId에 해당하는 Expense가 존재하지 않습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;

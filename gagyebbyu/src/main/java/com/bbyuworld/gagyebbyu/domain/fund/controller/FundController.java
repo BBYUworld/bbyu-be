@@ -19,6 +19,8 @@ import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundOverViewDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundStatusDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundTransactionDto;
 import com.bbyuworld.gagyebbyu.domain.fund.service.FundService;
+import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
+import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,18 +64,17 @@ public class FundController {
 	}
 
 	/**
-	 * 펀딩 금액 입금
+	 * 펀딩 금액 입출금
 	 * @param fundId
 	 * @param fundTransactionCreateDto
 	 * @return
 	 */
 	@PostMapping(path = "/transaction/{fundId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	// @RequireJwtToken 동길오빠 코드 풀 받으면 수정~
+	@RequireJwtToken
 	public ResponseEntity<FundStatusDto> createFundTransaction(@PathVariable long fundId,
 		@RequestBody FundTransactionCreateDto fundTransactionCreateDto) {
-		// UserContext.getUserId()
 		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(fundService.createFundTransaction(fundId, 1, fundTransactionCreateDto));
+			.body(fundService.createFundTransaction(fundId, UserContext.getUserId(), fundTransactionCreateDto));
 	}
 
 	/**
