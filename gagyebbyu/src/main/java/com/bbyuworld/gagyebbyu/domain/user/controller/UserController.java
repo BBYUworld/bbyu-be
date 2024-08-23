@@ -4,6 +4,7 @@ import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
+
     private final UserService userService;
 
     /**
@@ -23,9 +25,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/regist")
-    public String regist(@RequestBody UserDto user) {
+    public String regist(@RequestBody UserDto user) throws JsonProcessingException {
         System.out.println("User = "+user);
         userService.regist(user);
+//        userService.test(user.getEmail());
         return "hello";
     }
 
@@ -48,6 +51,7 @@ public class UserController {
     @RequireJwtToken
     public String deleteUser(){
         Long userId = UserContext.getUserId();
-
+        userService.deleteUser(userId);
+        return "delete";
     }
 }
