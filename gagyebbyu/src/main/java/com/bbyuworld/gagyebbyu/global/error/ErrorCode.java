@@ -19,6 +19,8 @@ public enum ErrorCode {
 	 */
 	USER_FORBIDDEN_ERROR(FORBIDDEN, "USER-000", "사용자의 접근 권한이 없습니다."),
 	USER_NOT_FOUND(UNAUTHORIZED, "USER-001", "사용자가 존재하지 않습니다."),
+	USER_ALREADY_EXIST(BAD_REQUEST, "USER-002", "사용자가 이미 존재합니다."),
+	USER_DELETE_ERROR(BAD_REQUEST, "USER-003", "삭제된 사용자 계정입니다."),
 
 	/**
 	 * Couple

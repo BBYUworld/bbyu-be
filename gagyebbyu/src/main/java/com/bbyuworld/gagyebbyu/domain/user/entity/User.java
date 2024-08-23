@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.user.entity;
 
+import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,14 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "user")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
@@ -54,6 +53,9 @@ public class User {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
+	@Column(nullable = false, length=100)
+	private String password;
+
 	@Column(length = 100)
 	private String nickname;
 
@@ -66,10 +68,13 @@ public class User {
 	@Column(name = "access_token")
 	private String accessToken;
 
+	@Column(name = "api_key")
+	private String apiKey;
+
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Integer monthlyTargetAmount,
-		String refreshToken, String accessToken, Long coupleId) {
+		String refreshToken, String accessToken, Long coupleId, String password, String apiKey) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -79,10 +84,73 @@ public class User {
 		this.phone = phone;
 		this.isLogin = isLogin;
 		this.email = email;
+		this.password=password;
 		this.nickname = nickname;
 		this.monthlyTargetAmount = monthlyTargetAmount;
 		this.refreshToken = refreshToken;
 		this.accessToken = accessToken;
 		this.coupleId = coupleId;
+		this.apiKey=apiKey;
+	}
+
+	public UserDto toDto() {
+		return UserDto.builder()
+				.userId(this.userId)
+				.coupleId(this.coupleId)
+				.name(this.name)
+				.gender(this.gender)
+				.age(this.age)
+				.monthlyIncome(this.monthlyIncome)
+				.ratingName(this.ratingName)
+				.isDeleted(this.isDeleted)
+				.phone(this.phone)
+				.isLogin(this.isLogin)
+				.email(this.email)
+				.password(this.password)
+				.nickname(this.nickname)
+				.monthlyTargetAmount(this.monthlyTargetAmount)
+				.refreshToken(this.refreshToken)
+				.accessToken(this.accessToken)
+				.build();
+	}
+
+	// Converts UserDto to User entity
+	public static User fromDto(UserDto userDto) {
+		return User.builder()
+				.coupleId(userDto.getCoupleId())
+				.name(userDto.getName())
+				.gender(userDto.getGender())
+				.age(userDto.getAge())
+				.monthlyIncome(userDto.getMonthlyIncome())
+				.ratingName(userDto.getRatingName())
+				.isDeleted(userDto.isDeleted())
+				.phone(userDto.getPhone())
+				.isLogin(userDto.isLogin())
+				.email(userDto.getEmail())
+				.password(userDto.getPassword())
+				.nickname(userDto.getNickname())
+				.monthlyTargetAmount(userDto.getMonthlyTargetAmount())
+				.refreshToken(userDto.getRefreshToken())
+				.accessToken(userDto.getAccessToken())
+				.apiKey(userDto.getApiKey())
+				.build();
+	}
+
+	// Updates User entity's properties from a UserDto
+	public void setProperties(UserDto userDto) {
+//		if (userDto.getCoupleId != null) this.coupleId = userDto.getCoupleId();
+		if (userDto.getName() != null) this.name = userDto.getName();
+		if (userDto.getGender() != null) this.gender = userDto.getGender();
+		if (userDto.getAge() != null) this.age = userDto.getAge();
+		if (userDto.getMonthlyIncome() != null) this.monthlyIncome = userDto.getMonthlyIncome();
+		if (userDto.getRatingName() != null) this.ratingName = userDto.getRatingName();
+		this.isDeleted = userDto.isDeleted();
+		if (userDto.getPhone() != null) this.phone = userDto.getPhone();
+		this.isLogin = userDto.isLogin();
+		if (userDto.getEmail() != null) this.email = userDto.getEmail();
+		if (userDto.getNickname() != null) this.nickname = userDto.getNickname();
+		if (userDto.getMonthlyTargetAmount() != null) this.monthlyTargetAmount = userDto.getMonthlyTargetAmount();
+		if (userDto.getRefreshToken() != null) this.refreshToken = userDto.getRefreshToken();
+		if (userDto.getAccessToken() != null) this.accessToken = userDto.getAccessToken();
 	}
 }

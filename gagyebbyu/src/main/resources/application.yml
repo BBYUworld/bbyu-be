@@ -35,3 +35,6 @@ logging:
     com.example: DEBUG
   file:
     name: logs/spring-boot-application.log
+
+ssafy:
+  api_key: ${api.key}
