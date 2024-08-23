@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
@@ -61,11 +62,23 @@ public class ExpenseController {
 	 * @return
 	 */
 	@PostMapping(path = "/memo/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@RequireJwtToken
 	public ResponseEntity<Void> createExpenseMemo(@PathVariable long expenseId,
 		@RequestBody ExpenseMemoCreateDto expenseMemoCreateDto) {
 		expenseService.createExpenseMemo(expenseId, expenseMemoCreateDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.ok().build();
+	}
+
+	/**
+	 * 사용자 지출 예산 설정
+	 * @param expenseTargetCreateDto
+	 * @return
+	 */
+	@PostMapping(path = "/target-amount", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<Void> createExpenseTargetAmount(
+		@RequestBody ExpenseTargetCreateDto expenseTargetCreateDto) {
+		expenseService.createExpenseTarget(UserContext.getUserId(), expenseTargetCreateDto);
+		return ResponseEntity.ok().build();
 	}
 
 }

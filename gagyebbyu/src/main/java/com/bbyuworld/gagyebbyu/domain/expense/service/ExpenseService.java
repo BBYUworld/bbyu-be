@@ -13,6 +13,7 @@ import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
@@ -82,5 +83,14 @@ public class ExpenseService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
 
 		expense.updateMemo(expenseMemoCreateDto.getMemo());
+	}
+
+	@Transactional
+	public void createExpenseTarget(long userId, ExpenseTargetCreateDto expenseTargetCreateDto) {
+
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		user.updateTargetAmount(expenseTargetCreateDto.getTargetAmount());
 	}
 }
