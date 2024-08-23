@@ -12,7 +12,9 @@ import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
@@ -71,5 +73,14 @@ public class ExpenseService {
 
 		expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
 
+	}
+
+	@Transactional
+	public void createExpenseMemo(long expenseId, ExpenseMemoCreateDto expenseMemoCreateDto) {
+
+		Expense expense = expenseRepository.findById(expenseId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
+
+		expense.updateMemo(expenseMemoCreateDto.getMemo());
 	}
 }

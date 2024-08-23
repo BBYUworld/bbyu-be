@@ -63,4 +63,8 @@ public class Expense {
 		this.memo = memo;
 		this.place = place;
 	}
+
+	public void updateMemo(String memo) {
+		this.memo = memo;
+	}
 }
