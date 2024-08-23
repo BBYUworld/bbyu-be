@@ -24,12 +24,13 @@ public class UserDto {
     private Integer monthlyTargetAmount;
     private String refreshToken;
     private String accessToken;
+    private String apiKey;
 
     @Builder
     public UserDto(Long userId, Long coupleId, String name, Gender gender, Integer age, Long monthlyIncome,
                    String ratingName, boolean isDeleted, String phone, boolean isLogin, String email,
                    String nickname, Integer monthlyTargetAmount, String refreshToken, String password,
-                   String accessToken) {
+                   String accessToken, String apiKey) {
         this.userId = userId;
         this.coupleId = coupleId;
         this.name = name;
@@ -46,5 +47,28 @@ public class UserDto {
         this.monthlyTargetAmount = monthlyTargetAmount;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
+        this.apiKey = apiKey;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "userId=" + userId +
+                ", coupleId=" + coupleId +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", monthlyIncome=" + monthlyIncome +
+                ", ratingName='" + ratingName + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", phone='" + phone + '\'' +
+                ", isLogin=" + isLogin +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", monthlyTargetAmount=" + monthlyTargetAmount +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                "}\n";
     }
 }

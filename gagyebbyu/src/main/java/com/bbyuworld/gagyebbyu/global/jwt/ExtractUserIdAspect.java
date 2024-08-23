@@ -1,6 +1,6 @@
 package com.bbyuworld.gagyebbyu.global.jwt;
 
-import com.bbyuworld.gagyebbyu.global.exception.UnauthorizedException;
+import com.bbyuworld.gagyebbyu.global.error.type.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

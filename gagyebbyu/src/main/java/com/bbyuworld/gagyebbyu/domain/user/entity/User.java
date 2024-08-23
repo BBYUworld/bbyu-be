@@ -9,14 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "user")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
@@ -70,10 +68,13 @@ public class User {
 	@Column(name = "access_token")
 	private String accessToken;
 
+	@Column(name = "api_key")
+	private String apiKey;
+
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Integer monthlyTargetAmount,
-		String refreshToken, String accessToken, Long coupleId, String password) {
+		String refreshToken, String accessToken, Long coupleId, String password, String apiKey) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -89,6 +90,7 @@ public class User {
 		this.refreshToken = refreshToken;
 		this.accessToken = accessToken;
 		this.coupleId = coupleId;
+		this.apiKey=apiKey;
 	}
 
 	public UserDto toDto() {
@@ -125,10 +127,12 @@ public class User {
 				.phone(userDto.getPhone())
 				.isLogin(userDto.isLogin())
 				.email(userDto.getEmail())
+				.password(userDto.getPassword())
 				.nickname(userDto.getNickname())
 				.monthlyTargetAmount(userDto.getMonthlyTargetAmount())
 				.refreshToken(userDto.getRefreshToken())
 				.accessToken(userDto.getAccessToken())
+				.apiKey(userDto.getApiKey())
 				.build();
 	}
 

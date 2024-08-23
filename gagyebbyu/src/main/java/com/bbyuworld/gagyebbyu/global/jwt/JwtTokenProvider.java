@@ -29,8 +29,13 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String accessToken) {
+        System.out.println("Validate AccessToken Value = "+accessToken);
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(accessToken);
+            log.info("Validate AccessToken Value = {}",accessToken);
+            Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                    .build()
+                    .parseClaimsJws(accessToken.replace("Bearer ", ""));
             return true;
         } catch (SignatureException ex) {
             ex.printStackTrace();

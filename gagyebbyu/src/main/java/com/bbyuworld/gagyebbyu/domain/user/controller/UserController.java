@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.user.controller;
 
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
+import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +13,41 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
+    private final UserService userService;
 
-
-    @GetMapping("/regist")
-    public String regist(){
-        System.out.println("Come to regist");
+    /**
+     *
+     * @param user
+     * NOT NULL LIST
+     * 이메일, 비밀번호, 이름, 주소, 핸드폰, 성별, 나이
+     * @return
+     */
+    @PostMapping("/regist")
+    public String regist(@RequestBody UserDto user) {
+        System.out.println("User = "+user);
+        userService.regist(user);
         return "hello";
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserDto user){
-        System.out.println("user = "+user);
+        boolean flag = userService.login(user);
         return "no";
+    }
+
+    @PostMapping("/logout")
+    @RequireJwtToken
+    public String logout(){
+        Long userId = UserContext.getUserId();
+        userService.logout(userId);
+        System.out.println("userId = "+userId);
+        return "logout";
+    }
+
+    @DeleteMapping("/delete")
+    @RequireJwtToken
+    public String deleteUser(){
+        Long userId = UserContext.getUserId();
+
     }
 }
