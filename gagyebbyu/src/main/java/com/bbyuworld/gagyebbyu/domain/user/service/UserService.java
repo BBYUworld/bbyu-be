@@ -72,8 +72,6 @@ public class UserService {
         User user = userRepository.findUserById(userId);
         if(user == null)throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
         user.setLogin(false);
-        user.setAccessToken(null);
-        user.setRefreshToken(null);
         userRepository.save(user);
         return true;
     }
@@ -83,6 +81,8 @@ public class UserService {
         if(user==null)throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
         logout(userId);
         user.setDeleted(true);
+        user.setAccessToken(null);
+        user.setRefreshToken(null);
         userRepository.save(user);
         return true;
     }
