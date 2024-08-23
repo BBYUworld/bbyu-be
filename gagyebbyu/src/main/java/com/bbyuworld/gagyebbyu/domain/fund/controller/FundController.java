@@ -62,7 +62,7 @@ public class FundController {
 	}
 
 	/**
-	 * 펀딩 금액 입금
+	 * 펀딩 금액 입출금
 	 * @param fundId
 	 * @param fundTransactionCreateDto
 	 * @return

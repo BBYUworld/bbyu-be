@@ -64,8 +64,14 @@ public class Fund {
 		this.isEnded = false;
 	}
 
-	public void updateFund(long money) {
-		currentAmount += money;
+	public void updateFund(long money, TransactionType type) {
+		if (type == TransactionType.MINUS) {
+			currentAmount -= money;
+			emergency += 1;
+		}
+		if (type == TransactionType.PLUS) {
+			currentAmount += money;
+		}
 	}
 
 	public void updateStatus() {

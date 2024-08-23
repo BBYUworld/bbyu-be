@@ -13,6 +13,7 @@ import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundOverViewDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundStatusDto;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.response.FundTransactionDto;
 import com.bbyuworld.gagyebbyu.domain.fund.entity.Fund;
+import com.bbyuworld.gagyebbyu.domain.fund.entity.TransactionType;
 import com.bbyuworld.gagyebbyu.domain.fund.repository.FundRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.repository.FundTransactionRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -32,7 +33,7 @@ public class FundService {
 	private final CoupleRepository coupleRepository;
 	private final UserRepository userRepository;
 	private final FundTransactionRepository fundTransactionRepository;
-	private final FundValidService fundValidService;
+	private final FundConditionService fundConditionService;
 
 	public FundOverViewDto getFund(long coupleId) {
 		Fund fund = fundRepository.findByCouple_CoupleIdAndIsEndedIsFalse(coupleId)
@@ -63,11 +64,15 @@ public class FundService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+		if (fundTransactionCreateDto.getType() == TransactionType.MINUS) {
+			fundConditionService.isExceededEmergency(fund.getEmergency());
+		}
+
 		fundTransactionRepository.save(fundTransactionCreateDto.toEntity(user, fund));
 
-		fund.updateFund(fundTransactionCreateDto.getAmount());
+		fund.updateFund(fundTransactionCreateDto.getAmount(), fundTransactionCreateDto.getType());
 
-		fundValidService.isAchievedFund(fund);
+		fundConditionService.isAchievedFund(fund);
 
 		return FundStatusDto.from(fund);
 
