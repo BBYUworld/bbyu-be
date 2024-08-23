@@ -36,7 +36,7 @@ public class FundService {
 	private final FundConditionService fundConditionService;
 
 	public FundOverViewDto getFund(long coupleId) {
-		Fund fund = fundRepository.findByCouple_CoupleIdAndIsEndedIsFalse(coupleId)
+		Fund fund = fundRepository.findByCouple_CoupleIdAndIsEndedIsFalseAndIsDeletedFalse(coupleId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_EXIST));
 
 		return FundOverViewDto.from(fund);
@@ -52,7 +52,10 @@ public class FundService {
 
 	@Transactional
 	public void deleteFund(long fundId) {
-		fundRepository.deleteById(fundId);
+		Fund fund = fundRepository.findById(fundId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_FOUND));
+
+		fund.deleteFund();
 	}
 
 	@Transactional

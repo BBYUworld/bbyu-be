@@ -52,6 +52,9 @@ public class Fund {
 	@Column(name = "is_ended", nullable = false)
 	private boolean isEnded;
 
+	@Column(name = "is_deleted", nullable = false)
+	private boolean isDeleted;
+
 	@Builder
 	public Fund(Couple couple, String goal, long targetAmount) {
 		this.couple = couple;
@@ -62,6 +65,7 @@ public class Fund {
 		this.currentAmount = 0;
 		this.emergency = 0;
 		this.isEnded = false;
+		this.isDeleted = false;
 	}
 
 	public void updateFund(long money, TransactionType type) {
@@ -76,6 +80,10 @@ public class Fund {
 
 	public void updateStatus() {
 		this.isEnded = true;
+	}
+
+	public void deleteFund() {
+		this.isDeleted = true;
 	}
 
 }
