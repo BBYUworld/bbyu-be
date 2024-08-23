@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.entity.FundTransaction;
 
 public interface FundTransactionRepository extends JpaRepository<FundTransaction, Long> {
-	List<FundTransaction> findByFund_FundId(long fundId);
+	List<FundTransaction> findByFund_FundIdOrderByDateDesc(long fundId);
 }

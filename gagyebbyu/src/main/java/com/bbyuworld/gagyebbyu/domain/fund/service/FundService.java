@@ -79,7 +79,7 @@ public class FundService {
 	}
 
 	public List<FundTransactionDto> getFundTransaction(long fundId) {
-		return fundTransactionRepository.findByFund_FundId(fundId)
+		return fundTransactionRepository.findByFund_FundIdOrderByDateDesc(fundId)
 			.stream()
 			.map(FundTransactionDto::from)
 			.collect(Collectors.toList());
