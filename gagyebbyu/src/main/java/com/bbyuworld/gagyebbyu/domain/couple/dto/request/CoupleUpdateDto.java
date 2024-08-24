@@ -1,6 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.couple.dto.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class CoupleUpdateDto {
 	private String nickname;
-	private LocalDateTime marriedAt;
+	private LocalDate marriedAt;
 	private Long monthlyTargetAmount;
 }

@@ -1,6 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.couple.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
@@ -40,13 +40,13 @@ public class Couple {
 	private String nickname; // 커플 닉네임
 
 	@Column(name = "married_at")
-	private LocalDateTime marriedAt; // 커플 기념일(결혼기념일)
+	private LocalDate marriedAt; // 커플 기념일(결혼기념일)
 
 	@Column(name = "monthly_target_amount")
 	private Long monthlyTargetAmount; // 목표 한 달 지출 금액
 
 	@Builder
-	public Couple(User user1, User user2, String nickname, LocalDateTime marriedAt, Long monthlyTargetAmount) {
+	public Couple(User user1, User user2, String nickname, LocalDate marriedAt, Long monthlyTargetAmount) {
 		this.user1 = user1;
 		this.user2 = user2;
 		this.nickname = nickname;
@@ -58,7 +58,7 @@ public class Couple {
 		this.monthlyTargetAmount = monthlyTargetAmount;
 	}
 
-	public void updateCouple(LocalDateTime marriedAt, String nickname, Long monthlyTargetAmount) {
+	public void updateCouple(LocalDate marriedAt, String nickname, Long monthlyTargetAmount) {
 		this.marriedAt = marriedAt;
 		this.nickname = nickname;
 		this.monthlyTargetAmount = monthlyTargetAmount;

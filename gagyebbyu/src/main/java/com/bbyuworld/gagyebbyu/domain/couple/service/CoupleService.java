@@ -1,9 +1,13 @@
 package com.bbyuworld.gagyebbyu.domain.couple.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
 import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
@@ -57,6 +61,16 @@ public class CoupleService {
 			coupleUpdateDto.getMonthlyTargetAmount() != null ? coupleUpdateDto.getMonthlyTargetAmount() :
 				couple.getMonthlyTargetAmount()
 		);
+	}
+
+	public CoupleResponseDto getCouple(long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+		return CoupleResponseDto.from(couple, ChronoUnit.DAYS.between(couple.getMarriedAt(), LocalDate.now()) + 1);
 	}
 
 }

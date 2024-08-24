@@ -1,6 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.couple.dto.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class CoupleCreateDto {
 	private String nickname;
-	private LocalDateTime marriedAt;
+	private LocalDate marriedAt;
 	private long monthlyTargetAmount;
 	private long user1Id;
 	private long user2Id;
