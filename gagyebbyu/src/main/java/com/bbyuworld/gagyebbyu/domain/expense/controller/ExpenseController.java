@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.expense.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
@@ -39,6 +42,18 @@ public class ExpenseController {
 	public ResponseEntity<ExpenseMonthDto> getExpenseAll(
 		@ModelAttribute ExpenseParam param) {
 		return ResponseEntity.ok(expenseService.getExpenseAll(UserContext.getUserId(), param));
+	}
+
+	/**
+	 * 커플 지출 일 별 조회
+	 * @param param 년, 월, 일, 정렬조건
+	 * @return
+	 */
+	@GetMapping(path = "/day", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<List<ExpenseDayDto>> getDayExpense(
+		@ModelAttribute ExpenseParam param) {
+		return ResponseEntity.ok(expenseService.getDayExpense(UserContext.getUserId(), param));
 	}
 
 	/**

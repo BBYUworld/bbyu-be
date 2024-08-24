@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
@@ -59,6 +61,21 @@ public class ExpenseService {
 
 		return new ExpenseMonthDto(totalAmount, user.getMonthlyTargetAmount(),
 			user.getMonthlyTargetAmount() - totalAmount, expenses);
+	}
+
+	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
+		Integer day = param.getDay() != null ? param.getDay() : LocalDateTime.now().getDayOfMonth();
+		Integer month = param.getMonth() != null ? param.getMonth() : LocalDateTime.now().getMonthValue();
+		Integer year = param.getYear() != null ? param.getYear() : LocalDateTime.now().getYear();
+		String sort = param.getSort() != null ? param.getSort() : "asc";
+
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		return expenseRepository.findExpenseByDay(day, month, year, user.getCoupleId(), sort)
+			.stream()
+			.map(ExpenseDayDto::from)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
