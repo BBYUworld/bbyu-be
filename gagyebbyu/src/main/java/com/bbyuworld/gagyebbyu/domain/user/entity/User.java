@@ -173,4 +173,8 @@ public class User {
 	public void updateTargetAmount(Long monthlyTargetAmount) {
 		this.monthlyTargetAmount = monthlyTargetAmount;
 	}
+
+	public void updateCoupleId(Long coupleId) {
+		this.coupleId = coupleId;
+	}
 }
