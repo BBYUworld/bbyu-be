@@ -1,7 +1,9 @@
 package com.bbyuworld.gagyebbyu.domain.user.controller;
 
+import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
+import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,9 +36,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto user){
-        boolean flag = userService.login(user);
-        return ResponseEntity.ok("로그인 성공");
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto user){
+        LoginResponseDto loginResponseDto = userService.login(user);
+        System.out.println("LoginResponseDto = "+loginResponseDto);
+        return ResponseEntity.ok(loginResponseDto);
     }
 
     @PostMapping("/logout")

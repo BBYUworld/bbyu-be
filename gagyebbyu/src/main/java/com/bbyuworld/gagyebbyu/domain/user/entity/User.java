@@ -37,7 +37,7 @@ public class User {
 	@Column(nullable = false)
 	private Gender gender;
 
-	@Column(nullable = false)
+	@Column(name = "age")
 	private Integer age;
 
 	@Column
