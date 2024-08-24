@@ -6,6 +6,7 @@ import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
 import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
+import com.bbyuworld.gagyebbyu.global.util.MailSender;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final MailSender mailSender;
 
     /**
      *
@@ -56,5 +58,21 @@ public class UserController {
         Long userId = UserContext.getUserId();
         userService.deleteUser(userId);
         return ResponseEntity.ok("계정 삭제 성공");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<String> searchUser(@RequestParam("email") String email){
+        boolean flag = userService.searchUser(email);
+        if(flag){
+            return ResponseEntity.ok("not Exist");
+        }
+        return ResponseEntity.ok("is Exist");
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<String> emailVerification(@RequestBody UserDto dto){
+        System.out.println("email = "+dto.getEmail());
+        String authNumber =mailSender.joinEmail(dto.getEmail());
+        return ResponseEntity.ok(authNumber);
     }
 }

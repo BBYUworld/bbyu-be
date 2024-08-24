@@ -91,6 +91,11 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
+    public boolean searchUser(String email){
+        User user = userRepository.findUserByEmail(email);
+        if(user == null)return true;
+        return false;
+    }
 
     public void test(String userEmail) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

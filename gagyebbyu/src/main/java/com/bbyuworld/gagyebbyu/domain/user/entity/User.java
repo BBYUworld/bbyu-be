@@ -40,6 +40,9 @@ public class User {
 	@Column(name = "age")
 	private Integer age;
 
+	@Column(name = "address")
+	private String address;
+
 	@Column
 	private Long monthlyIncome;
 
@@ -79,10 +82,11 @@ public class User {
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Long monthlyTargetAmount,
-		String refreshToken, String accessToken, Long coupleId, String password, String apiKey) {
+		String refreshToken, String accessToken, Long coupleId, String password, String apiKey, String address) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
+		this.address = address;
 		this.monthlyIncome = monthlyIncome;
 		this.ratingName = ratingName;
 		this.isDeleted = isDeleted;
@@ -105,6 +109,7 @@ public class User {
 			.name(this.name)
 			.gender(this.gender)
 			.age(this.age)
+				.address(this.address)
 			.monthlyIncome(this.monthlyIncome)
 			.ratingName(this.ratingName)
 			.isDeleted(this.isDeleted)
@@ -126,6 +131,7 @@ public class User {
 			.name(userDto.getName())
 			.gender(userDto.getGender())
 			.age(userDto.getAge())
+				.address(userDto.getAddress())
 			.monthlyIncome(userDto.getMonthlyIncome())
 			.ratingName(userDto.getRatingName())
 			.isDeleted(userDto.isDeleted())
@@ -157,6 +163,8 @@ public class User {
 		this.isDeleted = userDto.isDeleted();
 		if (userDto.getPhone() != null)
 			this.phone = userDto.getPhone();
+		if(userDto.getAddress()!=null)
+			this.address = userDto.getAddress();
 		this.isLogin = userDto.isLogin();
 		if (userDto.getEmail() != null)
 			this.email = userDto.getEmail();
