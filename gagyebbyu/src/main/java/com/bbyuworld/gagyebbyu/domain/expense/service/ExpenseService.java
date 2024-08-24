@@ -14,6 +14,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
@@ -34,7 +35,7 @@ public class ExpenseService {
 	private final UserRepository userRepository;
 	private final CoupleRepository coupleRepository;
 
-	public List<ExpenseOverviewDto> getExpenseAll(long userId, ExpenseParam param) {
+	public ExpenseMonthDto getExpenseAll(long userId, ExpenseParam param) {
 		Integer month = param.getMonth() != null ? param.getMonth() : LocalDateTime.now().getMonthValue();
 		Integer year = param.getYear() != null ? param.getYear() : LocalDateTime.now().getYear();
 		String sort = param.getSort() != null ? param.getSort() : "asc";
@@ -44,16 +45,20 @@ public class ExpenseService {
 
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
+		long totalAmount = 0;
+
 		List<ExpenseOverviewDto> expenses = new ArrayList<ExpenseOverviewDto>();
 		for (Tuple tuple : expenseTuples) {
 			Date sqlDate = tuple.get(0, Date.class);
 			LocalDate date = sqlDate.toLocalDate();
 			Couple couple = tuple.get(1, Couple.class);
 			Long amount = tuple.get(2, Long.class);
+			totalAmount += amount;
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
 
-		return expenses;
+		return new ExpenseMonthDto(totalAmount, user.getMonthlyTargetAmount(),
+			user.getMonthlyTargetAmount() - totalAmount, expenses);
 	}
 
 	@Transactional

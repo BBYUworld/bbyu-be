@@ -1,7 +1,5 @@
 package com.bbyuworld.gagyebbyu.domain.expense.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
-import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
@@ -32,13 +30,13 @@ public class ExpenseController {
 	private final ExpenseService expenseService;
 
 	/**
-	 * 커플 지출 전체 조회
+	 * 커플 지출 월 별 조회
 	 * @param param 년, 월, 정렬조건
 	 * @return
 	 */
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/month", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<ExpenseOverviewDto>> getExpenseAll(
+	public ResponseEntity<ExpenseMonthDto> getExpenseAll(
 		@ModelAttribute ExpenseParam param) {
 		return ResponseEntity.ok(expenseService.getExpenseAll(UserContext.getUserId(), param));
 	}
