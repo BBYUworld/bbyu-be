@@ -50,6 +50,10 @@ public class CoupleController {
 		return ResponseEntity.ok().build();
 	}
 
+	/**
+	 * 커플 조회
+	 * @return
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
 	public ResponseEntity<CoupleResponseDto> updateCouple() {

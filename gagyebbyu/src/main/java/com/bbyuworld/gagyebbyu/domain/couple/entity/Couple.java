@@ -37,13 +37,13 @@ public class Couple {
 	private User user2;
 
 	@Column(length = 10)
-	private String nickname; // 커플 닉네임
+	private String nickname;
 
 	@Column(name = "married_at")
-	private LocalDate marriedAt; // 커플 기념일(결혼기념일)
+	private LocalDate marriedAt;
 
 	@Column(name = "monthly_target_amount")
-	private Long monthlyTargetAmount; // 목표 한 달 지출 금액
+	private Long monthlyTargetAmount;
 
 	@Builder
 	public Couple(User user1, User user2, String nickname, LocalDate marriedAt, Long monthlyTargetAmount) {
