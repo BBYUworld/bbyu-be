@@ -84,7 +84,7 @@ public class ExpenseController {
 	}
 
 	/**
-	 * 사용자 지출 예산 설정
+	 * 커플 지출 예산 설정
 	 * @param expenseTargetCreateDto
 	 * @return
 	 */

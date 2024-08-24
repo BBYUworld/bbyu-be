@@ -46,22 +46,25 @@ public class ExpenseService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
+		long targetAmount = couple.getMonthlyTargetAmount();
 
 		List<ExpenseOverviewDto> expenses = new ArrayList<ExpenseOverviewDto>();
 		for (Tuple tuple : expenseTuples) {
 			Date sqlDate = tuple.get(0, Date.class);
 			LocalDate date = sqlDate.toLocalDate();
-			Couple couple = tuple.get(1, Couple.class);
 			Long amount = tuple.get(2, Long.class);
 			totalAmount += amount;
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
 
-		return new ExpenseMonthDto(totalAmount, user.getMonthlyTargetAmount(),
-			user.getMonthlyTargetAmount() - totalAmount, expenses);
+		return new ExpenseMonthDto(totalAmount, targetAmount,
+			targetAmount - totalAmount, expenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
@@ -114,7 +117,10 @@ public class ExpenseService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-		user.updateTargetAmount(expenseTargetCreateDto.getTargetAmount());
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+		couple.updateTargetAmount(expenseTargetCreateDto.getTargetAmount());
 	}
 
 	@Transactional
