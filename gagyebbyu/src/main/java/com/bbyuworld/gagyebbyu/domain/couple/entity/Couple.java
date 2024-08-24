@@ -57,4 +57,10 @@ public class Couple {
 	public void updateTargetAmount(Long monthlyTargetAmount) {
 		this.monthlyTargetAmount = monthlyTargetAmount;
 	}
+
+	public void updateCouple(LocalDateTime marriedAt, String nickname, Long monthlyTargetAmount) {
+		this.marriedAt = marriedAt;
+		this.nickname = nickname;
+		this.monthlyTargetAmount = monthlyTargetAmount;
+	}
 }
