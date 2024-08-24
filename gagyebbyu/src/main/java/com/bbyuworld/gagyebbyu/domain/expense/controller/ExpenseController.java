@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,9 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
-import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
@@ -32,15 +35,27 @@ public class ExpenseController {
 	private final ExpenseService expenseService;
 
 	/**
-	 * 커플 지출 전체 조회
+	 * 커플 지출 월 별 조회
 	 * @param param 년, 월, 정렬조건
 	 * @return
 	 */
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/month", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<ExpenseOverviewDto>> getExpenseAll(
+	public ResponseEntity<ExpenseMonthDto> getExpenseAll(
 		@ModelAttribute ExpenseParam param) {
 		return ResponseEntity.ok(expenseService.getExpenseAll(UserContext.getUserId(), param));
+	}
+
+	/**
+	 * 커플 지출 일 별 조회
+	 * @param param 년, 월, 일, 정렬조건
+	 * @return
+	 */
+	@GetMapping(path = "/day", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<List<ExpenseDayDto>> getDayExpense(
+		@ModelAttribute ExpenseParam param) {
+		return ResponseEntity.ok(expenseService.getDayExpense(UserContext.getUserId(), param));
 	}
 
 	/**
@@ -69,7 +84,7 @@ public class ExpenseController {
 	}
 
 	/**
-	 * 사용자 지출 예산 설정
+	 * 커플 지출 예산 설정
 	 * @param expenseTargetCreateDto
 	 * @return
 	 */
@@ -78,6 +93,19 @@ public class ExpenseController {
 	public ResponseEntity<Void> createExpenseTargetAmount(
 		@RequestBody ExpenseTargetCreateDto expenseTargetCreateDto) {
 		expenseService.createExpenseTarget(UserContext.getUserId(), expenseTargetCreateDto);
+		return ResponseEntity.ok().build();
+	}
+
+	/**
+	 * 사용자 지출 금액 수정
+	 * @param expenseId
+	 * @param expenseUpdateDto
+	 * @return
+	 */
+	@PatchMapping(path = "/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateExpense(@PathVariable long expenseId,
+		@RequestBody ExpenseUpdateDto expenseUpdateDto) {
+		expenseService.updateExpense(expenseId, expenseUpdateDto);
 		return ResponseEntity.ok().build();
 	}
 

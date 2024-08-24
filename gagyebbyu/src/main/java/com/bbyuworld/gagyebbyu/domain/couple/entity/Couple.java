@@ -53,4 +53,8 @@ public class Couple {
 		this.marriedAt = marriedAt;
 		this.monthlyTargetAmount = monthlyTargetAmount;
 	}
+
+	public void updateTargetAmount(Long monthlyTargetAmount) {
+		this.monthlyTargetAmount = monthlyTargetAmount;
+	}
 }
