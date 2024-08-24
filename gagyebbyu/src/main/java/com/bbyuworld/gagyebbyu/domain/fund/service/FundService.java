@@ -56,6 +56,7 @@ public class FundService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_FOUND));
 
 		fund.deleteFund();
+
 	}
 
 	@Transactional

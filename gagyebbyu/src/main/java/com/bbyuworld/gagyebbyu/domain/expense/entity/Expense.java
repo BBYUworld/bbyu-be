@@ -67,4 +67,8 @@ public class Expense {
 	public void updateMemo(String memo) {
 		this.memo = memo;
 	}
+
+	public void updateAmount(Long amount) {
+		this.amount = amount;
+	}
 }

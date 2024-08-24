@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
@@ -91,6 +93,19 @@ public class ExpenseController {
 	public ResponseEntity<Void> createExpenseTargetAmount(
 		@RequestBody ExpenseTargetCreateDto expenseTargetCreateDto) {
 		expenseService.createExpenseTarget(UserContext.getUserId(), expenseTargetCreateDto);
+		return ResponseEntity.ok().build();
+	}
+
+	/**
+	 * 사용자 지출 금액 수정
+	 * @param expenseId
+	 * @param expenseUpdateDto
+	 * @return
+	 */
+	@PatchMapping(path = "/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateExpense(@PathVariable long expenseId,
+		@RequestBody ExpenseUpdateDto expenseUpdateDto) {
+		expenseService.updateExpense(expenseId, expenseUpdateDto);
 		return ResponseEntity.ok().build();
 	}
 

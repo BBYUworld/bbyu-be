@@ -15,6 +15,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
@@ -114,5 +115,14 @@ public class ExpenseService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		user.updateTargetAmount(expenseTargetCreateDto.getTargetAmount());
+	}
+
+	@Transactional
+	public void updateExpense(long expenseId, ExpenseUpdateDto expenseUpdateDto) {
+
+		Expense expense = expenseRepository.findById(expenseId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
+
+		expense.updateAmount(expenseUpdateDto.getAmount());
 	}
 }
