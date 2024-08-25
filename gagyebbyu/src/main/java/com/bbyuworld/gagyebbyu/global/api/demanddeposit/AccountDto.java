@@ -14,11 +14,32 @@ public class AccountDto {
     private String accountNo;
     private String accountName;
     private String accountTypeCode;
+    private String accountTypeName;
     private String accountCreatedDate;
     private String accountExpiryDate;
     private Long dailyTransferLimit;
     private Long oneTimeTransferLimit;
     private Long accountBalance;
-    private String lastTransferDate;
+    private String lastTransactionDate;
     private String currency;
+
+    @Override
+    public String toString() {
+        return "AccountDto{" +
+                "bankCode='" + bankCode + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", accountNo='" + accountNo + '\'' +
+                ", accountName='" + accountName + '\'' +
+                ", accountTypeCode='" + accountTypeCode + '\'' +
+                ", accountTypeName='" + accountTypeName + '\'' +
+                ", accountCreatedDate='" + accountCreatedDate + '\'' +
+                ", accountExpiryDate='" + accountExpiryDate + '\'' +
+                ", dailyTransferLimit=" + dailyTransferLimit +
+                ", oneTimeTransferLimit=" + oneTimeTransferLimit +
+                ", accountBalance=" + accountBalance +
+                ", lastTransactionDate='" + lastTransactionDate + '\'' +
+                ", currency='" + currency + '\'' +
+                "}\n";
+    }
 }

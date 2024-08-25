@@ -50,14 +50,16 @@ public class AccountService {
         User user = userRepository.findUserById(userId);
         String userKey = user.getApiKey();
         List<AccountDto> list = sendPostAboutUserAccount(userKey);
+        System.out.println("user Account = "+list);
         return list;
     }
     @Transactional
-    public CreateDemandDepositAccountDto createUserAccount(Long userId, String uniqueNo, String bankName){
+    public AccountDto createUserAccount(Long userId, String uniqueNo, String bankName, Long dailyTransferLimit, Long oneTimeTransferLimit){
         User user = userRepository.findUserById(userId);
         String userKey = user.getApiKey();
         CreateDemandDepositAccountDto dto = sendPostAboutCreateUserAccount(userKey, uniqueNo);
-        System.out.println("dto = "+dto);
+        System.out.println("Create Dto = "+dto);
+        AccountDto updateDto = sendPostAboutUpdateTransferLimit(userKey, dto.getAccountNo(), dailyTransferLimit, oneTimeTransferLimit);
         if(dto!= null ){
             Asset asset = Asset.builder()
                     .amount(0L)
@@ -67,7 +69,6 @@ public class AccountService {
                     .build();
             user.getAssets().add(asset);
             asset.setUser(user);
-            assetRepository.save(asset);
             AssetDeposit assetDeposit = AssetDeposit.builder()
                     .bank(bankName)
                     .bankCode(dto.getBankCode())
@@ -79,8 +80,7 @@ public class AccountService {
             assetDeposit.setAsset(asset);
             asset.setAssetDeposit(assetDeposit);
             assetRepository.save(asset);
-            assetDepositRepository.save(assetDeposit);
-            return dto;
+            return updateDto;
         }
         return null;
     }
@@ -96,14 +96,12 @@ public class AccountService {
             headerNode.put("userKey", userKey);
             rootNode.set("Header", headerNode);
             String jsonBody = objectMapper.writeValueAsString(rootNode);
-            System.out.println("Request Body: " + jsonBody);
             httpPost.setEntity(new StringEntity(jsonBody));
 
             try(CloseableHttpResponse response = client.execute(httpPost)){
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
-                System.out.println("Response = "+jsonResponse);
                 if (recNode.isArray()) {
                     return objectMapper.convertValue(recNode, new TypeReference<List<AccountDto>>() {});
                 } else {
@@ -131,14 +129,12 @@ public class AccountService {
             ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, objectMapper, apiKey);
             rootNode.set("Header", headerNode);
             String jsonBody = objectMapper.writeValueAsString(rootNode);
-            System.out.println("Request Body: " + jsonBody);
             httpPost.setEntity(new StringEntity(jsonBody));
 
             try(CloseableHttpResponse response = client.execute(httpPost)){
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
-                System.out.println("recNode = "+recNode);
                 if (recNode.isArray()) {
                     return objectMapper.convertValue(recNode, new TypeReference<List<DemandDepositDto>>() {});
                 } else {
@@ -175,6 +171,46 @@ public class AccountService {
                 JsonNode recNode = responseRootNode.get("REC");
                 if (recNode != null) {
                     CreateDemandDepositAccountDto dto = mapper.treeToValue(recNode, CreateDemandDepositAccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+    private AccountDto sendPostAboutUpdateTransferLimit(String userKey, String accountNo, Long dailyTransferLimit, Long oneTimeTransferLimit){
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateTransferLimit";
+            String apiName = "updateTransferLimit";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            rootNode.put("accountNo", accountNo);
+            rootNode.put("oneTimeTransferLimit", oneTimeTransferLimit);
+            rootNode.put("dailyTransferLimit", dailyTransferLimit);
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
+
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                if (recNode != null) {
+                    AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
                     System.out.println("Converted DTO: " + dto);
                     return dto;
                 } else {

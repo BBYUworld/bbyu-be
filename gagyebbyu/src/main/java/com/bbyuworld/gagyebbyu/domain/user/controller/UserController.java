@@ -81,20 +81,25 @@ public class UserController {
     public ResponseEntity<List<AccountDto>> findAllUserAccount(){
         Long userId = UserContext.getUserId();
         List<AccountDto> list = accountService.findAllUserAccount(userId);
+
         return ResponseEntity.ok(list);
     }
 
     @PostMapping("/account")
     @RequireJwtToken
-    public ResponseEntity<String> createUserAccount(@RequestBody Map<String, String>map){
+    public ResponseEntity<AccountDto> createUserAccount(@RequestBody Map<String, String>map){
         Long userId = UserContext.getUserId();
         String uniqueNo = map.get("accountTypeUniqueNo");
         String bankName = map.get("bankName");
+        Long dailyTransferLimit = Long.parseLong(map.get("dailyTransferLimit"));
+        Long oneTimeTransferLimit = Long.valueOf(map.get("oneTimeTransferLimit"));
         System.out.println("bankName = "+bankName);
         System.out.println("uniqueNo = "+uniqueNo);
-        CreateDemandDepositAccountDto dto = accountService.createUserAccount(userId, uniqueNo, bankName);
+        System.out.println("dailyTransferLimit" +dailyTransferLimit);
+        System.out.println("oneTimeTransferLimit" +oneTimeTransferLimit);
+        AccountDto dto = accountService.createUserAccount(userId, uniqueNo, bankName, dailyTransferLimit, oneTimeTransferLimit);
         System.out.println("dto = "+dto);
-        return null;
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/product")
