@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.user.service;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.api.asset.CreateDemandDepositAccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandDepositDto;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
@@ -41,6 +42,9 @@ public class AccountService {
         String userKey = user.getApiKey();
         List<AccountDto> list = sendPostAboutUserAccount(userKey);
         return list;
+    }
+    public CreateDemandDepositAccountDto createUserAccount(Long userId, String uniqueNo){
+        sendPostAboutCreateUserAccount(userId, uniqueNo);
     }
     private List<AccountDto> sendPostAboutUserAccount(String userKey){
         try(CloseableHttpClient client = HttpClients.createDefault()){
@@ -110,5 +114,36 @@ public class AccountService {
             e.printStackTrace();
         }
         return null;
+    }
+    private boolean sendPostAboutCreateUserAccount(Long userId, String uniqueNo){
+        User user = userRepository.findUserById(userId);
+        String userKey = user.getApiKey();
+
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/createDemandDepositAccount";
+            String apiName = "createDemandDepositAccount";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
+
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+
+        }
     }
 }

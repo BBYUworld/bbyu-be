@@ -82,6 +82,13 @@ public class UserController {
         return ResponseEntity.ok(list);
     }
 
+    @PostMapping("/account")
+    @RequireJwtToken
+    public ResponseEntity<String> createUserAccount(@RequestParam("accountTypeUniqueNo")String uniqueNo){
+        Long userId = UserContext.getUserId();
+
+    }
+
     @GetMapping("/product")
     @RequireJwtToken
     public ResponseEntity<List<DemandDepositDto>> findAllProducts(){
