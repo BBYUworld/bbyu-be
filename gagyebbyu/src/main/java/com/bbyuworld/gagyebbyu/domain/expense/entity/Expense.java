@@ -34,7 +34,7 @@ public class Expense {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "couple_id", nullable = false)
+	@JoinColumn(name = "couple_id")
 	private Couple couple;
 
 	@Column(nullable = false)

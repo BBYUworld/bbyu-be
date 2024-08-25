@@ -15,12 +15,10 @@ public final class CoupleCreateDto {
 	private LocalDate marriedAt;
 	private long monthlyTargetAmount;
 	private long user1Id;
-	private long user2Id;
 
-	public Couple toEntity(User user1, User user2) {
+	public Couple toEntity(User user1) {
 		return Couple.builder()
 			.user1(user1)
-			.user2(user2)
 			.marriedAt(marriedAt)
 			.monthlyTargetAmount(monthlyTargetAmount)
 			.nickname(nickname)
