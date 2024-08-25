@@ -1,4 +1,4 @@
-package com.bbyuworld.gagyebbyu.domain.user.dto;
+package com.bbyuworld.gagyebbyu.global.api.demanddeposit;
 
 import lombok.*;
 

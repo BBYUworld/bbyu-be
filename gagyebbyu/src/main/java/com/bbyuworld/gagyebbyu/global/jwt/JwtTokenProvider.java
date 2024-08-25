@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.global.jwt;
 
+import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.CustomExpiredJwtTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -42,7 +44,7 @@ public class JwtTokenProvider {
         } catch (MalformedJwtException ex) {
             ex.printStackTrace();
         } catch (ExpiredJwtException ex) {
-            ex.printStackTrace();
+            throw new CustomExpiredJwtTokenException(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (UnsupportedJwtException ex) {
             ex.printStackTrace();
         } catch (IllegalArgumentException ex) {

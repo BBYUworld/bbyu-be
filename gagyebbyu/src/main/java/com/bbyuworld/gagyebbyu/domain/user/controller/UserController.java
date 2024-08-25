@@ -2,16 +2,20 @@ package com.bbyuworld.gagyebbyu.domain.user.controller;
 
 import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
+import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandDepositDto;
 import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
-import com.bbyuworld.gagyebbyu.global.util.MailSender;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -20,7 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final MailSender mailSender;
+    private final AccountService accountService;
+//    private final MailSender mailSender;
 
     /**
      *
@@ -69,10 +74,26 @@ public class UserController {
         return ResponseEntity.ok("is Exist");
     }
 
-    @PostMapping("/email")
-    public ResponseEntity<String> emailVerification(@RequestBody UserDto dto){
-        System.out.println("email = "+dto.getEmail());
-        String authNumber =mailSender.joinEmail(dto.getEmail());
-        return ResponseEntity.ok(authNumber);
+    @GetMapping("/account")
+    @RequireJwtToken
+    public ResponseEntity<List<AccountDto>> findAllUserAccount(){
+        Long userId = UserContext.getUserId();
+        List<AccountDto> list = accountService.findAllUserAccount(userId);
+        return ResponseEntity.ok(list);
     }
+
+    @GetMapping("/product")
+    @RequireJwtToken
+    public ResponseEntity<List<DemandDepositDto>> findAllProducts(){
+        List<DemandDepositDto> list = accountService.findAllDemandDeposit();
+        System.out.println("return list = "+list);
+        return ResponseEntity.ok(list);
+    }
+
+//    @PostMapping("/email")
+//    public ResponseEntity<String> emailVerification(@RequestBody UserDto dto){
+//        System.out.println("email = "+dto.getEmail());
+//        String authNumber =mailSender.joinEmail(dto.getEmail());
+//        return ResponseEntity.ok(authNumber);
+//    }
 }

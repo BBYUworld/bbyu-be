@@ -34,7 +34,7 @@ public class User {
 	private String name;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(name = "gender")
 	private Gender gender;
 
 	@Column(name = "age")
