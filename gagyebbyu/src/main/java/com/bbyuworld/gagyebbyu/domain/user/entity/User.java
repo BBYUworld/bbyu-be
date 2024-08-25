@@ -1,20 +1,17 @@
 package com.bbyuworld.gagyebbyu.domain.user.entity;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -78,6 +75,9 @@ public class User {
 
 	@Column(name = "api_key")
 	private String apiKey;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Asset> assets = new ArrayList<>();
 
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
@@ -180,5 +180,14 @@ public class User {
 
 	public void updateTargetAmount(Long monthlyTargetAmount) {
 		this.monthlyTargetAmount = monthlyTargetAmount;
+	}
+	public void addAsset(Asset asset) {
+		this.assets.add(asset);
+		asset.setUser(this);
+	}
+
+	public void removeAsset(Asset asset) {
+		this.assets.remove(asset);
+		asset.setUser(null);
 	}
 }

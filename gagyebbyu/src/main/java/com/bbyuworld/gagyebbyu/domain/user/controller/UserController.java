@@ -4,6 +4,7 @@ import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
+import com.bbyuworld.gagyebbyu.global.api.asset.CreateDemandDepositAccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandDepositDto;
 import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -84,9 +86,15 @@ public class UserController {
 
     @PostMapping("/account")
     @RequireJwtToken
-    public ResponseEntity<String> createUserAccount(@RequestParam("accountTypeUniqueNo")String uniqueNo){
+    public ResponseEntity<String> createUserAccount(@RequestBody Map<String, String>map){
         Long userId = UserContext.getUserId();
-
+        String uniqueNo = map.get("accountTypeUniqueNo");
+        String bankName = map.get("bankName");
+        System.out.println("bankName = "+bankName);
+        System.out.println("uniqueNo = "+uniqueNo);
+        CreateDemandDepositAccountDto dto = accountService.createUserAccount(userId, uniqueNo, bankName);
+        System.out.println("dto = "+dto);
+        return null;
     }
 
     @GetMapping("/product")

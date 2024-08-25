@@ -1,5 +1,10 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetDeposit;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Type;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetDepositRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
@@ -22,7 +27,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +39,9 @@ public class AccountService {
     @Value("${ssafy.api_key}")
     private String apiKey;
     private final ApiPost apiPost;
+    private final AssetRepository assetRepository;
     private final UserRepository userRepository;
+    private final AssetDepositRepository assetDepositRepository;
 
     public List<DemandDepositDto> findAllDemandDeposit(){
         return sendPostAboutFindAllProducts();
@@ -43,8 +52,37 @@ public class AccountService {
         List<AccountDto> list = sendPostAboutUserAccount(userKey);
         return list;
     }
-    public CreateDemandDepositAccountDto createUserAccount(Long userId, String uniqueNo){
-        sendPostAboutCreateUserAccount(userId, uniqueNo);
+    @Transactional
+    public CreateDemandDepositAccountDto createUserAccount(Long userId, String uniqueNo, String bankName){
+        User user = userRepository.findUserById(userId);
+        String userKey = user.getApiKey();
+        CreateDemandDepositAccountDto dto = sendPostAboutCreateUserAccount(userKey, uniqueNo);
+        System.out.println("dto = "+dto);
+        if(dto!= null ){
+            Asset asset = Asset.builder()
+                    .amount(0L)
+                    .type(Type.DEPOSIT)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            user.getAssets().add(asset);
+            asset.setUser(user);
+            assetRepository.save(asset);
+            AssetDeposit assetDeposit = AssetDeposit.builder()
+                    .bank(bankName)
+                    .bankCode(dto.getBankCode())
+                    .number(dto.getAccountNo())
+                    .type("수시입출금")
+                    .amount(0L)
+                    .hidden(false)
+                    .build();
+            assetDeposit.setAsset(asset);
+            asset.setAssetDeposit(assetDeposit);
+            assetRepository.save(asset);
+            assetDepositRepository.save(assetDeposit);
+            return dto;
+        }
+        return null;
     }
     private List<AccountDto> sendPostAboutUserAccount(String userKey){
         try(CloseableHttpClient client = HttpClients.createDefault()){
@@ -115,10 +153,7 @@ public class AccountService {
         }
         return null;
     }
-    private boolean sendPostAboutCreateUserAccount(Long userId, String uniqueNo){
-        User user = userRepository.findUserById(userId);
-        String userKey = user.getApiKey();
-
+    private CreateDemandDepositAccountDto sendPostAboutCreateUserAccount(String userKey, String uniqueNo){
         try(CloseableHttpClient client = HttpClients.createDefault()){
             String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/createDemandDepositAccount";
             String apiName = "createDemandDepositAccount";
@@ -128,6 +163,7 @@ public class AccountService {
             ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
             headerNode.put("userKey", userKey);
             rootNode.set("Header", headerNode);
+            rootNode.put("accountTypeUniqueNo", uniqueNo);
             httpPost.setHeader("Content-Type", "application/json");
             String jsonBody = mapper.writeValueAsString(rootNode);
             System.out.println("Request Body: " + jsonBody);
@@ -137,13 +173,22 @@ public class AccountService {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = mapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
-
+                if (recNode != null) {
+                    CreateDemandDepositAccountDto dto = mapper.treeToValue(recNode, CreateDemandDepositAccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
         catch (Exception e){
-
+            e.printStackTrace();
+            return null;
         }
+        return null;
     }
 }

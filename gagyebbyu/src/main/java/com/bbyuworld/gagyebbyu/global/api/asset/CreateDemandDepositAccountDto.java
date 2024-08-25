@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.global.api.asset;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -10,6 +11,7 @@ import lombok.*;
 public class CreateDemandDepositAccountDto {
     private String bankCode;
     private String accountNo;
+    @JsonProperty("currency")
     private Currency currency;
 
     @Getter
@@ -17,8 +19,25 @@ public class CreateDemandDepositAccountDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    static class Currency{
+    public static class Currency{
         private String currency;
         private String currencyName;
+
+        @Override
+        public String toString() {
+            return "Currency{" +
+                    "currency='" + currency + '\'' +
+                    ", currencyName='" + currencyName + '\'' +
+                    "}\n";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CreateDemandDepositAccountDto{" +
+                "bankCode='" + bankCode + '\'' +
+                ", accountNo='" + accountNo + '\'' +
+                ", currency=" + currency +
+                "}\n";
     }
 }
