@@ -20,19 +20,19 @@ import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/couple")
+@RequestMapping("/api/couple/request")
 @RequiredArgsConstructor
 public class CoupleController {
 
 	private final CoupleService coupleService;
 
 	/**
-	 * 커플 등록
+	 * 커플 등록 요청
 	 * @param coupleCreateDto
 	 * @return
 	 */
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createCouple(@RequestBody CoupleCreateDto coupleCreateDto) {
+	public ResponseEntity<Void> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
 		coupleService.createCouple(coupleCreateDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
