@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public final class CoupleConnectedDto {
+public final class CoupleConnectDto {
 	private Long user2Id;
 }
