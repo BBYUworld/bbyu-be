@@ -220,7 +220,6 @@ public class AssetServiceImpl implements AssetService {
         return true;
     }
 
-
     protected AssetDto convertToDto(Asset asset) {
         return AssetDto.builder()
                 .assetId(asset.getAssetId())

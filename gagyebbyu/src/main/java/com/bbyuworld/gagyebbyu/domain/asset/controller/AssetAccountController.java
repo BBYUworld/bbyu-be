@@ -6,6 +6,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount.AssetAccountSer
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class AssetAccountController {
      */
     @GetMapping("/bank-name")
     @RequireJwtToken
-    public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBank(
+    public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBank( @Param("bankName")
         String bankName) {
         return ResponseEntity.ok(assetAccountService.getAssetAccountsByBank(UserContext.getUserId(), bankName));
     }
@@ -50,7 +51,7 @@ public class AssetAccountController {
     @GetMapping("/type")
     @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByType(
-            AccountType accountType) {
+            @Param("accountType") AccountType accountType) {
         try {
             return ResponseEntity.ok(assetAccountService.getAssetAccountsByType(UserContext.getUserId(), accountType));
         } catch (IllegalArgumentException e) {
@@ -68,7 +69,7 @@ public class AssetAccountController {
     @GetMapping("/bank/type")
     @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBankAndType(
-            String bankName, AccountType accountType) {
+            @Param("bankName") String bankName, @Param("accountType") AccountType accountType) {
         try {
             return ResponseEntity.ok(assetAccountService.getAssetAccountByBankAndType(UserContext.getUserId(), bankName, accountType));
         } catch (IllegalArgumentException e) {
@@ -76,14 +77,4 @@ public class AssetAccountController {
         }
     }
 
-    /**
-     * 최대 자산이 들어있는 계좌를 반환
-     *
-     * @return AssetAccount 최대 금액이 들어있는 계좌 (여기서 type 써서 세분화해도 좋을 듯?)
-     */
-    @GetMapping("/max")
-    @RequireJwtToken
-    public ResponseEntity<AssetAccountDto> getMaxAssetAccount() {
-        return ResponseEntity.ok(assetAccountService.getMaxAssetAccount(UserContext.getUserId()));
-    }
 }

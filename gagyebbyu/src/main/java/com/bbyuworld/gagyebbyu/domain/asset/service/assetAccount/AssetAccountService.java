@@ -12,6 +12,4 @@ public interface AssetAccountService {
     List<AssetAccountDto> getAssetAccountsByType(Long userId, AccountType accountType);
     List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String Bank, AccountType accountType);
 
-    AssetAccountDto getMaxAssetAccount(Long userId);
-
 }

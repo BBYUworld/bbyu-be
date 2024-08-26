@@ -1,11 +1,9 @@
 package com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount;
 
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,39 +17,31 @@ public class AssetAccountServiceImpl implements AssetAccountService {
 
     @Override
     public List<AssetAccountDto> getAllAssetAccounts(Long userId) {
-        return assetAccountRepository.findByUser_UserIdAndIsHiddenFalse(userId).stream()
+        return assetAccountRepository.findByUser_UserIdAndIsHiddenFalseOrderByAmountDesc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<AssetAccountDto> getAssetAccountsByBank(Long userId, String bankName) {
-        return assetAccountRepository.findByUser_UserIdAndBankNameAndIsHiddenFalse(userId, bankName).stream()
+        return assetAccountRepository.findByUser_UserIdAndBankNameContainingAndIsHiddenFalseOrderByAmountDesc(userId, bankName).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<AssetAccountDto> getAssetAccountsByType(Long userId, AccountType accountType) {
-        return assetAccountRepository.findByUser_UserIdAndAccountTypeAndIsHiddenFalse(userId, accountType).stream()
+        return assetAccountRepository.findByUser_UserIdAndAccountTypeAndIsHiddenFalseOrderByAmountDesc(userId, accountType).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String bankName, AccountType accountType) {
-        return assetAccountRepository.findByUser_UserIdAndBankNameAndAccountTypeAndIsHiddenFalse(userId, bankName, accountType).stream()
+        return assetAccountRepository.findByUser_UserIdAndBankNameContainingAndAccountTypeAndIsHiddenFalseOrderByAmountDesc(userId, bankName, accountType).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public AssetAccountDto getMaxAssetAccount(Long userId) {
-        return assetAccountRepository.findFirstByUser_UserIdAndIsHiddenFalseOrderByAmountDesc(userId)
-                .map(this::convertToDto)
-                .orElse(null);
-    }
-
 
     private AssetAccountDto convertToDto(AssetAccount assetAccount) {
         return AssetAccountDto.builder()
