@@ -8,6 +8,12 @@ import lombok.Getter;
 public final class ExpenseParam {
 
 	/**
+	 * default 현재 일
+	 * month : 1, 2, 3, 4, 5, 6, 7, 8, ...
+	 */
+	private Integer day;
+
+	/**
 	 * default 현재 달
 	 * month : 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	 */

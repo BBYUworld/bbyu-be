@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -29,10 +30,28 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 			.from(expense)
 			.where(
 				expense.couple.coupleId.eq(coupleId),
-				getDate(month, year)
+				getMonth(month, year)
 			)
 			.groupBy(Expressions.dateTemplate(LocalDate.class, "DATE({0})", expense.date),
 				expense.couple)
+			.orderBy(orderSpecifier)
+			.fetch();
+	}
+
+	@Override
+	public List<Expense> findExpenseByDay(Integer day, Integer month, Integer year, long coupleId, String sort) {
+
+		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier(sort);
+
+		// 날짜 범위를 설정합니다.
+		LocalDateTime startOfDay = LocalDateTime.of(year, month, day, 0, 0, 0); // 해당 일의 시작 시간
+		LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1); // 해당 일의 마지막 순간
+
+		return jpaQueryFactory.selectFrom(expense)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				getDay(day, month, year)
+			)
 			.orderBy(orderSpecifier)
 			.fetch();
 	}
@@ -45,10 +64,17 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 		}
 	}
 
-	private BooleanExpression getDate(Integer month, Integer year) {
+	private BooleanExpression getMonth(Integer month, Integer year) {
 		LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0);
 		LocalDateTime endDate = startDate.plusMonths(1).minusNanos(1);
 
 		return expense.date.between(startDate, endDate);
+	}
+
+	private BooleanExpression getDay(Integer day, Integer month, Integer year) {
+		LocalDateTime startOfDay = LocalDateTime.of(year, month, day, 0, 0, 0); // 해당 일의 시작 시간
+		LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
+
+		return expense.date.between(startOfDay, endOfDay);
 	}
 }

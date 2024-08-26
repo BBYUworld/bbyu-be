@@ -44,7 +44,7 @@ public class User {
 	private Long monthlyIncome;
 
 	@Column(name = "rating_name")
-	private String ratingName; // 신용등급
+	private String ratingName;
 
 	@Column(name = "is_deleted", nullable = false)
 	private boolean isDeleted = false;
@@ -189,5 +189,9 @@ public class User {
 	public void removeAsset(Asset asset) {
 		this.assets.remove(asset);
 		asset.setUser(null);
+	}
+
+	public void updateCoupleId(Long coupleId) {
+		this.coupleId = coupleId;
 	}
 }

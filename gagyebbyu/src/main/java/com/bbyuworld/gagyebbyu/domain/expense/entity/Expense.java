@@ -34,7 +34,7 @@ public class Expense {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "couple_id", nullable = false)
+	@JoinColumn(name = "couple_id")
 	private Couple couple;
 
 	@Column(nullable = false)
@@ -66,5 +66,9 @@ public class Expense {
 
 	public void updateMemo(String memo) {
 		this.memo = memo;
+	}
+
+	public void updateAmount(Long amount) {
+		this.amount = amount;
 	}
 }

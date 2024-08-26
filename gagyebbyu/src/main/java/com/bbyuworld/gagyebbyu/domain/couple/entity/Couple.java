@@ -1,11 +1,13 @@
 package com.bbyuworld.gagyebbyu.domain.couple.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,7 @@ public class Couple {
 	private Long coupleId;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user1_id", referencedColumnName = "userId")
+	@JoinColumn(name = "user1_id", referencedColumnName = "userId", nullable = false)
 	private User user1;
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -37,20 +39,39 @@ public class Couple {
 	private User user2;
 
 	@Column(length = 10)
-	private String nickname; // 커플 닉네임
+	private String nickname;
 
 	@Column(name = "married_at")
-	private LocalDateTime marriedAt; // 커플 기념일(결혼기념일)
+	private LocalDate marriedAt;
 
 	@Column(name = "monthly_target_amount")
-	private Long monthlyTargetAmount; // 목표 한 달 지출 금액
+	private Long monthlyTargetAmount;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	@Builder
-	public Couple(User user1, User user2, String nickname, LocalDateTime marriedAt, Long monthlyTargetAmount) {
+	public Couple(User user1, String nickname, LocalDate marriedAt, Long monthlyTargetAmount) {
 		this.user1 = user1;
-		this.user2 = user2;
 		this.nickname = nickname;
 		this.marriedAt = marriedAt;
 		this.monthlyTargetAmount = monthlyTargetAmount;
+		this.status = Status.WAIT;
+	}
+
+	public void updateTargetAmount(Long monthlyTargetAmount) {
+		this.monthlyTargetAmount = monthlyTargetAmount;
+	}
+
+	public void updateCouple(LocalDate marriedAt, String nickname, Long monthlyTargetAmount) {
+		this.marriedAt = marriedAt;
+		this.nickname = nickname;
+		this.monthlyTargetAmount = monthlyTargetAmount;
+	}
+
+	public void updateStatusConnect(User user2) {
+		this.user2 = user2;
+		this.status = Status.CONNECT;
 	}
 }
