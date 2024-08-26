@@ -1,9 +1,11 @@
 package com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount;
 
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AssetAccountServiceImpl implements AssetAccountService {
     private final AssetAccountRepository assetAccountRepository;
+    private final AssetRepository assetRepository;
 
     @Override
     public List<AssetAccountDto> getAllAssetAccounts(Long userId) {

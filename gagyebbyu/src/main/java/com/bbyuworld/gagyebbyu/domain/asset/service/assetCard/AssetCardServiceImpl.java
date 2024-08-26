@@ -39,18 +39,22 @@ public class AssetCardServiceImpl implements AssetCardService {
                 .collect(Collectors.toList());
     }
 
-    protected AssetCardDto convertToDto(AssetCard assetCard) {
-        AssetCardDto assetCardDto = new AssetCardDto();
-        AssetCardDto.builder()
+    private AssetCardDto convertToDto(AssetCard assetCard) {
+        return AssetCardDto.builder()
                 .assetId(assetCard.getAssetId())
                 .userId(assetCard.getUser().getUserId())
+                .coupleId(assetCard.getCouple() != null ? assetCard.getCouple().getCoupleId() : null)
+                .type(String.valueOf(assetCard.getType()))
                 .bankName(assetCard.getBankName())
-                .cardName(assetCard.getCardName())
+                .bankCode(assetCard.getBankCode())
+                .amount(assetCard.getAmount())
+                .createdAt(assetCard.getCreatedAt())
+                .updatedAt(assetCard.getUpdatedAt())
+                .isEnded(assetCard.getIsEnded())
+                .isHidden(assetCard.getIsHidden())
                 .cardNumber(assetCard.getCardNumber())
-                .cardType(assetCard.getCardType().name())
+                .cardName(assetCard.getCardName())
+                .cardType(String.valueOf(assetCard.getCardType()))
                 .build();
-
-        return assetCardDto;
-
     }
 }
