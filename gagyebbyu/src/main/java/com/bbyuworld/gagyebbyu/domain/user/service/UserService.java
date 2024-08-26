@@ -107,7 +107,7 @@ public class UserService {
     @Transactional
     public boolean saveAdditionalInfo(Long userId, UserAccountRequestDto dto){
         User user = userRepository.findUserById(userId);
-        if(dto.getAdditionalInfo().getGender().equals("M")){
+        if(dto.getAdditionalInfo().getGender().equals("male")){
             user.setGender(Gender.M);
         }
         else{
