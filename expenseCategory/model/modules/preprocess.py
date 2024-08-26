@@ -1,42 +1,17 @@
-import pandas as pd
+# preprocess.py
 import re
 
-def regularize(df, cased=False):  # cased = True -> 대소문자 구별 / cased = False -> 영어는 모두 소문자
-    if isinstance(df, pd.DataFrame):
 
-        if df['거래일자'].dtype == int:
-            df['거래일자'] = pd.to_datetime(df['거래일자'], format='%Y%m%d').astype(str)
+def preprocess_infer(text):
+    # regularize
+    # 문자열에서 한글, 영문, 숫자만 남기고 나머지는 공백으로 대체합니다.
+    text = re.sub("[^가-힣a-zA-Z0-9]", " ", text).strip()
 
-        if df['금액'].dtype != int:
-            df['금액'] = df['금액'].str.replace(',', '').astype(int)
+    # 문자열이 비어있을 경우 예외를 발생시킵니다.
+    if not text:
+        raise Exception('Cannot preprocess an empty string!')
 
-        df['업체명_r'] = df['업체명'].apply(lambda x: re.sub("[^가-힣a-zA-Z0-9]", " ", x).strip())
+    # 공백이 2개 이상 연속될 경우 하나의 공백으로 대체합니다.
+    text = re.sub(' {2,}', ' ', text)
 
-        for _ in range(10):
-            df['업체명_r'] = df['업체명_r'].str.replace(' {2,}', ' ', regex=True)
-
-        df = df[df['업체명_r'] != ''].reset_index(drop=True)
-
-        if not cased:
-            df['업체명_r'] = df['업체명_r'].str.lower()
-
-        return df
-
-    elif isinstance(df, str):
-        word = re.sub("[^가-힣a-zA-Z0-9]", " ", df).strip()
-        if word == '':
-            raise Exception('Cannot Preprocess an Empty String!')
-        word = re.sub(' {2,}', ' ', word)
-        return word
-
-
-def preprocess_infer(df):
-    if isinstance(df, pd.DataFrame):
-        df.dropna(how='any', inplace=True)
-        return regularize(df)
-    elif isinstance(df, str):
-        return regularize(df)
-
-
-if __name__ == '__main__':
-    pass
+    return text

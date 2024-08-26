@@ -3,7 +3,6 @@ import torch
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import pandas as pd
 from model.inference_streamlit import load_model, inference
 from model.modules.preprocess import preprocess_infer
 
@@ -22,18 +21,23 @@ class InferenceData(BaseModel):
 
 @app.post("/api/expenseCategory")
 def inference_single(inp: InferenceData):
-    merch_name = inp.name
+    store_name = inp.name
 
-    if not merch_name:
-        raise HTTPException(status_code=400, detail="name 필드는 비어 있을 수 없습니다.")
+    if not store_name:
+        raise HTTPException(status_code=400, detail="The name field is empty.")
 
     try:
         # 모델과 토크나이저 설정
-        cate, prob = inference(preprocess_infer(merch_name), 26, MODEL, TOKENIZER, device, topk=False)
+        category, prediction_probability = inference(preprocess_infer(store_name), 26, MODEL, TOKENIZER, device)
 
-        # 결과를 DataFrame으로 변환 및 JSON으로 반환
-        result = pd.DataFrame({'category': [cate], 'predictionProbability': [prob]})
-        result_json = result.to_json(orient='records')
-        return JSONResponse(content=json.loads(result_json))
+        # prediction_probability를 float으로 변환하고 소수점 둘째 자리까지 반올림
+        prediction_probability = round(float(prediction_probability), 2)
+
+        # 결과를 JSON으로 변환하여 반환
+        result = {
+            "category": category,
+            "predictionProbability": prediction_probability
+        }
+        return JSONResponse(content=result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
