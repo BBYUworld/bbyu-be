@@ -4,10 +4,12 @@ import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetCardDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AssetService {
     List<AssetDto> getAssets(Long userId);
@@ -26,5 +28,7 @@ public interface AssetService {
     boolean insertNewLoan(AssetLoanDto assetLoanDtoDto, Long userId);
     boolean insertNewCard(AssetCardDto assetCardDto, Long userId);
     boolean insertNewAccount(AssetAccountDto assetAccountDto, Long userId);
+
+    /* 상세정보 출력 */
 
 }

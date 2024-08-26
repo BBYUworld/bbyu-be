@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.asset.repository;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -44,4 +45,5 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     /* 상환 완료된 대출 보기 */
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByUser_UserIdAndIsEndedTrue(Long userId);
+
 }

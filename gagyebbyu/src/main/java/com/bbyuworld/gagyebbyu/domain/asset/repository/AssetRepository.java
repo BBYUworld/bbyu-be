@@ -36,11 +36,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     /* 커플 연결됐을 때, 자산 업데이트 */
     @Modifying
-    @Query("UPDATE Asset a SET a.couple.coupleId = :coupleId WHERE a.user IN :userIds")
-    void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId,  List<Long> userIds);
-
-
-
-
+    @Query("UPDATE Asset a SET a.couple.coupleId = :coupleId WHERE a.user.userId = :user1Id OR a.user.userId = :user2Id")
+    void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId, @Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
 
 }

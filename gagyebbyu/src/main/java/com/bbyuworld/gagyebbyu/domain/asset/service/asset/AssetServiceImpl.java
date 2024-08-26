@@ -10,6 +10,9 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCardRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
@@ -17,6 +20,7 @@ import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +37,9 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final UserRepository userRepository;
     private final CoupleRepository coupleRepository;
+    private final AssetAccountRepository assetAccountRepository;
+    private final AssetCardRepository assetCardRepository;
+    private final AssetLoanRepository assetLoanRepository;
 
     /**
      * 사용자의 전체 자산 내역 정보 제공
@@ -110,11 +117,8 @@ public class AssetServiceImpl implements AssetService {
     @Transactional
     public void updateUserAssetsToCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
                                          @Param("user2Id") Long user2Id) {
-        List<Long> userIds = new ArrayList<>();
-        userIds.add(user1Id);
-        userIds.add(user2Id);
         Long coupleId = couple.getCoupleId();
-        assetRepository.updateAssetsByCouple_CoupleId(coupleId, userIds);
+        assetRepository.updateAssetsByCouple_CoupleId(coupleId, user1Id,user2Id);
     }
 
     /**

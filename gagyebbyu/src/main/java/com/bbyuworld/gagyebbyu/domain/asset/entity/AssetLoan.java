@@ -23,4 +23,12 @@ public class AssetLoan extends Asset {
 
     @Column(name = "remained_amount", nullable = false)
     private Long remainedAmount;
+
+    @PreUpdate
+    public void preUpdate() {
+        if (this.remainedAmount <= 0) {
+            this.setIsEnded(true);
+            this.setIsHidden(true);
+        }
+    }
 }

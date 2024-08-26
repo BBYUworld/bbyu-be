@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.couple.service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
@@ -27,6 +28,7 @@ public class CoupleService {
 	private final CoupleRepository coupleRepository;
 	private final UserRepository userRepository;
 	private final ExpenseRepository expenseRepository;
+	private final AssetRepository assetRepository;
 
 	@Transactional
 	public void createCouple(CoupleCreateDto coupleCreateDto) {
@@ -54,6 +56,7 @@ public class CoupleService {
 		expenseRepository.updateExpenseCouple(couple, couple.getUser1().getUserId(), user2.getUserId());
 
 		//자산도 추후 추가
+		assetRepository.updateAssetsByCouple_CoupleId(coupleId, couple.getUser1().getUserId(), user2.getUserId() );
 	}
 
 	@Transactional
