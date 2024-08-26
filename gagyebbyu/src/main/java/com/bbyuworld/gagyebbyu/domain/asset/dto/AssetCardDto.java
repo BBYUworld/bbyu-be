@@ -1,13 +1,14 @@
 package com.bbyuworld.gagyebbyu.domain.asset.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class AssetCardDto extends AssetDto {
     private String cardNumber;
     private String cardName;
