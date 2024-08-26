@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
+@NamedEntityGraph(name = "Asset.withUser",
+        attributeNodes = @NamedAttributeNode("user"))
 public abstract class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

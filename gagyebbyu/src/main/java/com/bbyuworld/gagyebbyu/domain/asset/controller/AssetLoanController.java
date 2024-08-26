@@ -22,6 +22,17 @@ public class AssetLoanController {
     private final AssetLoanService assetLoanService;
 
     /**
+     * 사용자의 id에 맞는 모든 대출 상품을 출력하는 메서드
+     *
+     * @return 사용자가 가입한 대출 상품 목록을 담은 ResponseEntity
+     */
+    @GetMapping
+    @RequireJwtToken
+    public ResponseEntity<List<AssetLoanDto>> getUserLoans() {
+        return ResponseEntity.ok(assetLoanService.getUserLoans(UserContext.getUserId()));
+    }
+
+    /**
      * 사용자의 특정 loan 상품을 불러오기 위한 메서드
      *
      * @param assetId 조회할 자산의 ID
@@ -33,17 +44,6 @@ public class AssetLoanController {
         return assetLoanService.getUserTargetLoan(UserContext.getUserId(), assetId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    /**
-     * 사용자의 id에 맞는 모든 대출 상품을 출력하는 메서드
-     *
-     * @return 사용자가 가입한 대출 상품 목록을 담은 ResponseEntity
-     */
-    @GetMapping("/user")
-    @RequireJwtToken
-    public ResponseEntity<List<AssetLoanDto>> getUserLoans() {
-        return ResponseEntity.ok(assetLoanService.getUserLoans(UserContext.getUserId()));
     }
 
     /**

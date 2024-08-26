@@ -3,9 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
-import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
-import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -128,11 +126,18 @@ public class AssetLoanServiceImpl implements AssetLoanService {
         return AssetLoanDto.builder()
                 .assetId(assetLoan.getAssetId())
                 .userId(assetLoan.getUser().getUserId())
+                .coupleId(assetLoan.getCouple() != null ? assetLoan.getCouple().getCoupleId() : null)
+                .type(String.valueOf(assetLoan.getType()))
                 .bankName(assetLoan.getBankName())
+                .bankCode(assetLoan.getBankCode())
                 .amount(assetLoan.getAmount())
-                .interestRate(assetLoan.getInterestRate())
+                .createdAt(assetLoan.getCreatedAt())
+                .updatedAt(assetLoan.getUpdatedAt())
+                .isEnded(assetLoan.getIsEnded())
                 .isHidden(assetLoan.getIsHidden())
+                // AssetLoan 특정 필드
                 .loanName(assetLoan.getLoanName())
+                .interestRate(assetLoan.getInterestRate())
                 .remainedAmount(assetLoan.getRemainedAmount())
                 .build();
     }

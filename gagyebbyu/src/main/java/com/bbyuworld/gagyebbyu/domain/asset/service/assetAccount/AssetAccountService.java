@@ -13,6 +13,5 @@ public interface AssetAccountService {
     List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String Bank, AccountType accountType);
 
     AssetAccountDto getMaxAssetAccount(Long userId);
-    Long getCountByHidden(Long userId);
 
 }

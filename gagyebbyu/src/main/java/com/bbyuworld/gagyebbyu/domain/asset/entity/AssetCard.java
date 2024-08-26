@@ -2,7 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.entity;
 
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
 import jakarta.persistence.*;
-import lombok.Data;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

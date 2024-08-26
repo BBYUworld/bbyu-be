@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AssetAccountServiceImpl implements AssetAccountService {
     private final AssetAccountRepository assetAccountRepository;
-    private final AssetRepository assetRepository;
 
     @Override
     public List<AssetAccountDto> getAllAssetAccounts(Long userId) {
@@ -53,18 +52,21 @@ public class AssetAccountServiceImpl implements AssetAccountService {
                 .orElse(null);
     }
 
-    @Override
-    public Long getCountByHidden(Long userId) {
-        return assetAccountRepository.countByUser_UserIdAndIsHiddenFalse(userId);
-    }
 
     private AssetAccountDto convertToDto(AssetAccount assetAccount) {
-
         return AssetAccountDto.builder()
                 .assetId(assetAccount.getAssetId())
                 .userId(assetAccount.getUser().getUserId())
+                .coupleId(assetAccount.getCouple() != null ? assetAccount.getCouple().getCoupleId() : null)
+                .type(String.valueOf(assetAccount.getType()))
                 .bankName(assetAccount.getBankName())
+                .bankCode(assetAccount.getBankCode())
                 .amount(assetAccount.getAmount())
+                .createdAt(assetAccount.getCreatedAt())
+                .updatedAt(assetAccount.getUpdatedAt())
+                .isEnded(assetAccount.getIsEnded())
+                .isHidden(assetAccount.getIsHidden())
+                // AssetAccount 특정 필드
                 .accountNumber(assetAccount.getAccountNumber())
                 .accountType(assetAccount.getAccountType().name())
                 .oneTimeTransferLimit(assetAccount.getOneTimeTransferLimit())
@@ -72,7 +74,6 @@ public class AssetAccountServiceImpl implements AssetAccountService {
                 .maturityDate(assetAccount.getMaturityDate())
                 .interestRate(assetAccount.getInterestRate())
                 .term(assetAccount.getTerm())
-                .isHidden(assetAccount.getIsHidden())
                 .build();
     }
 }
