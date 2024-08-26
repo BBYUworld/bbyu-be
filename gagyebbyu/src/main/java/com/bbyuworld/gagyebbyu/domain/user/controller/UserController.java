@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.user.controller;
 
 import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
+import com.bbyuworld.gagyebbyu.domain.user.dto.UserAccountRequestDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
@@ -108,6 +109,14 @@ public class UserController {
         List<DemandDepositDto> list = accountService.findAllDemandDeposit();
         System.out.println("return list = "+list);
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/adittional/info")
+    @RequireJwtToken
+    public ResponseEntity<String> saveAdditionalInfo(@RequestBody UserAccountRequestDto requestDto){
+        Long userId = UserContext.getUserId();
+        userService.saveAdditionalInfo(userId, requestDto);
+        return ResponseEntity.ok("good");
     }
 
 //    @PostMapping("/email")
