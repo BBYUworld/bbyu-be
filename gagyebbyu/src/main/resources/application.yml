@@ -16,6 +16,8 @@ spring:
     issuer: ${jwt.issuer}
     secret_key: ${jwt.secret_key}
 
+
+
 cloud:
   s3:
     bucket: ${aws.bucket}
@@ -35,3 +37,10 @@ logging:
     com.example: DEBUG
   file:
     name: logs/spring-boot-application.log
+
+ssafy:
+  api_key: ${api.key}
+
+mail:
+  username: ${naver.mail.username}
+  password: ${naver.mail.password}

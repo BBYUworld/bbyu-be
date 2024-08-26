@@ -37,27 +37,53 @@ public class Fund {
 	@Column(name = "target_amount", nullable = false)
 	private long targetAmount;
 
-	@Column(name = "start_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "start_date", nullable = false)
 	private LocalDateTime startDate;
 
-	@Column(name = "end_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "end_date", nullable = false)
 	private LocalDateTime endDate;
 
 	@Column(name = "current_amount", nullable = false)
-	private Long currentAmount;
+	private long currentAmount;
 
-	@Column(name = "emergency", nullable = false, columnDefinition = "INT DEFAULT 0")
+	@Column(name = "emergency", nullable = false)
 	private int emergency;
 
+	@Column(name = "is_ended", nullable = false)
+	private boolean isEnded;
+
+	@Column(name = "is_deleted", nullable = false)
+	private boolean isDeleted;
+
 	@Builder
-	public Fund(Couple couple, String goal, long targetAmount, int emergency) {
+	public Fund(Couple couple, String goal, long targetAmount) {
 		this.couple = couple;
 		this.goal = goal;
 		this.targetAmount = targetAmount;
 		this.startDate = LocalDateTime.now();
 		this.endDate = LocalDateTime.now();
-		this.currentAmount = 0L;
+		this.currentAmount = 0;
 		this.emergency = 0;
+		this.isEnded = false;
+		this.isDeleted = false;
+	}
+
+	public void updateFund(long money, TransactionType type) {
+		if (type == TransactionType.MINUS) {
+			currentAmount -= money;
+			emergency += 1;
+		}
+		if (type == TransactionType.PLUS) {
+			currentAmount += money;
+		}
+	}
+
+	public void updateStatus() {
+		this.isEnded = true;
+	}
+
+	public void deleteFund() {
+		this.isDeleted = true;
 	}
 
 }
