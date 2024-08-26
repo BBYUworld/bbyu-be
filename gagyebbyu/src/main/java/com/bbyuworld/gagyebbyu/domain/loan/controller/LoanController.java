@@ -2,11 +2,15 @@ package com.bbyuworld.gagyebbyu.domain.loan.controller;
 
 import com.bbyuworld.gagyebbyu.domain.loan.dto.response.LoanResponseDto;
 import com.bbyuworld.gagyebbyu.domain.loan.service.LoanService;
+import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
+import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -33,8 +37,8 @@ public class LoanController {
      * @return 조회된 대출 상품 정보 반환
      */
     @GetMapping("/loan-name/{loanName}")
-    public ResponseEntity<LoanResponseDto> getLoanByLoanName(@PathVariable String loanName) {
-        LoanResponseDto loan = loanService.getLoanByLoanName(loanName);
+    public ResponseEntity<List<LoanResponseDto>> getLoanByLoanName(@PathVariable String loanName) {
+        List<LoanResponseDto> loan = loanService.getLoanByLoanName(loanName);
         System.out.println("getLoanByLoanName");
         return ResponseEntity.ok(loan);
     }
@@ -78,5 +82,19 @@ public class LoanController {
         List<LoanResponseDto> loans = loanService.getOrderedByInterestRate();
         System.out.println("getOrderedByInterestRate");
         return ResponseEntity.ok(loans);
+    }
+
+    /**
+     * 사용자의 신용정보 호출
+     *
+     * @return String 으로 사용자의 신용정보 반환
+     */
+    @GetMapping("/rating")
+    @RequireJwtToken
+    public ResponseEntity<Map<String, String>> getUserRating() {
+        String rating = loanService.getUserRating(UserContext.getUserId());
+        Map<String, String> response = new HashMap<>();
+        response.put("rating", rating);
+        return ResponseEntity.ok(response);
     }
 }

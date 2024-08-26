@@ -48,19 +48,19 @@ public class AssetController {
         assetService.updateAssetVisibility(assetId, isHidden);
     }
 
-    @PostMapping("/loan")
+    @PostMapping("/add-loan")
     @RequireJwtToken
     public boolean addNewLoan(@RequestBody AssetLoanDto assetLoanDto) {
         return assetService.insertNewLoan(assetLoanDto, UserContext.getUserId());
     }
 
-    @PostMapping("/account")
+    @PostMapping("/add-account")
     @RequireJwtToken
     public boolean addNewAccount(@RequestBody AssetAccountDto assetAccountDto) {
         return assetService.insertNewAccount(assetAccountDto, UserContext.getUserId());
     }
 
-    @PostMapping("/card")
+    @PostMapping("/add-card")
     @RequireJwtToken
     public boolean addNewCard(@RequestBody AssetCardDto assetCardDto) {
         return assetService.insertNewCard(assetCardDto, UserContext.getUserId());
