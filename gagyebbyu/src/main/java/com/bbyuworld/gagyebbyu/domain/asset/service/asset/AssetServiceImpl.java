@@ -11,10 +11,18 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
+import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +31,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
+    private final UserRepository userRepository;
+    private final CoupleRepository coupleRepository;
 
     /**
      * 사용자의 전체 자산 내역 정보 제공
@@ -32,7 +42,7 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public List<AssetDto> getAssets(Long userId) {
-        return assetRepository.findAllByUserIdAndIsHiddenFalse(userId).stream()
+        return assetRepository.findAllByUser_UserIdAndIsHiddenFalse(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -45,18 +55,21 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public Long getSumUserAssets(Long userId) {
-        return assetRepository.sumAmountByUserIdAndIsHiddenFalse(userId);
+        return assetRepository.sumAmountByUser_UserIdAndIsHiddenFalse(userId);
     }
 
     /**
      * 커플에 맞는 전체 자산 정보 제공
      *
-     * @param coupleId 커플 번호
+     * @param userId 커플 번호
      * @return 커플의 모든 자산 정보 List
      */
     @Override
-    public List<AssetDto> getCoupleAssets(Long coupleId) {
-        return assetRepository.findAllByCoupleIdAndIsHiddenFalse(coupleId).stream()
+    public List<AssetDto> getCoupleAssets(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        return assetRepository.findAllByCouple_CoupleIdAndIsHiddenFalse(user.getCoupleId()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -64,12 +77,14 @@ public class AssetServiceImpl implements AssetService {
     /**
      * 커플의 전체 자산 총합 제공
      *
-     * @param coupleId 커플 번호
+     * @param userId 커플 번호
      * @return 커플의 자산 총합 sum
      */
     @Override
-    public Long getSumCoupleAssets(Long coupleId) {
-        return assetRepository.sumAmountByCoupleIdAndIsHiddenFalse(coupleId);
+    public Long getSumCoupleAssets(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        return assetRepository.sumAmountByCouple_CoupleIdAndIsHiddenFalse(user.getCoupleId());
     }
 
     /**
@@ -87,13 +102,15 @@ public class AssetServiceImpl implements AssetService {
     /**
      * 커플 연결됐을 때, update_assetCouple 변경해줘야 함 userid 2개, coupleid 1개
      *
-     * @param coupleId 커플 번호
-     * @param userIds 사용자들의 번호 (userIds 인 List 로 변경 필요)
+     * @param couple 커플 번호
+     * @param user1Id 사용자 번호 1
+     * @param user2Id 사용자 번호 2
      */
     @Override
     @Transactional
-    public void updateCoupleIdForUsers(Long coupleId, List<Long> userIds) {
-        assetRepository.updateCoupleIdForUsers(coupleId, userIds);
+    public void updateUserAssetsToCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
+                                         @Param("user2Id") Long user2Id) {
+
     }
 
     /**
@@ -104,25 +121,28 @@ public class AssetServiceImpl implements AssetService {
      */
     @Transactional
     @Override
-    public boolean insertNewLoan(AssetLoanDto assetLoanDto) {
+    public boolean insertNewLoan(AssetLoanDto assetLoanDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        Couple couple = coupleRepository.findById(user.getCoupleId())
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-        AssetLoan asset = new AssetLoan();
+        AssetLoan assetLoan = new AssetLoan();
 
-        // Set common Asset properties
-        asset.setUserId(assetLoanDto.getUserId());
-        asset.setCoupleId(assetLoanDto.getCoupleId());
-        asset.setBankName(assetLoanDto.getBankName());
-        asset.setBankCode(assetLoanDto.getBankCode());
-        asset.setAmount(assetLoanDto.getAmount());
-        asset.setIsEnded(assetLoanDto.getIsEnded());
-        asset.setIsHidden(assetLoanDto.getIsHidden());
+        assetLoan.setUser(user);
+        assetLoan.setCouple(couple);
+        assetLoan.setBankName(assetLoanDto.getBankName());
+        assetLoan.setBankCode(assetLoanDto.getBankCode());
+        assetLoan.setAmount(assetLoanDto.getAmount());
+        assetLoan.setIsEnded(assetLoanDto.getIsEnded());
+        assetLoan.setIsHidden(assetLoanDto.getIsHidden());
 
         // Set AssetLoan specific properties
-        asset.setLoanName(assetLoanDto.getLoanName());
-        asset.setInterestRate(assetLoanDto.getInterestRate());
-        asset.setRemainedAmount(assetLoanDto.getRemainedAmount());
+        assetLoan.setLoanName(assetLoanDto.getLoanName());
+        assetLoan.setInterestRate(assetLoanDto.getInterestRate());
+        assetLoan.setRemainedAmount(assetLoanDto.getRemainedAmount());
 
-        assetRepository.save(asset);
+        assetRepository.save(assetLoan);
 
         return true;
     }
@@ -135,11 +155,15 @@ public class AssetServiceImpl implements AssetService {
      */
     @Transactional
     @Override
-    public boolean insertNewAccount(AssetAccountDto assetAccountDto) {
+    public boolean insertNewAccount(AssetAccountDto assetAccountDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        Couple couple = coupleRepository.findById(user.getCoupleId())
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
         AssetAccount assetAccount = new AssetAccount();
-        assetAccount.setUserId(assetAccountDto.getUserId());
-        assetAccount.setCoupleId(assetAccountDto.getCoupleId());
+        assetAccount.setUser(user);
+        assetAccount.setCouple(couple);
         assetAccount.setBankName(assetAccountDto.getBankName());
         assetAccount.setBankCode(assetAccountDto.getBankCode());
         assetAccount.setAmount(assetAccountDto.getAmount());
@@ -167,12 +191,16 @@ public class AssetServiceImpl implements AssetService {
      */
     @Transactional
     @Override
-    public boolean insertNewCard(AssetCardDto assetCardDto) {
+    public boolean insertNewCard(AssetCardDto assetCardDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        Couple couple = coupleRepository.findById(user.getCoupleId())
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
         AssetCard assetCard = new AssetCard();
 
-        assetCard.setUserId(assetCardDto.getUserId());
-        assetCard.setCoupleId(assetCardDto.getCoupleId());
+        assetCard.setUser(user);
+        assetCard.setCouple(couple);
         assetCard.setBankName(assetCardDto.getBankName());
         assetCard.setBankCode(assetCardDto.getBankCode());
         assetCard.setAmount(assetCardDto.getAmount());
@@ -192,8 +220,8 @@ public class AssetServiceImpl implements AssetService {
     protected AssetDto convertToDto(Asset asset) {
         return AssetDto.builder()
                 .assetId(asset.getAssetId())
-                .userId(asset.getUserId())
-                .coupleId(asset.getCoupleId())
+                .userId(asset.getUser().getUserId())
+                .coupleId(asset.getCouple().getCoupleId())
                 .type(asset.getType().name())
                 .bankName(asset.getBankName())
                 .bankCode(asset.getBankCode())

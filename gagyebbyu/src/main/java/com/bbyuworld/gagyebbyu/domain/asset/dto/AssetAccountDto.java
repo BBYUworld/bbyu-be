@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.asset.dto;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

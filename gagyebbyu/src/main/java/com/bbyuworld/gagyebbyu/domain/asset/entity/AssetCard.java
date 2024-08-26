@@ -8,10 +8,12 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "asset_card")
+@PrimaryKeyJoinColumn(name = "asset_id")
 @DiscriminatorValue("CARD")
 @Getter
 @Setter
 public class AssetCard extends Asset {
+
     @Column(name = "card_number", nullable = false)
     private String cardNumber;
 
@@ -22,5 +24,3 @@ public class AssetCard extends Asset {
     @Column(name = "card_type", nullable = false)
     private CardType cardType;
 }
-
-

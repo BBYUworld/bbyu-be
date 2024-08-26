@@ -21,7 +21,7 @@ public class AssetCardServiceImpl implements AssetCardService {
      */
     @Override
     public List<AssetCardDto> getAllAssetCards(Long userId) {
-        return assetCardRepository.findByUserIdAndIsHiddenFalse(userId).stream()
+        return assetCardRepository.findByUser_UserIdAndIsHiddenFalse(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -34,7 +34,7 @@ public class AssetCardServiceImpl implements AssetCardService {
      */
     @Override
     public List<AssetCardDto> getAllAssetCardByCardType(CardType cardType, Long userId) {
-        return assetCardRepository.findAllByUserIdAndCardTypeAndIsHiddenFalse(cardType, userId).stream()
+        return assetCardRepository.findAllByUser_UserIdAndCardTypeAndIsHiddenFalse(userId, cardType).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -43,7 +43,7 @@ public class AssetCardServiceImpl implements AssetCardService {
         AssetCardDto assetCardDto = new AssetCardDto();
         AssetCardDto.builder()
                 .assetId(assetCard.getAssetId())
-                .userId(assetCard.getUserId())
+                .userId(assetCard.getUser().getUserId())
                 .bankName(assetCard.getBankName())
                 .cardName(assetCard.getCardName())
                 .cardNumber(assetCard.getCardNumber())

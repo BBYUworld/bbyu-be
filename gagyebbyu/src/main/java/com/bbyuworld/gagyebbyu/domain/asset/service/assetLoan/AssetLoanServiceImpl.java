@@ -1,10 +1,12 @@
 package com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan;
 
-import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
+import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
+import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class AssetLoanServiceImpl implements AssetLoanService {
 
     private final AssetLoanRepository assetLoanRepository;
+    private final UserRepository userRepository;
 
     /**
      * 사용자의 특정 loan 상품을 불러오기 위함
@@ -26,8 +29,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 특정 loan 상품
      */
     @Override
-    public Optional<AssetLoanDto> postUserTargetLoan(Long userId, Long assetId) {
-        return assetLoanRepository.findByUserIdAndAssetId(userId, assetId)
+    public Optional<AssetLoanDto> getUserTargetLoan(Long userId, Long assetId) {
+        return assetLoanRepository.findByUser_UserIdAndAssetId(userId, assetId)
                 .map(this::convertToDto);
     }
 
@@ -38,8 +41,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 사용자가 가입한 대출 상품 list
      */
     @Override
-    public List<AssetLoanDto> postUserLoans(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedFalse(userId).stream()
+    public List<AssetLoanDto> getUserLoans(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalse(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -51,8 +54,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 갚을 대출액이 많은 순 정렬
      */
     @Override
-    public List<AssetLoanDto> postOrderByRemainAmountDesc(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedFalseOrderByRemainedAmountDesc(userId).stream()
+    public List<AssetLoanDto> getOrderByRemainAmountDesc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByRemainedAmountDesc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -64,8 +67,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 갚을 대출액이 적은ㄴ 순 정렬
      */
     @Override
-    public List<AssetLoanDto> postOrderByRemainAmountAsc(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedFalseOrderByRemainedAmountAsc(userId).stream()
+    public List<AssetLoanDto> getOrderByRemainAmountAsc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByRemainedAmountAsc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -77,8 +80,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 대출 리스트
      */
     @Override
-    public List<AssetLoanDto> postOrderByAmountDesc(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedFalseOrderByAmountDesc(userId).stream()
+    public List<AssetLoanDto> getOrderByAmountDesc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByAmountDesc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -89,8 +92,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 대출 리스트
      */
     @Override
-    public List<AssetLoanDto> postOrderByAmountAsc(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedFalseOrderByAmountAsc(userId).stream()
+    public List<AssetLoanDto> getOrderByAmountAsc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByAmountAsc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -105,7 +108,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      */
     @Override
     public int isEndedUpdate(Long assetId, Long remainedAmount, Long userId) {
-        return assetLoanRepository.updateRemainedAmountAndCheckIsEnded(assetId, remainedAmount, userId);
+        return assetLoanRepository.updateRemainedAmountAndCheckIsEnded(assetId, remainedAmount, UserContext.getUserId());
     }
 
     /**
@@ -115,8 +118,8 @@ public class AssetLoanServiceImpl implements AssetLoanService {
      * @return 대출 리스트
      */
     @Override
-    public List<AssetLoanDto> postEndedLoans(Long userId) {
-        return assetLoanRepository.findAllByUserIdAndIsEndedTrue(userId).stream()
+    public List<AssetLoanDto> getEndedLoans(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedTrue(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -124,7 +127,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     private AssetLoanDto convertToDto(AssetLoan assetLoan) {
         return AssetLoanDto.builder()
                 .assetId(assetLoan.getAssetId())
-                .userId(assetLoan.getUserId())
+                .userId(assetLoan.getUser().getUserId())
                 .bankName(assetLoan.getBankName())
                 .amount(assetLoan.getAmount())
                 .interestRate(assetLoan.getInterestRate())

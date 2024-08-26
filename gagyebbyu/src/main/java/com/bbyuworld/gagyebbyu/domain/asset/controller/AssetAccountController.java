@@ -3,7 +3,10 @@ package com.bbyuworld.gagyebbyu.domain.asset.controller;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount.AssetAccountService;
+import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
+import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,39 +24,37 @@ public class AssetAccountController {
      *
      * @return List<AssetAccountDto> 형태의 사용자가 보이게 설정한 자산 리스트
      */
-    @PostMapping
-    public ResponseEntity<List<AssetAccountDto>> getAllAssetAccounts(@RequestBody Long userId) {
-        return ResponseEntity.ok(assetAccountService.postAllAssetAccounts(userId));
+    @GetMapping
+    @RequireJwtToken
+    public ResponseEntity<List<AssetAccountDto>> getAllAssetAccounts() {
+        return ResponseEntity.ok(assetAccountService.getAllAssetAccounts(UserContext.getUserId()));
     }
 
     /**
      * 은행별 자산을 반환
      *
-     * @param request 은행명과 사용자 id
+     * @param bankName 은행명
      * @return List 형식으로 해당 은행의 자산 목록 반환
      */
-    @PostMapping("/bank-name")
+    @GetMapping("/bank-name")
+    @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBank(
-            @RequestBody Map<String, Object> request) {
-        Long userId = Long.parseLong(request.get("userId").toString());
-        String bank = (String) request.get("bankName");
-        return ResponseEntity.ok(assetAccountService.postAssetAccountsByBank(userId, bank));
+        String bankName) {
+        return ResponseEntity.ok(assetAccountService.getAssetAccountsByBank(UserContext.getUserId(), bankName));
     }
 
     /**
      * 입출금 계좌, 예금, 적금, (주식?) 의 자산 목록을 반환
      *
-     * @param request 위에 적힌 3~4개의 타입과 사용자 Id
+     * @param accountType 위에 적힌 3~4개의 타입
      * @return List 형식의 예적금, 입출금, 주식 계좌들
      */
-    @PostMapping("/type")
+    @GetMapping("/type")
+    @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByType(
-            @RequestBody Map<String, Object> request) {
-        Long userId = Long.parseLong(request.get("userId").toString());
-        String accountTypeStr = (String) request.get("accountType");
+            AccountType accountType) {
         try {
-            AccountType accountType = AccountType.valueOf(accountTypeStr.toUpperCase());
-            return ResponseEntity.ok(assetAccountService.postAssetAccountsByType(userId, accountType));
+            return ResponseEntity.ok(assetAccountService.getAssetAccountsByType(UserContext.getUserId(), accountType));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -62,18 +63,16 @@ public class AssetAccountController {
     /**
      * 은행별 자산의 종류에 따른 자산 목록 반환
      *
-     * @param request 은행명 자산종류
+     * @param bankName 은행명 자산종류
+     * @param accountType 타입 번호
      * @return List 형식의 자산 내역
      */
-    @PostMapping("/bank/type")
+    @GetMapping("/bank/type")
+    @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBankAndType(
-            @RequestBody Map<String, Object> request) {
-        Long userId = Long.parseLong(request.get("userId").toString());
-        String bankName = (String) request.get("bankName");
-        String accountTypeStr = (String) request.get("accountType");
+            String bankName, AccountType accountType) {
         try {
-            AccountType accountType = AccountType.valueOf(accountTypeStr.toUpperCase());
-            return ResponseEntity.ok(assetAccountService.postAssetAccountByBankAndType(userId, bankName, accountType));
+            return ResponseEntity.ok(assetAccountService.getAssetAccountByBankAndType(UserContext.getUserId(), bankName, accountType));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -84,9 +83,10 @@ public class AssetAccountController {
      *
      * @return AssetAccount 최대 금액이 들어있는 계좌 (여기서 type 써서 세분화해도 좋을 듯?)
      */
-    @PostMapping("/max")
-    public ResponseEntity<AssetAccountDto> getMaxAssetAccount(@RequestBody Long userId) {
-        return ResponseEntity.ok(assetAccountService.postMaxAssetAccount(userId));
+    @GetMapping("/max")
+    @RequireJwtToken
+    public ResponseEntity<AssetAccountDto> getMaxAssetAccount() {
+        return ResponseEntity.ok(assetAccountService.getMaxAssetAccount(UserContext.getUserId()));
     }
 
     /**
@@ -94,8 +94,9 @@ public class AssetAccountController {
      *
      * @return Long 몇 개
      */
-    @PostMapping("/count")
-    public ResponseEntity<Long> getCountByHidden(@RequestBody Long userId) {
-        return ResponseEntity.ok(assetAccountService.postCountByHidden(userId));
+    @GetMapping("/count")
+    @RequireJwtToken
+    public ResponseEntity<Long> getCountByHidden() {
+        return ResponseEntity.ok(assetAccountService.getCountByHidden(UserContext.getUserId()));
     }
 }

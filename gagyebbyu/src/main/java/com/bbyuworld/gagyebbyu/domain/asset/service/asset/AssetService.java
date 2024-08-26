@@ -4,10 +4,8 @@ import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetCardDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -16,17 +14,18 @@ public interface AssetService {
 
     Long getSumUserAssets(Long userId);
 
-    List<AssetDto> getCoupleAssets(Long coupleId);
+    List<AssetDto> getCoupleAssets(Long userId);
 
     Long getSumCoupleAssets(Long userId);
 
     void updateAssetVisibility(Long assetId, boolean isHidden);
 
-    void updateCoupleIdForUsers(Long coupleId, List<Long> userIds);
+    void updateUserAssetsToCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
+                                  @Param("user2Id") Long user2Id);
 
     /* INSERT 이 있어야 함 */
-    boolean insertNewLoan(AssetLoanDto assetLoanDtoDto);
-    boolean insertNewCard(AssetCardDto assetCardDto);
-    boolean insertNewAccount(AssetAccountDto assetAccountDto);
+    boolean insertNewLoan(AssetLoanDto assetLoanDtoDto, Long userId);
+    boolean insertNewCard(AssetCardDto assetCardDto, Long userId);
+    boolean insertNewAccount(AssetAccountDto assetAccountDto, Long userId);
 
 }

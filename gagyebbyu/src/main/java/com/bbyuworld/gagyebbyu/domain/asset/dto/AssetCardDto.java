@@ -13,4 +13,6 @@ public class AssetCardDto extends AssetDto {
     private String cardNumber;
     private String cardName;
     private String cardType;  // ENUM('CREDIT', 'CHECK')
+
+
 }

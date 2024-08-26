@@ -4,12 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "asset_deposit")
+@Table(name = "asset_Deposit")
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class AssetDeposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,37 +1,39 @@
 package com.bbyuworld.gagyebbyu.domain.asset.entity;
 
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetTypeConverter;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "asset")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
-@Data
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
 public abstract class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "asset_id")
     private Long assetId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "couple_id")
-    private Long coupleId;
+    @ManyToOne
+    @JoinColumn(name = "couple_id")
+    private Couple couple;
 
+    @Column(name = "type", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false, insertable = false, updatable = false)
     private AssetType type;
 
     @Column(name = "bank_name", nullable = false)
@@ -57,3 +59,4 @@ public abstract class Asset {
     @Column(name = "is_hidden", nullable = false)
     private Boolean isHidden = false;
 }
+

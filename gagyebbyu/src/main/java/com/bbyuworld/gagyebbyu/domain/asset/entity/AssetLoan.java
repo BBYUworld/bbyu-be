@@ -9,10 +9,12 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "asset_loan")
+@PrimaryKeyJoinColumn(name = "asset_id")
 @DiscriminatorValue("LOAN")
 @Getter
 @Setter
 public class AssetLoan extends Asset {
+
     @Column(name = "loan_name", nullable = false)
     private String loanName;
 

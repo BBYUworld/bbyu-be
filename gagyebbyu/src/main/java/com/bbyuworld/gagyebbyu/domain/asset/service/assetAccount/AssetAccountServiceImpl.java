@@ -16,49 +16,50 @@ public class AssetAccountServiceImpl implements AssetAccountService {
     private final AssetAccountRepository assetAccountRepository;
 
     @Override
-    public List<AssetAccountDto> postAllAssetAccounts(Long userId) {
-        return assetAccountRepository.findByUserIdAndIsHiddenFalse(userId).stream()
+    public List<AssetAccountDto> getAllAssetAccounts(Long userId) {
+        return assetAccountRepository.findByUser_UserIdAndIsHiddenFalse(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AssetAccountDto> postAssetAccountsByBank(Long userId, String bankName) {
-        return assetAccountRepository.findByUserIdAndBankNameAndIsHiddenFalse(userId, bankName).stream()
+    public List<AssetAccountDto> getAssetAccountsByBank(Long userId, String bankName) {
+        return assetAccountRepository.findByUser_UserIdAndBankNameAndIsHiddenFalse(userId, bankName).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AssetAccountDto> postAssetAccountsByType(Long userId, AccountType accountType) {
-        return assetAccountRepository.findByUserIdAndAccountTypeAndIsHiddenFalse(userId, accountType).stream()
+    public List<AssetAccountDto> getAssetAccountsByType(Long userId, AccountType accountType) {
+        return assetAccountRepository.findByUser_UserIdAndAccountTypeAndIsHiddenFalse(userId, accountType).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AssetAccountDto> postAssetAccountByBankAndType(Long userId, String bankName, AccountType accountType) {
-        return assetAccountRepository.findByUserIdAndBankNameAndAccountTypeAndIsHiddenFalse(userId, bankName, accountType).stream()
+    public List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String bankName, AccountType accountType) {
+        return assetAccountRepository.findByUser_UserIdAndBankNameAndAccountTypeAndIsHiddenFalse(userId, bankName, accountType).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AssetAccountDto postMaxAssetAccount(Long userId) {
-        return assetAccountRepository.findFirstByUserIdAndIsHiddenFalseOrderByAmountDesc(userId)
+    public AssetAccountDto getMaxAssetAccount(Long userId) {
+        return assetAccountRepository.findFirstByUser_UserIdAndIsHiddenFalseOrderByAmountDesc(userId)
                 .map(this::convertToDto)
                 .orElse(null);
     }
 
     @Override
-    public Long postCountByHidden(Long userId) {
-        return assetAccountRepository.countByUserIdAndIsHiddenFalse(userId);
+    public Long getCountByHidden(Long userId) {
+        return assetAccountRepository.countByUser_UserIdAndIsHiddenFalse(userId);
     }
 
     private AssetAccountDto convertToDto(AssetAccount assetAccount) {
+
         return AssetAccountDto.builder()
                 .assetId(assetAccount.getAssetId())
-                .userId(assetAccount.getUserId())
+                .userId(assetAccount.getUser().getUserId())
                 .bankName(assetAccount.getBankName())
                 .amount(assetAccount.getAmount())
                 .accountNumber(assetAccount.getAccountNumber())

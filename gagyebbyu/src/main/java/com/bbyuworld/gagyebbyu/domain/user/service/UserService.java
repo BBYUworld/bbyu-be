@@ -1,8 +1,10 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetDeposit;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Type;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserAccountRequestDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
@@ -118,33 +120,38 @@ public class UserService {
         user.setMonthlyIncome(monthlyIncome);
         user.setMonthlyTargetAmount((long) dto.getAdditionalInfo().getDesiredSpending());
 
-        for(AccountDto accountDto : dto.getSelectedAccounts()){
-            Asset asset = new Asset();
-            if(accountDto.getAccountTypeName().equals("수시입출금"))
-                asset.setType(Type.DEPOSIT);
-            asset.setBankName(accountDto.getBankName());
-            asset.setAmount(accountDto.getAccountBalance());
-            asset.setCreatedAt(LocalDateTime.now());
-            asset.setUpdatedAt(LocalDateTime.now());
-            asset.setUser(user);
-            AssetDeposit assetDeposit = new AssetDeposit();
-            assetDeposit.setBank(accountDto.getBankName());
-            assetDeposit.setBankCode(accountDto.getBankCode());
-            assetDeposit.setNumber(accountDto.getAccountNo());
-            assetDeposit.setType(accountDto.getAccountTypeName());
-            assetDeposit.setAmount(accountDto.getAccountBalance());
-            assetDeposit.setHidden(false);
-            asset.setAssetDeposit(assetDeposit);
-            assetDeposit.setAsset(asset);
-            assetDeposit.setOneTimeTransferLimit(accountDto.getOneTimeTransferLimit());
-            assetDeposit.setDailyTransferLimit(accountDto.getDailyTransferLimit());
-            user.getAssets().add(asset);
+        for (AccountDto accountDto : dto.getSelectedAccounts()) {
+            AssetAccount assetAccount = new AssetAccount();
+            assetAccount.setUser(user);
+            assetAccount.setBankName(accountDto.getBankName());
+            assetAccount.setBankCode(accountDto.getBankCode());
+            assetAccount.setAmount(accountDto.getAccountBalance());
+            assetAccount.setAccountNumber(accountDto.getAccountNo());
+            assetAccount.setAccountType(convertToAccountType(accountDto.getAccountTypeName()));
+            assetAccount.setOneTimeTransferLimit(accountDto.getOneTimeTransferLimit());
+            assetAccount.setDailyTransferLimit(accountDto.getDailyTransferLimit());
+            assetAccount.setIsHidden(false);
+            assetAccount.setCreatedAt(LocalDateTime.now());
+            assetAccount.setUpdatedAt(LocalDateTime.now());
+
+            user.getAssets().add(assetAccount);
         }
         userRepository.save(user);
         return true;
     }
 
-
+    private AccountType convertToAccountType(String accountTypeName) {
+        switch (accountTypeName) {
+            case "수시입출금":
+                return AccountType.FREE_SAVINGS;
+            case "예금":
+                return AccountType.DEPOSIT;
+            case "적금":
+                return AccountType.SAVINGS;
+            default:
+                throw new IllegalArgumentException("Unknown account type: " + accountTypeName);
+        }
+    }
 
 
 
