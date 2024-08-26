@@ -1,7 +1,13 @@
 package com.bbyuworld.gagyebbyu.domain.user.controller;
 
+import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
+import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
 import com.bbyuworld.gagyebbyu.domain.user.service.UserService;
+import com.bbyuworld.gagyebbyu.global.api.asset.CreateDemandDepositAccountDto;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandDepositDto;
+import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -17,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final AccountService accountService;
+//    private final MailSender mailSender;
 
     /**
      *
@@ -34,9 +45,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto user){
-        boolean flag = userService.login(user);
-        return ResponseEntity.ok("로그인 성공");
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto user){
+        LoginResponseDto loginResponseDto = userService.login(user);
+        System.out.println("LoginResponseDto = "+loginResponseDto);
+        return ResponseEntity.ok(loginResponseDto);
     }
 
     @PostMapping("/logout")
@@ -54,4 +66,54 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.ok("계정 삭제 성공");
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<String> searchUser(@RequestParam("email") String email){
+        boolean flag = userService.searchUser(email);
+        if(flag){
+            return ResponseEntity.ok("not Exist");
+        }
+        return ResponseEntity.ok("is Exist");
+    }
+
+    @GetMapping("/account")
+    @RequireJwtToken
+    public ResponseEntity<List<AccountDto>> findAllUserAccount(){
+        Long userId = UserContext.getUserId();
+        List<AccountDto> list = accountService.findAllUserAccount(userId);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/account")
+    @RequireJwtToken
+    public ResponseEntity<AccountDto> createUserAccount(@RequestBody Map<String, String>map){
+        Long userId = UserContext.getUserId();
+        String uniqueNo = map.get("accountTypeUniqueNo");
+        String bankName = map.get("bankName");
+        Long dailyTransferLimit = Long.parseLong(map.get("dailyTransferLimit"));
+        Long oneTimeTransferLimit = Long.valueOf(map.get("oneTimeTransferLimit"));
+        System.out.println("bankName = "+bankName);
+        System.out.println("uniqueNo = "+uniqueNo);
+        System.out.println("dailyTransferLimit" +dailyTransferLimit);
+        System.out.println("oneTimeTransferLimit" +oneTimeTransferLimit);
+        AccountDto dto = accountService.createUserAccount(userId, uniqueNo, bankName, dailyTransferLimit, oneTimeTransferLimit);
+        System.out.println("dto = "+dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/product")
+    @RequireJwtToken
+    public ResponseEntity<List<DemandDepositDto>> findAllProducts(){
+        List<DemandDepositDto> list = accountService.findAllDemandDeposit();
+        System.out.println("return list = "+list);
+        return ResponseEntity.ok(list);
+    }
+
+//    @PostMapping("/email")
+//    public ResponseEntity<String> emailVerification(@RequestBody UserDto dto){
+//        System.out.println("email = "+dto.getEmail());
+//        String authNumber =mailSender.joinEmail(dto.getEmail());
+//        return ResponseEntity.ok(authNumber);
+//    }
 }

@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.global.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Component
@@ -22,13 +26,13 @@ public class ApiPost {
     @Value("${ssafy.api_key}")
     private String apiKey;
     private final ObjectMapper objectMapper;
-    public <T> T sendPostRequest(String url, String apiName,String userKey,T requestBody, Class<T> responseType) throws Exception {
+    public <T> ApiResponse<T> sendPostRequest(String url, String apiName, Object requestBody, Class<?> elementType) throws Exception {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Content-Type", "application/json");
 
             ObjectNode rootNode = objectMapper.createObjectNode();
-            ObjectNode headerNode = createHeaderNode(apiName, userKey);
+            ObjectNode headerNode = createHeaderNode(apiName);
             rootNode.set("HEADER", headerNode);
 
             if (requestBody != null) {
@@ -41,12 +45,27 @@ public class ApiPost {
 
             try (CloseableHttpResponse response = client.execute(httpPost)) {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
-                return objectMapper.readValue(jsonResponse, responseType);
+                JsonNode responseNode = objectMapper.readTree(jsonResponse);
+
+                ApiResponse<T> apiResponse = new ApiResponse<>();
+                apiResponse.setHeader(objectMapper.treeToValue(responseNode.get("HEADER"), ApiResponse.Header.class));
+
+                JsonNode recNode = responseNode.get("REC");
+                System.out.println("Api Result REC = "+recNode);
+                if (recNode.isArray()) {
+                    List<?> resultList = objectMapper.readValue(recNode.traverse(),
+                            objectMapper.getTypeFactory().constructCollectionType(List.class, elementType));
+                    apiResponse.setRec((T) resultList);
+                } else {
+                    apiResponse.setRec((T) objectMapper.treeToValue(recNode, elementType));
+                }
+
+                return apiResponse;
             }
         }
     }
 
-    private ObjectNode createHeaderNode(String apiName, String userKey) {
+    private ObjectNode createHeaderNode(String apiName) {
         LocalDateTime now = LocalDateTime.now();
         String transmissionDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String transmissionTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
@@ -60,7 +79,6 @@ public class ApiPost {
         headerNode.put("fintechAppNo", "001");
         headerNode.put("institutionTransactionUniqueNo", generateUniqueNo());
         headerNode.put("apiKey", apiKey);
-        headerNode.put("userKey", userKey);
 
         return headerNode;
     }

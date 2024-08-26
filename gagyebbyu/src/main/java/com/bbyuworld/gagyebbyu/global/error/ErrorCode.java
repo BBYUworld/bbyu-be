@@ -13,7 +13,7 @@ public enum ErrorCode {
 	 */
 	SYSTEM_ERROR(INTERNAL_SERVER_ERROR, "SYSTEM-000", "서비스에 장애가 발생했습니다."),
 	BAD_REQUEST_ERROR(BAD_REQUEST, "SYSTEM-001", "유효하지 않은 요청입니다."),
-
+	EXPIRED_JWT_TOKEN(UNAUTHORIZED, "SYSTEM-002", "AccessToken 만료"),
 	/**
 	 * User
 	 */

@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.global.error;
 
-import com.bbyuworld.gagyebbyu.global.error.type.UnauthorizedException;
+import com.bbyuworld.gagyebbyu.global.error.type.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,12 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.bbyuworld.gagyebbyu.global.error.response.AcceptedResponse;
 import com.bbyuworld.gagyebbyu.global.error.response.ErrorResponse;
-import com.bbyuworld.gagyebbyu.global.error.type.AcceptedException;
-import com.bbyuworld.gagyebbyu.global.error.type.BadRequestException;
-import com.bbyuworld.gagyebbyu.global.error.type.BusinessException;
-import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
-import com.bbyuworld.gagyebbyu.global.error.type.ForbiddenException;
-import com.bbyuworld.gagyebbyu.global.error.type.UserNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +24,10 @@ public class GlobalExceptionHandler {
 	private ResponseEntity<AcceptedResponse> createAcceptedResponse(AcceptedCode acceptedCode) {
 		return new ResponseEntity<>(AcceptedResponse.of(acceptedCode.getCode(), acceptedCode.getMessage()),
 			acceptedCode.getHttpStatus());
+	}
+	@ExceptionHandler(CustomExpiredJwtTokenException.class)
+	public ResponseEntity<String> handleExpiredJwtTokenException(CustomExpiredJwtTokenException e){
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 	@ExceptionHandler(UnauthorizedException.class)
 	public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException e) {

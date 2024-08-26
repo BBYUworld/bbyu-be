@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
+import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -52,7 +53,7 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
-    public boolean login(UserDto dto){
+    public LoginResponseDto login(UserDto dto){
         User user = userRepository.findUserByEmail(dto.getEmail());
         if(user == null)throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
         if(user.isDeleted())throw new BadRequestException(ErrorCode.USER_DELETE_ERROR);
@@ -63,9 +64,13 @@ public class UserService {
             user.setRefreshToken(token.getRefreshToken());
             user.setLogin(true);
             userRepository.save(user);
-            return true;
+            LoginResponseDto loginResponseDto = LoginResponseDto.builder().token(token).is_first_login(false).build();
+            if(user.getAge() == null){
+                loginResponseDto.set_first_login(true);
+            }
+            return loginResponseDto;
         }
-        return false;
+        return null;
     }
 
     public boolean logout(Long userId){
@@ -85,6 +90,11 @@ public class UserService {
         user.setRefreshToken(null);
         userRepository.save(user);
         return true;
+    }
+    public boolean searchUser(String email){
+        User user = userRepository.findUserByEmail(email);
+        if(user == null)return true;
+        return false;
     }
 
     public void test(String userEmail) throws JsonProcessingException {

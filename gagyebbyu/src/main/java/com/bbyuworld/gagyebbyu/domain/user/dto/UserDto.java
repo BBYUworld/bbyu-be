@@ -17,6 +17,7 @@ public class UserDto {
 	private String name;
 	private Gender gender;
 	private Integer age;
+	private String address;
 	private Long monthlyIncome;
 	private String ratingName;
 	private boolean isDeleted;
@@ -34,12 +35,13 @@ public class UserDto {
 	public UserDto(Long userId, Long coupleId, String name, Gender gender, Integer age, Long monthlyIncome,
 		String ratingName, boolean isDeleted, String phone, boolean isLogin, String email,
 		String nickname, Long monthlyTargetAmount, String refreshToken, String password,
-		String accessToken, String apiKey) {
+		String accessToken, String apiKey, String address) {
 		this.userId = userId;
 		this.coupleId = coupleId;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
+		this.address = address;
 		this.monthlyIncome = monthlyIncome;
 		this.ratingName = ratingName;
 		this.isDeleted = isDeleted;
@@ -62,6 +64,7 @@ public class UserDto {
 			", name='" + name + '\'' +
 			", gender=" + gender +
 			", age=" + age +
+				", address='" + address + '\'' +
 			", monthlyIncome=" + monthlyIncome +
 			", ratingName='" + ratingName + '\'' +
 			", isDeleted=" + isDeleted +
