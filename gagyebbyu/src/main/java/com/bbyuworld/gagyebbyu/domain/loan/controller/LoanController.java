@@ -35,6 +35,7 @@ public class LoanController {
     @GetMapping("/loan-name/{loanName}")
     public ResponseEntity<LoanResponseDto> getLoanByLoanName(@PathVariable String loanName) {
         LoanResponseDto loan = loanService.getLoanByLoanName(loanName);
+        System.out.println("getLoanByLoanName");
         return ResponseEntity.ok(loan);
     }
 
@@ -47,6 +48,7 @@ public class LoanController {
     @GetMapping("/bank-name/{bankName}")
     public ResponseEntity<List<LoanResponseDto>> getLoansByBankName(@PathVariable String bankName) {
         List<LoanResponseDto> loans = loanService.findLoansByBankName(bankName);
+        System.out.println("getLoansByBankName");
         return ResponseEntity.ok(loans);
     }
 
@@ -62,6 +64,7 @@ public class LoanController {
             @RequestParam Long minBalance,
             @RequestParam Long maxBalance) {
         List<LoanResponseDto> loans = loanService.searchLoansBesideBalance(minBalance, maxBalance);
+        System.out.println("getLoansByBalanceRange");
         return ResponseEntity.ok(loans);
     }
 
@@ -73,6 +76,7 @@ public class LoanController {
     @GetMapping("/ordered-by-rate")
     public ResponseEntity<List<LoanResponseDto>> getLoansOrderedByInterestRate() {
         List<LoanResponseDto> loans = loanService.getOrderedByInterestRate();
+        System.out.println("getOrderedByInterestRate");
         return ResponseEntity.ok(loans);
     }
 }

@@ -110,7 +110,11 @@ public class AssetServiceImpl implements AssetService {
     @Transactional
     public void updateUserAssetsToCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
                                          @Param("user2Id") Long user2Id) {
-
+        List<Long> userIds = new ArrayList<>();
+        userIds.add(user1Id);
+        userIds.add(user2Id);
+        Long coupleId = couple.getCoupleId();
+        assetRepository.updateAssetsByCouple_CoupleId(coupleId, userIds);
     }
 
     /**

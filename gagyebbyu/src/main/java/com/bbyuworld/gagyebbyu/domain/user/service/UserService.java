@@ -1,9 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetDeposit;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Type;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.user.dto.LoginResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserAccountRequestDto;
@@ -18,7 +15,6 @@ import com.bbyuworld.gagyebbyu.global.error.type.BadRequestException;
 import com.bbyuworld.gagyebbyu.global.error.type.UserNotFoundException;
 import com.bbyuworld.gagyebbyu.global.jwt.JwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.JwtTokenProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

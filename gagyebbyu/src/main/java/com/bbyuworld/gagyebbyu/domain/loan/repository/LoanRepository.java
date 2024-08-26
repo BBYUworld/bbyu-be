@@ -19,7 +19,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
      * @param loanName
      * @return 해당 이름과 맞는 loan 정보
      */
-    Loan findLoanByLoanName(String loanName);
+    Loan findByLoanNameContainingIgnoreCase(String loanName);
 
     /**
      * 은행별 대출 정보 가져오기

@@ -37,9 +37,10 @@ public class AssetController {
         return assetService.getCoupleAssets(UserContext.getUserId());
     }
 
-    @GetMapping("/couple/{coupleId}/sum")
-    public Long getCoupleAssetSum(@PathVariable Long coupleId) {
-        return assetService.getSumCoupleAssets(coupleId);
+    @GetMapping("/couple/sum")
+    @RequireJwtToken
+    public Long getCoupleAssetSum() {
+        return assetService.getSumCoupleAssets(UserContext.getUserId());
     }
 
     @PatchMapping("/{assetId}/visibility")

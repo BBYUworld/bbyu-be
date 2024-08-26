@@ -20,8 +20,7 @@ public interface AssetService {
 
     void updateAssetVisibility(Long assetId, boolean isHidden);
 
-    void updateUserAssetsToCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
-                                  @Param("user2Id") Long user2Id);
+    void updateUserAssetsToCouple(Couple couple, Long user1Id, Long user2Id);
 
     /* INSERT 이 있어야 함 */
     boolean insertNewLoan(AssetLoanDto assetLoanDtoDto, Long userId);

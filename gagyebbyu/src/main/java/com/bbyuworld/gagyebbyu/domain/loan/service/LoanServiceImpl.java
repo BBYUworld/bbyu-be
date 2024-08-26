@@ -22,7 +22,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     public LoanResponseDto getLoanByLoanName(String loanName) {
-        Loan loan = loanRepository.findLoanByLoanName(loanName);
+        Loan loan = loanRepository.findByLoanNameContainingIgnoreCase(loanName);
         return convertToResponseDto(loan);
     }
 
