@@ -53,6 +53,9 @@ public class FundTransaction {
 	@Column(name = "date", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime date;
 
+	@Column(name = "current_amount")
+	private Long currentAmount;
+
 	@Builder
 	public FundTransaction(Couple couple, User user, Fund fund, Long amount, TransactionType type, LocalDateTime date) {
 		this.couple = couple;
@@ -61,5 +64,10 @@ public class FundTransaction {
 		this.amount = amount;
 		this.type = type;
 		this.date = LocalDateTime.now();
+		if (type.equals(TransactionType.MINUS)) {
+			this.currentAmount = fund.getCurrentAmount() - amount;
+		} else if (type.equals(TransactionType.PLUS)) {
+			this.currentAmount = fund.getCurrentAmount() + amount;
+		}
 	}
 }
