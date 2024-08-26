@@ -60,29 +60,8 @@ public class AccountService {
         CreateDemandDepositAccountDto dto = sendPostAboutCreateUserAccount(userKey, uniqueNo);
         System.out.println("Create Dto = "+dto);
         AccountDto updateDto = sendPostAboutUpdateTransferLimit(userKey, dto.getAccountNo(), dailyTransferLimit, oneTimeTransferLimit);
-        if(dto!= null ){
-            Asset asset = Asset.builder()
-                    .amount(0L)
-                    .type(Type.DEPOSIT)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build();
-            user.getAssets().add(asset);
-            asset.setUser(user);
-            AssetDeposit assetDeposit = AssetDeposit.builder()
-                    .bank(bankName)
-                    .bankCode(dto.getBankCode())
-                    .number(dto.getAccountNo())
-                    .type("수시입출금")
-                    .amount(0L)
-                    .hidden(false)
-                    .build();
-            assetDeposit.setAsset(asset);
-            asset.setAssetDeposit(assetDeposit);
-            assetRepository.save(asset);
-            return updateDto;
-        }
-        return null;
+        if(updateDto==null)return null;
+        return updateDto;
     }
     private List<AccountDto> sendPostAboutUserAccount(String userKey){
         try(CloseableHttpClient client = HttpClients.createDefault()){

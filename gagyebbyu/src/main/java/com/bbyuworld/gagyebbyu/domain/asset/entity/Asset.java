@@ -33,6 +33,10 @@ public class Asset {
     @Column(name = "type")
     private Type type;
 
+
+    @Column(name = "bank_name")
+    private String bankName;
+
     @Column(name = "amount")
     private Long amount;
     @Column(name = "created_at")
