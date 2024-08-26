@@ -1,0 +1,45 @@
+# Python 관련 설정 파일들
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 가상 환경 및 환경 파일
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# 빌드/패키징 관련 파일
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE 설정 관련 파일
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# 테스트/커버리지 관련 파일
+.coverage
+.tox/
+.pytest_cache/
+.coverage.*
+cache/
+htmlcov/
+
+# Jupyter 노트북 체크포인트
+.ipynb_checkpoints/
+
+# 기타
+.mypy_cache/
+.pytype/
+cython_debug/
