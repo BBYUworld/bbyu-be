@@ -5,11 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
 import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
 import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
@@ -27,14 +29,26 @@ public class CoupleController {
 	private final CoupleService coupleService;
 
 	/**
-	 * 커플 등록
+	 * 커플 등록 요청
 	 * @param coupleCreateDto
 	 * @return
 	 */
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createCouple(@RequestBody CoupleCreateDto coupleCreateDto) {
+	@PostMapping(path = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
 		coupleService.createCouple(coupleCreateDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	/**
+	 * 커플 연결
+	 * @param coupleConnectDto
+	 * @return
+	 */
+	@PostMapping(path = "/connect/{coupleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> connectCouple(@PathVariable Long coupleId,
+		@RequestBody CoupleConnectDto coupleConnectDto) {
+		coupleService.connectCouple(coupleId, coupleConnectDto);
+		return ResponseEntity.ok().build();
 	}
 
 	/**
