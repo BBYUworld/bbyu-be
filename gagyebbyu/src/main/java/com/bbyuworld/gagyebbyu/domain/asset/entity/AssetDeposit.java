@@ -31,4 +31,9 @@ public class AssetDeposit {
     private Long amount;
 
     private Boolean hidden;
+
+    @Column(name = "daily_transfer_limit")
+    private Long dailyTransferLimit;
+    @Column(name = "one_time_transfer_limit")
+    private Long oneTimeTransferLimit;
 }

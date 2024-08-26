@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CoupleResponseDto {
+	private Long coupleId;
 	private String nickname;
 	private LocalDate marriedAt;
 	private Long monthlyTargetAmount;
@@ -19,6 +20,7 @@ public class CoupleResponseDto {
 
 	public static CoupleResponseDto from(Couple couple, Long marriedPeriod) {
 		return new CoupleResponseDto(
+			couple.getCoupleId(),
 			couple.getNickname(),
 			couple.getMarriedAt(),
 			couple.getMonthlyTargetAmount(),

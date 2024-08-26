@@ -7,6 +7,8 @@ import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,7 +43,8 @@ public class Expense {
 	private Long amount;
 
 	@Column(nullable = false)
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime date;
@@ -53,7 +56,7 @@ public class Expense {
 	private String place;
 
 	@Builder
-	public Expense(User user, Couple couple, Long amount, String category, LocalDateTime date, String memo,
+	public Expense(User user, Couple couple, Long amount, Category category, LocalDateTime date, String memo,
 		String place) {
 		this.user = user;
 		this.couple = couple;
