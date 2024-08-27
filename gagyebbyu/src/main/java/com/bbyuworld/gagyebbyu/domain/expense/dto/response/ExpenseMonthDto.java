@@ -12,4 +12,5 @@ public final class ExpenseMonthDto {
 	private Long targetAmount;
 	private Long amountDifference;
 	private List<ExpenseOverviewDto> expenses;
+	private List<ExpenseDayDto> dayExpenses;
 }

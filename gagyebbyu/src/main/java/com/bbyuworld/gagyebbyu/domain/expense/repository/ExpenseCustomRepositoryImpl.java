@@ -43,10 +43,6 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 
 		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier(sort);
 
-		// 날짜 범위를 설정합니다.
-		LocalDateTime startOfDay = LocalDateTime.of(year, month, day, 0, 0, 0); // 해당 일의 시작 시간
-		LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1); // 해당 일의 마지막 순간
-
 		return jpaQueryFactory.selectFrom(expense)
 			.where(
 				expense.couple.coupleId.eq(coupleId),
@@ -72,6 +68,10 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	private BooleanExpression getDay(Integer day, Integer month, Integer year) {
+		if (day == null) {
+			return getMonth(month, year);
+		}
+
 		LocalDateTime startOfDay = LocalDateTime.of(year, month, day, 0, 0, 0); // 해당 일의 시작 시간
 		LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
