@@ -5,10 +5,10 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Service;
 
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response.CoupleResponseDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;

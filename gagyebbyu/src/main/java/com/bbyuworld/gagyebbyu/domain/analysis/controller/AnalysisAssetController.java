@@ -1,7 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.controller;
 
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AnalysisAssetCategoryDto;
-import com.bbyuworld.gagyebbyu.domain.analysis.service.AnalysisService;
+import com.bbyuworld.gagyebbyu.domain.analysis.service.AnalysisAssetService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/analysis")
 @RequiredArgsConstructor
-public class AnalysisController {
+public class AnalysisAssetController {
 
-    private final AnalysisService analysisService;
+    private final AnalysisAssetService analysisAssetService;
 
     /**
      * 커플 자산 카테고리별 퍼센트 조회
@@ -25,6 +25,8 @@ public class AnalysisController {
     @GetMapping(path = "/couple-asset", produces = MediaType.APPLICATION_JSON_VALUE)
     @RequireJwtToken
     public ResponseEntity<List<AnalysisAssetCategoryDto>> getAssetPercentage() {
-        return ResponseEntity.ok(analysisService.getAssetPercentage(UserContext.getUserId()));
+        return ResponseEntity.ok(analysisAssetService.getAssetPercentage(UserContext.getUserId()));
     }
+
+
 }

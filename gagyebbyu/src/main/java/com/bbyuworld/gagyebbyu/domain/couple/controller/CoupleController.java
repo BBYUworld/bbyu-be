@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response.CoupleResponseDto;
 import com.bbyuworld.gagyebbyu.domain.couple.service.CoupleService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;

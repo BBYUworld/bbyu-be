@@ -1,4 +1,4 @@
-package com.bbyuworld.gagyebbyu.domain.couple.dto.response;
+package com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response;
 
 import java.time.LocalDate;
 

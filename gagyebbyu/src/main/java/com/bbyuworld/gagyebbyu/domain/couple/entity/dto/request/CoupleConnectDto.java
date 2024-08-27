@@ -1,4 +1,4 @@
-package com.bbyuworld.gagyebbyu.domain.couple.dto.request;
+package com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
