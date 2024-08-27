@@ -49,20 +49,6 @@ public class User {
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "region")
-	@Enumerated(EnumType.STRING)
-	private Region region;
-
-	@Column
-	@Enumerated(EnumType.STRING)
-	private Occupation occupation;
-
-	@Column(name = "late_payment", nullable = false)
-	Boolean latePayment;
-
-	@Column(name = "financial_accident", nullable = false)
-	Integer financialAccident;
-
 	@Column
 	private Long monthlyIncome;
 
@@ -99,6 +85,20 @@ public class User {
 	@Column(name = "api_key")
 	private String apiKey;
 
+	@Column(name = "region")
+	@Enumerated(EnumType.STRING)
+	private Region region;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Occupation occupation;
+
+	@Column(name = "late_payment", nullable = false)
+	Boolean latePayment = false;
+
+	@Column(name = "financial_accident", nullable = false)
+	Integer financialAccident = 0;
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Asset> assets = new ArrayList<>();
 
@@ -106,7 +106,7 @@ public class User {
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Long monthlyTargetAmount,
 		String refreshToken, String accessToken, Long coupleId, String password, String apiKey, String address,
-		Occupation occupation, Region region) {
+		Occupation occupation, Region region, Boolean latePayment, Integer financialAccident) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -124,10 +124,10 @@ public class User {
 		this.accessToken = accessToken;
 		this.coupleId = coupleId;
 		this.apiKey = apiKey;
-		this.financialAccident = 0;
-		this.latePayment = false;
 		this.region = region;
 		this.occupation = occupation;
+		this.latePayment = latePayment;
+		this.financialAccident = financialAccident;
 	}
 
 	public UserDto toDto() {
@@ -172,6 +172,10 @@ public class User {
 			.refreshToken(userDto.getRefreshToken())
 			.accessToken(userDto.getAccessToken())
 			.apiKey(userDto.getApiKey())
+			.occupation(userDto.getOccupation())
+			.financialAccident(userDto.getFinancialAccident())
+			.region(userDto.getRegion())
+			.latePayment(userDto.getLatePayment())
 			.build();
 	}
 
