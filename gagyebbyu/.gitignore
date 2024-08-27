@@ -449,3 +449,4 @@ gradle-app.setting
 
 application-private.yml
 
+*.0.gz
