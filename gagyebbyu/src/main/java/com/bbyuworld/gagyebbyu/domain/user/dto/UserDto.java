@@ -1,6 +1,8 @@
 package com.bbyuworld.gagyebbyu.domain.user.dto;
 
 import com.bbyuworld.gagyebbyu.domain.user.entity.Gender;
+import com.bbyuworld.gagyebbyu.domain.user.entity.Occupation;
+import com.bbyuworld.gagyebbyu.domain.user.entity.Region;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -30,12 +32,16 @@ public class UserDto {
 	private String refreshToken;
 	private String accessToken;
 	private String apiKey;
+	private Occupation occupation;
+	private Region region;
+	private Boolean latePayment;
+	private Integer financialAccident;
 
 	@Builder
 	public UserDto(Long userId, Long coupleId, String name, Gender gender, Integer age, Long monthlyIncome,
 		String ratingName, boolean isDeleted, String phone, boolean isLogin, String email,
 		String nickname, Long monthlyTargetAmount, String refreshToken, String password,
-		String accessToken, String apiKey, String address) {
+		String accessToken, String apiKey, String address, Occupation occupation, Region region, Boolean latePayment, Integer financialAccident) {
 		this.userId = userId;
 		this.coupleId = coupleId;
 		this.name = name;
@@ -54,6 +60,10 @@ public class UserDto {
 		this.refreshToken = refreshToken;
 		this.accessToken = accessToken;
 		this.apiKey = apiKey;
+		this.occupation = occupation;
+		this.region = region;
+		this.latePayment = latePayment;
+		this.financialAccident = financialAccident;
 	}
 
 	@Override
@@ -76,6 +86,10 @@ public class UserDto {
 			", monthlyTargetAmount=" + monthlyTargetAmount +
 			", refreshToken='" + refreshToken + '\'' +
 			", accessToken='" + accessToken + '\'' +
+			", occupation='" + occupation + '\'' +
+			", region='" + region + '\'' +
+			", financialAccident='" + financialAccident + '\'' +
+			", latePayment='" + latePayment + '\'' +
 			"}\n";
 	}
 }
