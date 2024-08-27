@@ -1,6 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.asset.enums;
 
 public enum AssetType {
-    CARD, ACCOUNT, LOAN
+    CARD, ACCOUNT, STOCK, REAL_ESTATE, LOAN
     //, STOCK, REAL_ESTATE
 }

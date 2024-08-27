@@ -1,13 +1,15 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AnnualAssetDto;
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AssetChangeRateDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.entity.AnnualAsset;
 import com.bbyuworld.gagyebbyu.domain.analysis.repository.AnnualAssetRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.QAsset;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AnalysisAssetCategoryDto;
-import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
@@ -16,7 +18,9 @@ import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,6 +93,60 @@ public class AnalysisAssetService {
                 asset.getTotalAssets()
             ))
             .collect(Collectors.toList());
+    }
+
+
+    public AssetChangeRateDto getAssetChangeRate(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        Couple couple = coupleRepository.findById(user.getCoupleId())
+            .orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+        int lastYear = LocalDate.now().getYear() - 1;
+
+        AnnualAsset lastYearAsset = annualAssetRepository.findByCoupleAndYear(couple, lastYear)
+            .orElseThrow(() -> new DataNotFoundException(ErrorCode.LAST_YEAR_ASSET_NOT_FOUND));
+
+        QAsset asset = QAsset.asset;
+
+        Map<AssetType, Long> currentAssets = queryFactory
+            .select(asset.type, asset.amount.sum())
+            .from(asset)
+            .where(asset.couple.coupleId.eq(couple.getCoupleId()))
+            .groupBy(asset.type)
+            .fetch().stream()
+            .collect(Collectors.toMap(
+                tuple -> tuple.get(asset.type),
+                tuple -> tuple.get(asset.amount.sum())
+            ));
+
+        Long currentCashAssets = currentAssets.getOrDefault(AssetType.ACCOUNT, 0L);
+        Long currentInvestmentAssets = currentAssets.getOrDefault(AssetType.STOCK, 0L);
+        Long currentRealEstateAssets = currentAssets.getOrDefault(AssetType.REAL_ESTATE, 0L);
+        Long currentLoanAssets = currentAssets.getOrDefault(AssetType.LOAN, 0L);
+        Long currentTotalAssets = currentCashAssets + currentInvestmentAssets + currentRealEstateAssets - currentLoanAssets;
+
+        // 증감율 계산
+        Long cashChangeRate = calculateChangeRate(lastYearAsset.getCashAssets(), currentCashAssets);
+        Long investmentChangeRate = calculateChangeRate(lastYearAsset.getInvestmentAssets(), currentInvestmentAssets);
+        Long realEstateChangeRate = calculateChangeRate(lastYearAsset.getRealEstateAssets(), currentRealEstateAssets);
+        Long loanChangeRate = calculateChangeRate(lastYearAsset.getLoanAssets(), currentLoanAssets);
+        Long totalChangeRate = calculateChangeRate(lastYearAsset.getTotalAssets(), currentTotalAssets);
+
+        return AssetChangeRateDto.builder()
+            .cashChangeRate(cashChangeRate)
+            .investmentChangeRate(investmentChangeRate)
+            .realEstateChangeRate(realEstateChangeRate)
+            .loanChangeRate(loanChangeRate)
+            .totalChangeRate(totalChangeRate)
+            .build();
+    }
+
+    private Long calculateChangeRate(Long previousValue, Long currentValue) {
+        if (previousValue == 0) {
+            return (currentValue > 0) ? 100L : 0L; // 이전 값이 0이면 현재 값이 0 이상인 경우 100% 상승, 그렇지 않으면 0%
+        }
+        return ((currentValue - previousValue) * 100) / previousValue;
     }
 
 }

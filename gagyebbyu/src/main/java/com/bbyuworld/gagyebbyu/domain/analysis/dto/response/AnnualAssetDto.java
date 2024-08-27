@@ -1,10 +1,12 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class AnnualAssetDto {
 	private final int year;
 	private final Long cashAssets;
@@ -13,7 +15,6 @@ public class AnnualAssetDto {
 	private final Long loanAssets;
 	private final Long totalAssets;
 
-	@Builder
 	public AnnualAssetDto(int year, Long cashAssets, Long investmentAssets, Long realEstateAssets, Long loanAssets, Long totalAssets) {
 		this.year = year;
 		this.cashAssets = cashAssets;

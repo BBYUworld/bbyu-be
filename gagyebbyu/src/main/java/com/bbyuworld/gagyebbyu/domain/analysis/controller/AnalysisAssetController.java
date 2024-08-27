@@ -2,8 +2,10 @@ package com.bbyuworld.gagyebbyu.domain.analysis.controller;
 
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AnalysisAssetCategoryDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AnnualAssetDto;
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.AssetChangeRateDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.entity.AnnualAsset;
 import com.bbyuworld.gagyebbyu.domain.analysis.service.AnalysisAssetService;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,12 @@ public class AnalysisAssetController {
     @RequireJwtToken
     public ResponseEntity<List<AnnualAssetDto>> getAnnualAssets() {
         return ResponseEntity.ok(analysisAssetService.getAnnualAsset(UserContext.getUserId()));
+    }
+
+    @GetMapping(path = "/couple-asset/change-rate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequireJwtToken
+    public ResponseEntity<AssetChangeRateDto> getAssetChangeRate() {
+        return ResponseEntity.ok(analysisAssetService.getAssetChangeRate(UserContext.getUserId()));
     }
 
 }
