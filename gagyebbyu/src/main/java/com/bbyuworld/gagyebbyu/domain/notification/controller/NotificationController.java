@@ -34,4 +34,22 @@ public class NotificationController {
         Long userId = UserContext.getUserId();
         return ResponseEntity.ok(notificationService.findAllUserNotification(userId));
     }
+
+    @DeleteMapping
+    @RequireJwtToken
+    public ResponseEntity<String> deleteUserNotification(@RequestBody Map<String, String> map) {
+        Long notificationId = Long.parseLong(map.get("notificationId"));
+        notificationService.deleteNotification(notificationId);
+        return ResponseEntity.ok("Notification deleted successfully");
+    }
+
+    @PutMapping
+    @RequireJwtToken
+    public ResponseEntity<String> updateUserNotification(@RequestBody Map<String, String> map) {
+        Long notificationId = Long.parseLong(map.get("notificationId"));
+        notificationService.updateNotification(notificationId);
+        return ResponseEntity.ok("Notification updated successfully");
+    }
+
+
 }

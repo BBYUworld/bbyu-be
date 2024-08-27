@@ -16,9 +16,23 @@ public class NotificationRepositoryImpl implements NotificationRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public Notification findNotificationById(Long id) {
+        return queryFactory.selectFrom(notification)
+                .where(notification.notificationId.eq(id))
+                .fetchOne();
+    }
+
+    @Override
     public List<Notification> findAllUserNotifications(Long userId) {
         return queryFactory.selectFrom(notification)
                 .where(notification.receiverId.eq(userId))
                 .fetch();
     }
+
+    @Override
+    public void deleteNotification(Long notificationId) {
+        queryFactory.delete(notification).where(notification.notificationId.eq(notificationId));
+    }
+
+
 }

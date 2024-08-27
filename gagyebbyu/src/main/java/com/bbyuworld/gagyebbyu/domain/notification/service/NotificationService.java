@@ -8,6 +8,7 @@ import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.management.LockInfo;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +43,14 @@ public class NotificationService {
             dtoList.add(dto);
         }
         return dtoList;
+    }
+
+    public void deleteNotification(Long notificationId){
+        notificationRepository.deleteNotification(notificationId);
+    }
+    public void updateNotification(Long notificationId){
+        Notification notification = notificationRepository.findNotificationById(notificationId);
+        notification.setIsRead(true);
+        notificationRepository.save(notification);
     }
 }

@@ -34,9 +34,9 @@ public class CoupleController {
 	 * @return
 	 */
 	@PostMapping(path = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
-		coupleService.createCouple(coupleCreateDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Long> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
+		Long coupleId = coupleService.createCouple(coupleCreateDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(coupleId);
 	}
 
 	/**
@@ -72,6 +72,13 @@ public class CoupleController {
 	@RequireJwtToken
 	public ResponseEntity<CoupleResponseDto> updateCouple() {
 		return ResponseEntity.ok(coupleService.getCouple(UserContext.getUserId()));
+	}
+
+	@GetMapping("/{userId}")
+	@RequireJwtToken
+	public ResponseEntity<CoupleResponseDto> updateCouple(@PathVariable Long userId) {
+		System.out.println("Get Couple Id user Id = "+userId);
+		return ResponseEntity.ok(coupleService.getCouple(userId));
 	}
 
 }
