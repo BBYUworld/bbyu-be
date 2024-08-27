@@ -133,7 +133,8 @@ local.properties
 
 # AWS User-specific
 .idea/**/aws.xml
-
+# Ignore Gradle XML files
+.idea/libraries/Gradle__*.xml
 # Generated files
 .idea/**/contentModel.xml
 
@@ -172,11 +173,24 @@ cmake-build-*/
 # File-based project format
 *.iws
 
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+
+# Gradle files
+.gradle/
+build/
+
+# Ignore Gradle XML files
+.idea/libraries/Gradle__*.xml
+
 # IntelliJ
 out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
 
 # JIRA plugin
 atlassian-ide-plugin.xml

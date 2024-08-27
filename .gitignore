@@ -26,3 +26,5 @@
 /.idea/uiDesigner.xml
 /expenseCategory/model/modules/utils.py
 /.idea/vcs.xml
+# Ignore Gradle XML files
+.idea/libraries/Gradle__*.xml

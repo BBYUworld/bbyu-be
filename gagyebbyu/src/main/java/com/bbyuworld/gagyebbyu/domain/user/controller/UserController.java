@@ -119,6 +119,13 @@ public class UserController {
         return ResponseEntity.ok("good");
     }
 
+    @GetMapping("/find")
+    @RequireJwtToken
+    public ResponseEntity<UserDto> findUserByEmail(@RequestParam("email")String email){
+        UserDto user = userService.findUserByEmail(email);
+        return ResponseEntity.ok(user);
+    }
+
 //    @PostMapping("/email")
 //    public ResponseEntity<String> emailVerification(@RequestBody UserDto dto){
 //        System.out.println("email = "+dto.getEmail());
