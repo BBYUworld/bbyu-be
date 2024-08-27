@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AnalysisAssetService {
+public class  AnalysisAssetService {
 
     private final UserRepository userRepository;
     private final CoupleRepository coupleRepository;
@@ -153,42 +153,28 @@ public class AnalysisAssetService {
     }
 
     public AnalysisAssetResultDto getAssetResult(long userId) {
-        // 사용자 조회: 주어진 userId로 사용자 정보를 userRepository에서 조회합니다. 사용자가 존재하지 않으면 DataNotFoundException을 던집니다.
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // 커플 정보 조회: 사용자가 속한 커플 정보를 coupleRepository에서 조회합니다. 커플 정보가 없으면 DataNotFoundException을 던집니다.
         Couple couple = coupleRepository.findById(user.getCoupleId())
             .orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-        // 평균 나이 계산: 커플의 두 구성원의 나이를 더한 후 2로 나누어 평균 나이를 계산합니다.
         int avgAge = (couple.getUser1().getAge() + couple.getUser2().getAge()) / 2;
 
-        // 연령대 계산: 평균 나이를 기반으로 연령대(예: 30-39세)를 계산합니다.
         int startAge = avgAge / 10 * 10;
         int endAge = startAge + 9;
 
-        // 평균 수입 계산: 커플의 두 구성원의 월 소득을 더한 후 2로 나누어 평균 수입을 계산합니다.
         long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
-        // 수입 범위 계산: 평균 수입을 기반으로 수입 범위를 계산합니다. 예를 들어, 100만 원 단위로 범위를 설정합니다.
         long startIncome = avgIncome / 100000 * 100000 - 1000000;
         long endIncome = startIncome + 1000000;
 
-        // 다른 커플의 평균 자산 조회: 비슷한 나이대와 수입 범위를 가진 다른 커플들의 평균 자산을 조회합니다.
         double anotherCoupleAverageAssets = assetRepository.findAverageAssetsForEligibleCouples(
             startAge, endAge, startIncome, endIncome);
 
-        // 최고 자산 타입 조회: 커플의 작년 자산에서 가장 많이 사용된 타입을 조회합니다.
-        AssetType topAssetType = assetRepository.findTopAssetTypeForCoupleLastYear(couple.getCoupleId());
+        long coupleTotalAssets = assetRepository.findTotalAssetsForCouple(couple.getCoupleId());
 
-        // 커플의 총 자산 조회: 커플의 작년의 총 자산을 조회합니다.
-        long coupleTotalAssets = assetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId());
-
-        // 결과 반환: 조회된 데이터를 바탕으로 AssetResultDto 객체를 생성하여 반환합니다.
-        return new AnalysisAssetResultDto(topAssetType, startAge, startIncome + 1000000,
+        return new AnalysisAssetResultDto(startAge, startIncome + 1000000,
             (long)anotherCoupleAverageAssets, coupleTotalAssets);
     }
-
-
 }

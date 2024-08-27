@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class AnalysisAssetResultDto {
-	private AssetType assetType;
 	private long averageAge;
 	private long monthlyIncome;
 	private long anotherCoupleAssetAvg;
