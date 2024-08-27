@@ -6,6 +6,13 @@ spring:
     include: private
     active: dev
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
   datasource:
     url: jdbc:mysql://${db.host}:${db.port}/${db.database}
     username: ${db.username}
