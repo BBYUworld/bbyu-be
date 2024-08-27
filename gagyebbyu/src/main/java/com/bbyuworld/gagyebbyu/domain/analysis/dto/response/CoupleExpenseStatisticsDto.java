@@ -7,10 +7,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CoupleExpenseResultDto {
-	private Category category;
-	private long averageAge;
-	private long monthlyIncome;
-	private long anotherCoupleMonthExpenseAvg;
-	private long coupleMonthExpense;
+public class CoupleExpenseStatisticsDto {
+	private Category label;
+	private long amount;
+	private double percentage;
 }
