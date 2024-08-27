@@ -18,6 +18,8 @@ public interface ExpenseCustomRepository {
 	Double findAverageExpenditureForEligibleCouples(int startAge, int endAge, long startIncome, long endIncome);
 
 	Category findTopCategoryForCoupleLastMonth(Long coupleId);
+
+	List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount);
+
+	Long findTotalExpenditureForMonth(Long coupleId);
 }
-
-

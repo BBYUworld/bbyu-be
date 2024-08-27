@@ -1,8 +1,12 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseResultDto;
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseStatisticsDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
@@ -30,40 +34,49 @@ public class CoupleExpenseService {
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-		log.info("{}", couple.getUser1().getAge());
-		log.info("{}", couple.getUser1().getMonthlyIncome());
-
-		log.info("{}", couple.getUser2().getAge());
-		log.info("{}", couple.getUser2().getMonthlyIncome());
-
 		int avgAge = (couple.getUser1().getAge() + couple.getUser2().getAge()) / 2;
 
 		int startAge = avgAge / 10 * 10;
 		int endAge = startAge + 9;
 
-		log.info("평균 Age {}", avgAge);
-
 		long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
 		long startIncome = avgIncome / 100000 * 100000 - 1000000;
 		long endIncome = startIncome + 1000000;
-		log.info("평균 income {}", avgIncome);
-
-		System.out.println(startAge + " " + endAge + " " + startIncome + " " + endIncome);
 
 		double anotherCoupleMonthExpenseAvg = expenseRepository.findAverageExpenditureForEligibleCouples(
 			startAge, endAge, startIncome, endIncome);
 
-		System.out.println(anotherCoupleMonthExpenseAvg);
-
 		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId());
-
-		System.out.println(category);
 
 		long coupleMonthExpense = expenseRepository.findTotalExpenditureForCoupleLastMonth(couple.getCoupleId());
 
 		return new CoupleExpenseResultDto(category, startAge, startIncome + 1000000,
 			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
+
+	}
+
+	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId());
+
+		if (totalAmount == 0) {
+			return null;
+		}
+
+		return expenseRepository.findCategoryWiseExpenditureForMonth(couple.getCoupleId(),
+				totalAmount).stream()
+			.map(tuple -> new CoupleExpenseStatisticsDto(
+				tuple.get(0, Category.class),
+				tuple.get(1, Long.class),
+				tuple.get(2, Double.class)
+			))
+			.collect(Collectors.toList());
 
 	}
 }

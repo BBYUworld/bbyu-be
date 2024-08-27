@@ -23,6 +23,40 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
+	public Long findTotalExpenditureForMonth(Long coupleId) {
+		return jpaQueryFactory
+			.select(expense.amount.sum())
+			.from(expense)
+			.join(expense.couple, couple)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear())  // 해당 달에 대한 날짜 필터링
+			)
+			.fetchOne();
+	}
+
+	@Override
+	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount) {
+
+		return jpaQueryFactory
+			.select(
+				expense.category,
+				expense.amount.sum(),
+				Expressions.numberTemplate(Double.class, "round(({0} / {1}) * 100, 1)", expense.amount.sum(),
+					totalAmount).as("percentage")
+			)
+			.from(expense)
+			.join(expense.couple, couple)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear())
+			)
+			.groupBy(expense.category)
+			.orderBy(expense.amount.sum().desc())
+			.fetch();
+	}
+
+	@Override
 	public Category findTopCategoryForCoupleLastMonth(Long coupleId) {
 		return jpaQueryFactory
 			.select(expense.category)
