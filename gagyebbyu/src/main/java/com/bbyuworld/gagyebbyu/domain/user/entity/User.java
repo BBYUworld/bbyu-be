@@ -49,6 +49,20 @@ public class User {
 	@Column(name = "address")
 	private String address;
 
+	@Column(name = "region")
+	@Enumerated(EnumType.STRING)
+	private Region region;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Occupation occupation;
+
+	@Column(name = "late_payment", nullable = false)
+	Boolean latePayment;
+
+	@Column(name = "financial_accident", nullable = false)
+	Integer financialAccident;
+
 	@Column
 	private Long monthlyIncome;
 
@@ -91,7 +105,8 @@ public class User {
 	@Builder
 	public User(String name, Gender gender, Integer age, Long monthlyIncome, String ratingName, boolean isDeleted,
 		String phone, boolean isLogin, String email, String nickname, Long monthlyTargetAmount,
-		String refreshToken, String accessToken, Long coupleId, String password, String apiKey, String address) {
+		String refreshToken, String accessToken, Long coupleId, String password, String apiKey, String address,
+		Occupation occupation, Region region) {
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -109,6 +124,10 @@ public class User {
 		this.accessToken = accessToken;
 		this.coupleId = coupleId;
 		this.apiKey = apiKey;
+		this.financialAccident = 0;
+		this.latePayment = false;
+		this.region = region;
+		this.occupation = occupation;
 	}
 
 	public UserDto toDto() {
