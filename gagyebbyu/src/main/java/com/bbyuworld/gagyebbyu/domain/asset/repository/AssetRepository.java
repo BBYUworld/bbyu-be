@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Repository
-public interface AssetRepository extends JpaRepository<Asset, Long> {
+public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustomRepository {
     /* 사용자의 전체 자산 내역 정보 제공 */
     List<Asset> findAllByUser_UserIdAndIsHiddenFalse(Long userId);
 
@@ -39,4 +39,4 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
     @Query("UPDATE Asset a SET a.couple.coupleId = :coupleId WHERE a.user.userId = :user1Id OR a.user.userId = :user2Id")
     void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId, @Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
 
-}
+    }
