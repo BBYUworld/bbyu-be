@@ -1,18 +1,13 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetDeposit;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.Type;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetDepositRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
-import com.bbyuworld.gagyebbyu.domain.user.dto.UserResponseDto;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.api.asset.CreateDemandDepositAccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandDepositDto;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
-import com.bbyuworld.gagyebbyu.global.util.ApiResponse;
 import com.bbyuworld.gagyebbyu.global.util.HeaderProvider;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +35,7 @@ public class AccountService {
     private final ApiPost apiPost;
     private final AssetRepository assetRepository;
     private final UserRepository userRepository;
-    private final AssetDepositRepository assetDepositRepository;
+    private final AssetAccountRepository assetAcountRepository;
 
     public List<DemandDepositDto> findAllDemandDeposit(){
         return sendPostAboutFindAllProducts();

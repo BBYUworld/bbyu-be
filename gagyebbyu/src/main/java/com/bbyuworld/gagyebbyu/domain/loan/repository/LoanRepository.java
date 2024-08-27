@@ -19,14 +19,14 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
      * @param loanName
      * @return 해당 이름과 맞는 loan 정보
      */
-    Loan findLoanByLoanName(String loanName);
+    List<Loan> findByLoanNameContainingIgnoreCase(String loanName);
 
     /**
      * 은행별 대출 정보 가져오기
      * @param bankName
      * @return 은행의 모든 loan 내용
      */
-    List<Loan> findLoansByBankName(String bankName);
+    List<Loan> findLoansByBankNameContainingIgnoreCase(String bankName);
 
     /**
      * 대출 금액 범위로 검색
@@ -41,12 +41,5 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
      * @return Loan의 interestRate기준 정렬
      */
     List<Loan> findAllByOrderByInterestRateAsc();
-
-    /**
-     * 사용자의 신용등급 가져오기
-     * @param User.ratingName
-     * @return user의 신용등급 반환
-     */
-
 
 }

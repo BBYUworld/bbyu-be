@@ -2,6 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.loan.dto.response;
 
 import com.bbyuworld.gagyebbyu.domain.loan.entity.RatingName;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LoanResponseDto {
     private Long loanId;
     private String bankCode;

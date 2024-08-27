@@ -43,6 +43,7 @@ public class ExpenseController {
 	@RequireJwtToken
 	public ResponseEntity<ExpenseMonthDto> getExpenseAll(
 		@ModelAttribute ExpenseParam param) {
+		System.out.println("expense param = "+param);
 		return ResponseEntity.ok(expenseService.getExpenseAll(UserContext.getUserId(), param));
 	}
 

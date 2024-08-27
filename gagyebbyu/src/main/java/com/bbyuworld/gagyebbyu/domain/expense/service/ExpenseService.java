@@ -45,10 +45,10 @@ public class ExpenseService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-
+		System.out.println("user id = "+user.getUserId());
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
-
+		System.out.println("couple id = "+couple.getCoupleId());
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
@@ -63,8 +63,14 @@ public class ExpenseService {
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
 
+		List<ExpenseDayDto> dayExpenses = expenseRepository.findExpenseByDay(null, month, year, user.getCoupleId(),
+				sort)
+			.stream()
+			.map(ExpenseDayDto::from)
+			.collect(Collectors.toList());
+
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, expenses);
+			targetAmount - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
