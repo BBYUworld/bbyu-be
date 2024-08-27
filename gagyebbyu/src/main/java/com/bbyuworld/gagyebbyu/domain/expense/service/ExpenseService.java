@@ -45,10 +45,10 @@ public class ExpenseService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-
+		System.out.println("user id = "+user.getUserId());
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
-
+		System.out.println("couple id = "+couple.getCoupleId());
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
