@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class AnalysisExpenseController {
 	private final CoupleExpenseService coupleExpenseService;
 
-	@GetMapping(path = "/couple-expense/result", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/result", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
 	public ResponseEntity<CoupleExpenseResultDto> getCoupleExpenseResult() {
 		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseResult(UserContext.getUserId()));

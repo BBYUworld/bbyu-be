@@ -1,17 +1,26 @@
 package com.bbyuworld.gagyebbyu.domain.user.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -58,7 +67,7 @@ public class User {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false)
 	private String password;
 
 	@Column(length = 100)
@@ -109,7 +118,7 @@ public class User {
 			.name(this.name)
 			.gender(this.gender)
 			.age(this.age)
-				.address(this.address)
+			.address(this.address)
 			.monthlyIncome(this.monthlyIncome)
 			.ratingName(this.ratingName)
 			.isDeleted(this.isDeleted)
@@ -131,7 +140,7 @@ public class User {
 			.name(userDto.getName())
 			.gender(userDto.getGender())
 			.age(userDto.getAge())
-				.address(userDto.getAddress())
+			.address(userDto.getAddress())
 			.monthlyIncome(userDto.getMonthlyIncome())
 			.ratingName(userDto.getRatingName())
 			.isDeleted(userDto.isDeleted())
@@ -163,7 +172,7 @@ public class User {
 		this.isDeleted = userDto.isDeleted();
 		if (userDto.getPhone() != null)
 			this.phone = userDto.getPhone();
-		if(userDto.getAddress()!=null)
+		if (userDto.getAddress() != null)
 			this.address = userDto.getAddress();
 		this.isLogin = userDto.isLogin();
 		if (userDto.getEmail() != null)
@@ -181,6 +190,7 @@ public class User {
 	public void updateTargetAmount(Long monthlyTargetAmount) {
 		this.monthlyTargetAmount = monthlyTargetAmount;
 	}
+
 	public void addAsset(Asset asset) {
 		this.assets.add(asset);
 		asset.setUser(this);
