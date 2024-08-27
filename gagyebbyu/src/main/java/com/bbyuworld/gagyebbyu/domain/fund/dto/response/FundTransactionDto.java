@@ -16,6 +16,7 @@ public final class FundTransactionDto {
 	private long amount;
 	private TransactionType type;
 	private LocalDateTime date;
+	private long currentAmount;
 
 	public static FundTransactionDto from(FundTransaction fundTransaction) {
 		return new FundTransactionDto(
@@ -23,7 +24,8 @@ public final class FundTransactionDto {
 			fundTransaction.getUser().getName(),
 			fundTransaction.getAmount(),
 			fundTransaction.getType(),
-			fundTransaction.getDate()
+			fundTransaction.getDate(),
+			fundTransaction.getCurrentAmount()
 		);
 	}
 }

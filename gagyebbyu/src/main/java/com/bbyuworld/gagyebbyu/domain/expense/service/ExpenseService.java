@@ -96,7 +96,29 @@ public class ExpenseService {
 		}
 
 		//카테고리 가져오는 로직 (추후 수정)
-		String category = "기타";
+		/**
+		 * 교육,
+		 *     교통_자동차,
+		 *     기타소비,
+		 *     대형마트,
+		 *     미용,
+		 *     배달,
+		 *     보험,
+		 *     생필품,
+		 *     생활서비스,
+		 *     세금_공과금,
+		 *     쇼핑몰,
+		 *     여행_숙박,
+		 *     외식,
+		 *     의료_건강,
+		 *     주류_펍,
+		 *     취미_여가,
+		 *     카페,
+		 *     통신,
+		 *     편의점
+		 *     이거 중에 하나 String 값으로 보내면 자동으로 ENUM 처리돼서 저장됨
+		 */
+		String category = "통신";
 
 		expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
 

@@ -1,0 +1,38 @@
+MODEL:
+    RESULTS:
+        KoBERT_26_CrossEntropy : KoBERT_26_CrossEntropyLoss
+        KoBERT_26_FocalLoss : KoBERT_26_FocalLoss
+        KoBERT_26_WeightedCrossEntropy : KoBERT_26_WeightedCE
+
+    model_name: KoBERT         # KoBERT 모델을 사용
+
+    max_seq_len: 26             # 시퀀스 길이 설정, 26으로 고정
+
+    pretrained_link:
+        KoBERT: kykim/bert-kor-base
+
+    num_of_classes: 19          # 클래스 개수, 설정에 맞게 유지
+
+TEST:
+    CHECKPOINT_PATH : 'model/KoBERT_26_CrossEntropyLoss'      # 모델 경로 설정, 정확한 경로와 일치해야 함
+
+LABELING:
+    0: '교육'
+    1: '교통/자동차'
+    2: '기타소비'
+    3: '대형마트'
+    4: '미용'
+    5: '배달'
+    6: '보험'
+    7: '생필품'
+    8: '생활서비스'
+    9: '세금/공과금'
+    10: '쇼핑몰'
+    11: '여행/숙박'
+    12: '외식'
+    13: '의료/건강'
+    14: '주류/펍'
+    15: '취미/여가'
+    16: '카페'
+    17: '통신'
+    18: '편의점'

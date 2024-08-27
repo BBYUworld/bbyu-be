@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.expense.dto.request;
 import java.time.LocalDateTime;
 
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
@@ -22,7 +23,7 @@ public final class ExpenseCreateDto {
 			.user(user)
 			.couple(couple)
 			.amount(amount)
-			.category(category)
+			.category(Category.getCategory(category))
 			.place(place)
 			.date(date == null ? LocalDateTime.now() : date)
 			.build();
