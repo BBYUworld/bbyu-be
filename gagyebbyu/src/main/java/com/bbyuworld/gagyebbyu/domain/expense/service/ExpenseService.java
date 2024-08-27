@@ -54,14 +54,15 @@ public class ExpenseService {
 		long totalAmount = 0;
 		long targetAmount = couple.getMonthlyTargetAmount();
 
-		List<ExpenseOverviewDto> expenses = new ArrayList<ExpenseOverviewDto>();
+		List<ExpenseOverviewDto> expenses = new ArrayList<>();
 		for (Tuple tuple : expenseTuples) {
-			Date sqlDate = tuple.get(0, Date.class);
-			LocalDate date = sqlDate.toLocalDate();
+			LocalDateTime dateTime = tuple.get(0, LocalDateTime.class);
+			LocalDate date = dateTime.toLocalDate();
 			Long amount = tuple.get(2, Long.class);
 			totalAmount += amount;
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
+		System.out.println("expenses size = "+expenses.size());
 
 		return new ExpenseMonthDto(totalAmount, targetAmount,
 			targetAmount - totalAmount, expenses);

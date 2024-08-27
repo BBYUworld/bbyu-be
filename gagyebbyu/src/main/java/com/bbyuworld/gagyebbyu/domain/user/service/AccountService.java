@@ -2,6 +2,8 @@ package com.bbyuworld.gagyebbyu.domain.user.service;
 
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.api.asset.CreateDemandDepositAccountDto;
@@ -34,6 +36,7 @@ public class AccountService {
     private String apiKey;
     private final ApiPost apiPost;
     private final AssetRepository assetRepository;
+    private final CoupleRepository coupleRepository;
     private final UserRepository userRepository;
     private final AssetAccountRepository assetAcountRepository;
 
@@ -46,6 +49,21 @@ public class AccountService {
         List<AccountDto> list = sendPostAboutUserAccount(userKey);
         System.out.println("user Account = "+list);
         return list;
+    }
+
+    public List<AccountDto> findAllCoupleAccount(Long userId){
+        User user = userRepository.findUserById(userId);
+        Couple couple = coupleRepository.getReferenceById(user.getCoupleId());
+        User user1 = couple.getUser1();
+        User user2 = couple.getUser2();
+        String userKey = user.getApiKey();
+        List<AccountDto> list = sendPostAboutUserAccount(user1.getApiKey());
+        List<AccountDto> list2 = sendPostAboutUserAccount(user2.getApiKey());
+        List<AccountDto> result = new ArrayList<>();
+        result.addAll(list);
+        result.addAll(list2);
+        System.out.println("user Account = "+list);
+        return result;
     }
     @Transactional
     public AccountDto createUserAccount(Long userId, String uniqueNo, String bankName, Long dailyTransferLimit, Long oneTimeTransferLimit){

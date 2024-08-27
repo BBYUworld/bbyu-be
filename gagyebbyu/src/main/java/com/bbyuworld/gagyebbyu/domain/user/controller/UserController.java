@@ -86,6 +86,15 @@ public class UserController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/couple/account")
+    @RequireJwtToken
+    public ResponseEntity<List<AccountDto>> findAllCoupleAccount(){
+        Long userId = UserContext.getUserId();
+        List<AccountDto> list = accountService.findAllCoupleAccount(userId);
+        System.out.println("List = "+list);
+        return ResponseEntity.ok(list);
+    }
+
     @PostMapping("/account")
     @RequireJwtToken
     public ResponseEntity<AccountDto> createUserAccount(@RequestBody Map<String, String>map){
