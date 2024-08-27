@@ -49,4 +49,7 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     //특정 대출 정보 출력
     AssetLoan findByAssetId(long assetId);
 
+    /* 부부의 대출 조회 */
+    @EntityGraph(value = "Asset.withUser")
+    List<AssetLoan> findAllByCouple_CoupleId(@Param("coupleId")Long coupleId);
 }

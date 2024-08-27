@@ -22,4 +22,6 @@ public interface AssetLoanService {
     List<AssetLoanDto> getEndedLoans(Long userId);
 
     AssetLoanDto getTargetAssetLoan(Long assetId);
+
+    List<AssetLoanDto> getCoupleAssetLoans(Long userId);
 }

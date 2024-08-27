@@ -2,6 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.controller;
 
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan.AssetLoanService;
+import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AssetLoanController {
 
     private final AssetLoanService assetLoanService;
+    private final UserRepository userRepository;
 
     /**
      * 사용자의 id에 맞는 모든 대출 상품을 출력하는 메서드
@@ -117,5 +119,11 @@ public class AssetLoanController {
     @GetMapping("/{assetId}")
     public ResponseEntity<AssetLoanDto> getAssetLoanById(@PathVariable Long assetId) {
         return ResponseEntity.ok(assetLoanService.getTargetAssetLoan(assetId));
+    }
+
+    @GetMapping("/couple")
+    @RequireJwtToken
+    public ResponseEntity<List<AssetLoanDto>> getCoupleLoans() {
+        return ResponseEntity.ok(assetLoanService.getCoupleAssetLoans(UserContext.getUserId()));
     }
 }
