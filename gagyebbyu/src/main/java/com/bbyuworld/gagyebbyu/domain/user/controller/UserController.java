@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity<List<AccountDto>> findAllUserAccount(){
         Long userId = UserContext.getUserId();
         List<AccountDto> list = accountService.findAllUserAccount(userId);
-
+        System.out.println("List = "+list);
         return ResponseEntity.ok(list);
     }
 
