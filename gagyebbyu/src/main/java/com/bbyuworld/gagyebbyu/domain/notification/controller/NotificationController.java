@@ -51,5 +51,13 @@ public class NotificationController {
         return ResponseEntity.ok("Notification updated successfully");
     }
 
+    @GetMapping("/count")
+    @RequireJwtToken
+    public ResponseEntity<Long> findAllUnreadNotificationCount(){
+        Long userId = UserContext.getUserId();
+        return ResponseEntity.ok(notificationService.findAllUnreadNotificationCount(userId));
+    }
+
+
 
 }

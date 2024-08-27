@@ -9,4 +9,6 @@ public interface NotificationRepositoryCustom {
     Notification findNotificationById(Long id);
     List<Notification> findAllUserNotifications(Long userId);
     void deleteNotification(Long notificationId);
+
+    Long findAllUnreadNotificationCount(Long userId);
 }

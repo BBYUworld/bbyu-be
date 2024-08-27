@@ -40,6 +40,8 @@ public class NotificationService {
         List<Notification> resultList = notificationRepository.findAllUserNotifications(userId);
         for(Notification noti : resultList){
             NotificationDto dto = noti.toDto();
+            noti.setIsRead(true);
+            notificationRepository.save(noti);
             dtoList.add(dto);
         }
         return dtoList;
@@ -52,5 +54,8 @@ public class NotificationService {
         Notification notification = notificationRepository.findNotificationById(notificationId);
         notification.setIsRead(true);
         notificationRepository.save(notification);
+    }
+    public long findAllUnreadNotificationCount(Long userId){
+        return notificationRepository.findAllUnreadNotificationCount(userId);
     }
 }

@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.couple.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
@@ -72,6 +73,7 @@ public class Couple {
 
 	public void updateStatusConnect(User user2) {
 		this.user2 = user2;
+		this.marriedAt = LocalDate.now();
 		this.status = Status.CONNECT;
 	}
 }

@@ -34,5 +34,14 @@ public class NotificationRepositoryImpl implements NotificationRepositoryCustom{
         queryFactory.delete(notification).where(notification.notificationId.eq(notificationId));
     }
 
+    @Override
+    public Long findAllUnreadNotificationCount(Long userId) {
+        return (long) queryFactory.selectFrom(notification)
+                .where(notification.receiverId.eq(userId).and(
+                        notification.isRead.eq(false)
+                ))
+                .fetch().size();
+    }
+
 
 }
