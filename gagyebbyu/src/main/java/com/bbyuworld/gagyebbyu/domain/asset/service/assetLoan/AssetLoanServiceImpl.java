@@ -122,6 +122,11 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public AssetLoanDto getTargetAssetLoan(Long assetId){
+        return convertToDto(assetLoanRepository.findByAssetId(assetId));
+    }
+
     private AssetLoanDto convertToDto(AssetLoan assetLoan) {
         return AssetLoanDto.builder()
                 .assetId(assetLoan.getAssetId())

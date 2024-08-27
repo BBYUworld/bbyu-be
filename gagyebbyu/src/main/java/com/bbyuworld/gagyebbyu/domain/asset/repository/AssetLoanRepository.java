@@ -46,4 +46,7 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByUser_UserIdAndIsEndedTrue(Long userId);
 
+    //특정 대출 정보 출력
+    AssetLoan findByAssetId(long assetId);
+
 }

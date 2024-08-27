@@ -20,4 +20,6 @@ public interface AssetLoanService {
     int isEndedUpdate(Long assetId, Long remainedAmount,Long userId);
 
     List<AssetLoanDto> getEndedLoans(Long userId);
+
+    AssetLoanDto getTargetAssetLoan(Long assetId);
 }

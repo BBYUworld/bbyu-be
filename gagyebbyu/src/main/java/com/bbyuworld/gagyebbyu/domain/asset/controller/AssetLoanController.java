@@ -113,4 +113,9 @@ public class AssetLoanController {
     public ResponseEntity<List<AssetLoanDto>> getEndedLoans() {
         return ResponseEntity.ok(assetLoanService.getEndedLoans(UserContext.getUserId()));
     }
+
+    @GetMapping("/{assetId}")
+    public ResponseEntity<AssetLoanDto> getAssetLoanById(@PathVariable Long assetId) {
+        return ResponseEntity.ok(assetLoanService.getTargetAssetLoan(assetId));
+    }
 }
