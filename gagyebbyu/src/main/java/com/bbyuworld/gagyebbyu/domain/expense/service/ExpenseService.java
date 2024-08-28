@@ -80,7 +80,7 @@ public class ExpenseService {
 			startDate, endDate);
 		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
 
-		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month + 1, year);
 
 		return new ExpenseMonthDto(totalAmount, targetAmount,
 			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
