@@ -20,7 +20,4 @@ public class RecommendSavingsRequestDto {
     private long credit_score;
     private long annual_spending;
     private long num_cards;
-    private long total_deposit;
-    private long total_savings;
-    private long total_assets;
 }

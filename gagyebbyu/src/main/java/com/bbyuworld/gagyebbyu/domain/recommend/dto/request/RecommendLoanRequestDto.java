@@ -18,9 +18,16 @@ public final class RecommendLoanRequestDto {
     private long annual_income;
     private long debt;
     private long credit_score;
+    // LOAN serv  -> getUserRating
     private long annual_spending;
+    //
     private long num_cards;
-
-    // Getters and setters (optional) or use Lombok annotations like @Data or @Getter/@Setter
+    //
+    private long total_deposit;
+    //
+    private long total_savings;
+    //
+    private long total_assets;
+    //
 }
 

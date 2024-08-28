@@ -1,7 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.recommend.controller;
 
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
-import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.service.RecommendService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
@@ -11,21 +10,25 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/recommend")
 @RequiredArgsConstructor
 public class RecommendController {
 
-	private final RecommendService recommendSevice;
+	private final RecommendService recommendService;
 
 	/**
 	 * 대출 추천 api
+	 *
 	 * @return
 	 */
 	@PostMapping(path = "/loan", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<RecommendLoanDto> getLoanRecommend() {
-		return ResponseEntity.ok(recommendSevice.getLoanRecommend(UserContext.getUserId()));
+	public ResponseEntity<List<Map.Entry<Integer, Double>>> getLoanRecommend() {
+		return ResponseEntity.ok(recommendService.getLoanRecommend(UserContext.getUserId()));
 
 	}
 
@@ -36,7 +39,7 @@ public class RecommendController {
 	@PostMapping(path = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
 	public ResponseEntity<RecommendDepositDto> getDepositRecommend() {
-		return ResponseEntity.ok(recommendSevice.getDepositRecommend(UserContext.getUserId()));
+		return ResponseEntity.ok(recommendService.getDepositRecommend(UserContext.getUserId()));
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class RecommendController {
 	@PostMapping(path = "/savings", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
 	public ResponseEntity<RecommendSavingsDto> getSavingsRecommend() {
-		return ResponseEntity.ok(recommendSevice.getSavingsRecommend(UserContext.getUserId()));
+		return ResponseEntity.ok(recommendService.getSavingsRecommend(UserContext.getUserId()));
 	}
 
 
