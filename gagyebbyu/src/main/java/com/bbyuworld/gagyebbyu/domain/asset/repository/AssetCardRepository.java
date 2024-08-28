@@ -23,4 +23,6 @@ public interface AssetCardRepository extends JpaRepository<AssetCard, Long> {
     @EntityGraph(value = "Asset.withUser")
     List<AssetCard> findAllByUser_UserIdAndCardTypeAndIsHiddenFalse(Long userId, CardType cardType);
 
+    @EntityGraph(value = "Asset.withUser")
+    int countAssetCardByUser_UserIdAndIsHiddenFalse(Long userId);
 }

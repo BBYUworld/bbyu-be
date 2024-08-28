@@ -43,6 +43,22 @@ public class AssetAccountServiceImpl implements AssetAccountService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 타입에 따른 계좌 총액 출력
+     *
+     * @param userId user 의 Id
+     * @param accountType 타입
+     * @return Long 값 반환
+     */
+    @Override
+    public Long getSumAmountByType(Long userId, AccountType accountType) {
+        System.out.println("=======================================");
+        System.out.println(userId);
+        System.out.println(accountType);
+        System.out.println("=======================================");
+        return assetAccountRepository.sumAmountByUserIdAndAccountType(userId, accountType);
+    }
+
     private AssetAccountDto convertToDto(AssetAccount assetAccount) {
         return AssetAccountDto.builder()
                 .assetId(assetAccount.getAssetId())

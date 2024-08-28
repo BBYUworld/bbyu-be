@@ -77,4 +77,22 @@ public class AssetAccountController {
         }
     }
 
+    /**
+     * 입출금 계좌, 예금, 적금 의 자산 총합을 반환
+     *
+     * @param accountTypeStr 위에 적힌 3~4개의 타입
+     * @return Long
+     */
+    @GetMapping("/sum-type/{accountType}")
+    @RequireJwtToken
+    public ResponseEntity<Long> getSumAmountByType(
+            @RequestParam("accountType") String accountTypeStr) {
+        try {
+            AccountType accountType = AccountType.valueOf(accountTypeStr.toUpperCase());
+            return ResponseEntity.ok(assetAccountService.getSumAmountByType(UserContext.getUserId(), accountType));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(-1L);
+        }
+    }
+
 }

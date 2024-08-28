@@ -36,4 +36,11 @@ public class AssetCardController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    //test
+    @GetMapping("/test")
+    @RequireJwtToken
+    public ResponseEntity<Integer> testCode(){
+        return ResponseEntity.ok(assetCardService.getCardsNum(UserContext.getUserId()));
+    }
 }
