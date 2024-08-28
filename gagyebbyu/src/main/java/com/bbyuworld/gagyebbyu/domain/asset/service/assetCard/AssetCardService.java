@@ -8,4 +8,6 @@ import java.util.List;
 public interface AssetCardService {
     List<AssetCardDto> getAllAssetCards(Long userId);
     List<AssetCardDto> getAllAssetCardByCardType(CardType cardType, Long userId);
+
+    int getCardsNum(Long userId);
 }

@@ -39,6 +39,17 @@ public class AssetCardServiceImpl implements AssetCardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 카드 총 갯수 제공
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getCardsNum(Long userId) {
+        return assetCardRepository.countAssetCardByUser_UserIdAndIsHiddenFalse(userId);
+    }
+
     private AssetCardDto convertToDto(AssetCard assetCard) {
         return AssetCardDto.builder()
                 .assetId(assetCard.getAssetId())
