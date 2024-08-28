@@ -106,7 +106,7 @@ public class ExpenseService {
 
 		ExpenseCategoryDto requestBody = new ExpenseCategoryDto(expenseCreateDto.getPlace());
 		try {
-			String category = apiService.sendPostRequest("http://localhost:8000/api/expense-category", requestBody);
+			String category = apiService.sendPostRequest("http://fastapi:8000/api/expense-category", requestBody);
 			expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
