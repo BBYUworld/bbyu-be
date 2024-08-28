@@ -80,7 +80,7 @@ public class RecommendService {
 
 
         try {
-            return apiService.sendLoanPostRequest("http://localhost:8000/ai/recommend/loan", requestDto);
+            return apiService.sendLoanPostRequest("http://3.39.19.140:8000/ai/recommend/loan", requestDto);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create expense", e);
         }
@@ -121,7 +121,7 @@ public class RecommendService {
 
 
         try {
-            return apiService.sendDepositPostRequest("http://localhost:8000/ai/recommend/deposit", requestDto);
+            return apiService.sendDepositPostRequest("http://3.39.19.140:8000/ai/recommend/deposit", requestDto);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create expense", e);
         }
@@ -160,7 +160,7 @@ public class RecommendService {
         requestDto.setNum_cards(cardNum);
         requestDto.setAnnual_spending(annualSpending);
         try {
-            return apiService.sendSavingsPostRequest("http://localhost:8000/ai/recommend/savings", requestDto);
+            return apiService.sendSavingsPostRequest("http://3.39.19.140:8000/ai/recommend/savings", requestDto);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create expense", e);
         }
