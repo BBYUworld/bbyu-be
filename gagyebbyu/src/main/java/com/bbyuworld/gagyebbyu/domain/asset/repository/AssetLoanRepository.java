@@ -23,6 +23,10 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByUser_UserIdAndIsEndedFalse(Long userId);
 
+    /*  */
+    @Query("SELECT SUM(a.remainedAmount) FROM AssetLoan a WHERE a.user.userId = :userId AND a.isHidden = false")
+    Long sumRemainedAmountByUser_UserIdAndIsHiddenFalse(Long userId);
+
     /* 남은 금액별 정렬 */
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByUser_UserIdAndIsEndedFalseOrderByRemainedAmountDesc(Long userId);
@@ -46,4 +50,10 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByUser_UserIdAndIsEndedTrue(Long userId);
 
+    //특정 대출 정보 출력
+    AssetLoan findByAssetId(long assetId);
+
+    /* 부부의 대출 조회 */
+    @EntityGraph(value = "Asset.withUser")
+    List<AssetLoan> findAllByCouple_CoupleId(@Param("coupleId")Long coupleId);
 }

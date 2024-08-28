@@ -3,11 +3,17 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
+import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +24,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
 
     private final AssetLoanRepository assetLoanRepository;
     private final UserRepository userRepository;
+    private final CoupleRepository coupleRepository;
 
     /**
      * 사용자의 특정 loan 상품을 불러오기 위함
@@ -121,6 +128,38 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public AssetLoanDto getTargetAssetLoan(Long assetId){
+        return convertToDto(assetLoanRepository.findByAssetId(assetId));
+    }
+
+    /**
+     * 부부 공콩의 대출 반환
+     *
+     * @param userId 사용자 id
+     * @return 사용자와 사용자 부부의 대출 반환
+     */
+    @Override
+    public List<AssetLoanDto> getCoupleAssetLoans(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+        Long coupleId = user.getCoupleId();
+
+        return assetLoanRepository.findAllByCouple_CoupleId(coupleId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public Long getUserRemainedAmount(Long userId) {
+        return assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+    }
+
 
     private AssetLoanDto convertToDto(AssetLoan assetLoan) {
         return AssetLoanDto.builder()

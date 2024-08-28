@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.asset.repository;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,7 @@ import java.util.List;
 
 
 @Repository
-public interface AssetRepository extends JpaRepository<Asset, Long> {
+public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustomRepository {
     /* 사용자의 전체 자산 내역 정보 제공 */
     List<Asset> findAllByUser_UserIdAndIsHiddenFalse(Long userId);
 
@@ -26,6 +27,10 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
     @Query("SELECT SUM(a.amount) FROM Asset a WHERE a.couple.coupleId = :coupleId AND a.isHidden = false")
     Long sumAmountByCouple_CoupleIdAndIsHiddenFalse(@Param("coupleId") Long coupleId);
 
+    /* 사용자의 전체 자산 총합 제공 */
+    @Query("SELECT SUM(a.amount) FROM Asset a WHERE a.user.userId = :userId AND a.type=:type AND a.isHidden = false")
+    Long getUserSumamount(@Param("userId") Long userId, @Param("type") String type);
+
 
     /* 자산 추가 -> type 에 맞는 asset_ 하위 테이블에도 추가 save 써서 넘어가기 */
 
@@ -39,4 +44,4 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
     @Query("UPDATE Asset a SET a.couple.coupleId = :coupleId WHERE a.user.userId = :user1Id OR a.user.userId = :user2Id")
     void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId, @Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
 
-}
+    }

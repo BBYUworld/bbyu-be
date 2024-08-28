@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response.CoupleResponseDto;
 import com.bbyuworld.gagyebbyu.domain.couple.service.CoupleService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
@@ -34,9 +34,9 @@ public class CoupleController {
 	 * @return
 	 */
 	@PostMapping(path = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
-		coupleService.createCouple(coupleCreateDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Long> createCoupleRequest(@RequestBody CoupleCreateDto coupleCreateDto) {
+		Long coupleId = coupleService.createCouple(coupleCreateDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(coupleId);
 	}
 
 	/**
@@ -72,6 +72,13 @@ public class CoupleController {
 	@RequireJwtToken
 	public ResponseEntity<CoupleResponseDto> updateCouple() {
 		return ResponseEntity.ok(coupleService.getCouple(UserContext.getUserId()));
+	}
+
+	@GetMapping("/{userId}")
+	@RequireJwtToken
+	public ResponseEntity<CoupleResponseDto> updateCouple(@PathVariable Long userId) {
+		System.out.println("Get Couple Id user Id = "+userId);
+		return ResponseEntity.ok(coupleService.getCouple(userId));
 	}
 
 }

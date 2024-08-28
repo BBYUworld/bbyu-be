@@ -89,6 +89,9 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Region region;
 
+	@Column(name = "credit_score")
+	private Integer creditScore;
+
 	@Column
 	@Enumerated(EnumType.STRING)
 	private Occupation occupation;

@@ -6,10 +6,10 @@ import java.time.temporal.ChronoUnit;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleConnectDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleCreateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.request.CoupleUpdateDto;
-import com.bbyuworld.gagyebbyu.domain.couple.dto.response.CoupleResponseDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleUpdateDto;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response.CoupleResponseDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
@@ -31,13 +31,14 @@ public class CoupleService {
 	private final AssetRepository assetRepository;
 
 	@Transactional
-	public void createCouple(CoupleCreateDto coupleCreateDto) {
+	public Long createCouple(CoupleCreateDto coupleCreateDto) {
 		User user1 = userRepository.findById(coupleCreateDto.getUser1Id())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = coupleCreateDto.toEntity(user1);
 
 		coupleRepository.save(couple);
+		return couple.getCoupleId();
 	}
 
 	@Transactional
