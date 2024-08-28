@@ -43,7 +43,6 @@ public class ExpenseController {
 	@RequireJwtToken
 	public ResponseEntity<ExpenseMonthDto> getExpenseAll(
 		@ModelAttribute ExpenseParam param) {
-		System.out.println("expense param = "+param);
 		return ResponseEntity.ok(expenseService.getExpenseAll(UserContext.getUserId(), param));
 	}
 
@@ -107,6 +106,13 @@ public class ExpenseController {
 	public ResponseEntity<Void> updateExpense(@PathVariable long expenseId,
 		@RequestBody ExpenseUpdateDto expenseUpdateDto) {
 		expenseService.updateExpense(expenseId, expenseUpdateDto);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping(path = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<ExpenseMonthDto> getTest() {
+		System.out.println(expenseService.getUserExpensesForYear(UserContext.getUserId()));
 		return ResponseEntity.ok().build();
 	}
 

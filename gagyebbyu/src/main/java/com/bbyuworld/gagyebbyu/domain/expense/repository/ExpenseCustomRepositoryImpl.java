@@ -36,6 +36,25 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
+	public Long findTotalExpenditureForYear(Long userId) {
+		LocalDate now = LocalDate.now();
+		int currentMonth = now.getMonthValue();
+		int currentYear = now.getYear();
+
+		int startMonth = currentMonth == 1 ? 12 : currentMonth - 1;
+		int startYear = currentMonth == 1 ? currentYear - 1 : currentYear;
+
+		return jpaQueryFactory
+			.select(expense.amount.sum())
+			.from(expense)
+			.where(
+				expense.user.userId.eq(userId),
+				getYear(startMonth, startYear)
+			)
+			.fetchOne();
+	}
+
+	@Override
 	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount) {
 
 		return jpaQueryFactory
@@ -97,16 +116,16 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier(sort);
 
 		return jpaQueryFactory.select(
-						expense.date,
-						expense.couple,
-						expense.amount)
-				.from(expense)
-				.where(
-						expense.couple.coupleId.eq(coupleId),
-						getMonth(month, year)
-				)
-				.orderBy(orderSpecifier)
-				.fetch();
+				expense.date,
+				expense.couple,
+				expense.amount)
+			.from(expense)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				getMonth(month, year)
+			)
+			.orderBy(orderSpecifier)
+			.fetch();
 	}
 
 	@Override
@@ -129,6 +148,13 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 		} else {
 			return Expressions.dateTemplate(LocalDate.class, "DATE({0})", expense.date).asc();
 		}
+	}
+
+	private BooleanExpression getYear(Integer month, Integer year) {
+		LocalDateTime startDate = LocalDateTime.of(year - 1, month + 1, 1, 0, 0);
+		LocalDateTime endDate = LocalDateTime.of(year, month + 1, 1, 0, 0).minusNanos(1);
+
+		return expense.date.between(startDate, endDate);
 	}
 
 	private BooleanExpression getMonth(Integer month, Integer year) {

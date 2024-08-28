@@ -1,6 +1,5 @@
 package com.bbyuworld.gagyebbyu.domain.expense.service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import com.bbyuworld.gagyebbyu.domain.webClient.dto.ExpenseCategoryDto;
 import com.bbyuworld.gagyebbyu.domain.webClient.service.ApiService;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.Tuple;
 
 import jakarta.transaction.Transactional;
@@ -49,10 +47,10 @@ public class ExpenseService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-		System.out.println("user id = "+user.getUserId());
+		System.out.println("user id = " + user.getUserId());
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
-		System.out.println("couple id = "+couple.getCoupleId());
+		System.out.println("couple id = " + couple.getCoupleId());
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
@@ -66,7 +64,7 @@ public class ExpenseService {
 			totalAmount += amount;
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
-		System.out.println("expenses size = "+expenses.size());
+		System.out.println("expenses size = " + expenses.size());
 
 		List<ExpenseDayDto> dayExpenses = expenseRepository.findExpenseByDay(null, month, year, user.getCoupleId(),
 				sort)
@@ -141,5 +139,9 @@ public class ExpenseService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
 
 		expense.updateAmount(expenseUpdateDto.getAmount());
+	}
+
+	public Long getUserExpensesForYear(long userId) {
+		return expenseRepository.findTotalExpenditureForYear(userId);
 	}
 }
