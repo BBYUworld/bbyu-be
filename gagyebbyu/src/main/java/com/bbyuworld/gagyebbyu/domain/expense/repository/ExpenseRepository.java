@@ -16,4 +16,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, Expense
 	@Query("update Expense e set e.couple = :couple where e.user.userId = :user1Id or e.user.userId = :user2Id")
 	int updateExpenseCouple(@Param("couple") Couple couple, @Param("user1Id") Long user1Id,
 		@Param("user2Id") Long user2Id);
+
+	@Query("SELECT SUM(e.amount) " +
+		"FROM Expense e " +
+		"WHERE e.couple.coupleId = :coupleId " +
+		"AND e.date >= CURRENT_DATE - 1 MONTH")
+	Long findTotalExpenditureForCoupleLastMonth(@Param("coupleId") Long coupleId);
+
 }

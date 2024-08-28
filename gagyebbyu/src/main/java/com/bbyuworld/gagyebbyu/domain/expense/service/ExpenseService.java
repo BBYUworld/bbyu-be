@@ -64,8 +64,14 @@ public class ExpenseService {
 		}
 		System.out.println("expenses size = "+expenses.size());
 
+		List<ExpenseDayDto> dayExpenses = expenseRepository.findExpenseByDay(null, month, year, user.getCoupleId(),
+				sort)
+			.stream()
+			.map(ExpenseDayDto::from)
+			.collect(Collectors.toList());
+
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, expenses);
+			targetAmount - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
