@@ -22,4 +22,6 @@ public interface ExpenseCustomRepository {
 	List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount);
 
 	Long findTotalExpenditureForMonth(Long coupleId);
+
+	Long findTotalExpenditureForYear(Long userId);
 }
