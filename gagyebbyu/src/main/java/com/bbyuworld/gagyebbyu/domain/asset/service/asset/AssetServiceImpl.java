@@ -65,6 +65,18 @@ public class AssetServiceImpl implements AssetService {
         return assetRepository.sumAmountByUser_UserIdAndIsHiddenFalse(userId);
     }
 
+//    /**
+//     * 타입에 따른 자산 총합 출력
+//     *
+//     * @param userId
+//     * @param type
+//     * @return
+//     */
+//    @Override
+//    public Long getSumUserAssets(Long userId, String type) {
+//        return assetRepository.getUserSumamount(userId, type);
+//    }
+
     /**
      * 커플에 맞는 전체 자산 정보 제공
      *

@@ -151,6 +151,15 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public Long getUserRemainedAmount(Long userId) {
+        return assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+    }
+
 
     private AssetLoanDto convertToDto(AssetLoan assetLoan) {
         return AssetLoanDto.builder()

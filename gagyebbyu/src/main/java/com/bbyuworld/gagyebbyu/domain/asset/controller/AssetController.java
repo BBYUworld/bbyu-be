@@ -8,6 +8,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.service.asset.AssetService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,5 +66,11 @@ public class AssetController {
     public boolean addNewCard(@RequestBody AssetCardDto assetCardDto) {
         return assetService.insertNewCard(assetCardDto, UserContext.getUserId());
     }
+
+//    @GetMapping("/sum-user")
+//    @RequireJwtToken
+//    public Long getSumUserAssets(@Param("type") String type) {
+//        return assetService.getSumUserAssets(UserContext.getUserId(), type);
+//    }
 
 }
