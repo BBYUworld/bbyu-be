@@ -97,18 +97,16 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier(sort);
 
 		return jpaQueryFactory.select(
-				Expressions.dateTemplate(LocalDate.class, "DATE({0})", expense.date),
-				expense.couple,
-				expense.amount.sum())
-			.from(expense)
-			.where(
-				expense.couple.coupleId.eq(coupleId),
-				getMonth(month, year)
-			)
-			.groupBy(Expressions.dateTemplate(LocalDate.class, "DATE({0})", expense.date),
-				expense.couple)
-			.orderBy(orderSpecifier)
-			.fetch();
+						expense.date,
+						expense.couple,
+						expense.amount)
+				.from(expense)
+				.where(
+						expense.couple.coupleId.eq(coupleId),
+						getMonth(month, year)
+				)
+				.orderBy(orderSpecifier)
+				.fetch();
 	}
 
 	@Override

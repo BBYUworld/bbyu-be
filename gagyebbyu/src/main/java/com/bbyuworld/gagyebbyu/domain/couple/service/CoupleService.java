@@ -31,13 +31,14 @@ public class CoupleService {
 	private final AssetRepository assetRepository;
 
 	@Transactional
-	public void createCouple(CoupleCreateDto coupleCreateDto) {
+	public Long createCouple(CoupleCreateDto coupleCreateDto) {
 		User user1 = userRepository.findById(coupleCreateDto.getUser1Id())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = coupleCreateDto.toEntity(user1);
 
 		coupleRepository.save(couple);
+		return couple.getCoupleId();
 	}
 
 	@Transactional
