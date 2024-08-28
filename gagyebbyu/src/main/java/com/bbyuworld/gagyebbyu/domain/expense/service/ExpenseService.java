@@ -23,8 +23,11 @@ import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.domain.webClient.dto.ExpenseCategoryDto;
+import com.bbyuworld.gagyebbyu.domain.webClient.service.ApiService;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.Tuple;
 
 import jakarta.transaction.Transactional;
@@ -37,6 +40,7 @@ public class ExpenseService {
 	private final ExpenseRepository expenseRepository;
 	private final UserRepository userRepository;
 	private final CoupleRepository coupleRepository;
+	private final ApiService apiService;
 
 	public ExpenseMonthDto getExpenseAll(long userId, ExpenseParam param) {
 		Integer month = param.getMonth() != null ? param.getMonth() : LocalDateTime.now().getMonthValue();
@@ -91,44 +95,22 @@ public class ExpenseService {
 
 	@Transactional
 	public void createExpense(long userId, ExpenseCreateDto expenseCreateDto) {
-
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = null;
-
 		if (user.getCoupleId() != null) {
 			couple = coupleRepository.findById(user.getCoupleId())
 				.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 		}
 
-		//카테고리 가져오는 로직 (추후 수정)
-		/**
-		 * 교육,
-		 *     교통_자동차,
-		 *     기타소비,
-		 *     대형마트,
-		 *     미용,
-		 *     배달,
-		 *     보험,
-		 *     생필품,
-		 *     생활서비스,
-		 *     세금_공과금,
-		 *     쇼핑몰,
-		 *     여행_숙박,
-		 *     외식,
-		 *     의료_건강,
-		 *     주류_펍,
-		 *     취미_여가,
-		 *     카페,
-		 *     통신,
-		 *     편의점
-		 *     이거 중에 하나 String 값으로 보내면 자동으로 ENUM 처리돼서 저장됨
-		 */
-		String category = "통신";
-
-		expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
-
+		ExpenseCategoryDto requestBody = new ExpenseCategoryDto(expenseCreateDto.getPlace());
+		try {
+			String category = apiService.sendPostRequest("http://localhost:8000/api/expense-category", requestBody);
+			expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create expense", e);
+		}
 	}
 
 	@Transactional
