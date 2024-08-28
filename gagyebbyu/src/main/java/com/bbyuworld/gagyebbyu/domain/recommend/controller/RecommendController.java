@@ -38,7 +38,7 @@ public class RecommendController {
 	 */
 	@PostMapping(path = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<RecommendDepositDto> getDepositRecommend() {
+	public ResponseEntity<List<Map.Entry<Integer, Double>>> getDepositRecommend() {
 		return ResponseEntity.ok(recommendService.getDepositRecommend(UserContext.getUserId()));
 	}
 
@@ -48,7 +48,7 @@ public class RecommendController {
 	 */
 	@PostMapping(path = "/savings", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<RecommendSavingsDto> getSavingsRecommend() {
+	public ResponseEntity<List<Map.Entry<Integer, Double>>> getSavingsRecommend() {
 		return ResponseEntity.ok(recommendService.getSavingsRecommend(UserContext.getUserId()));
 	}
 
