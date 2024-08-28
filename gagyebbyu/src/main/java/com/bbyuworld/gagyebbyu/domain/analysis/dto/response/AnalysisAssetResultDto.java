@@ -1,7 +1,5 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.dto.response;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetType;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
