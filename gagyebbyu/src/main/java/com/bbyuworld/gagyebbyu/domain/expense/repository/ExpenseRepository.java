@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.expense.repository;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +24,14 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, Expense
 		"WHERE e.couple.coupleId = :coupleId " +
 		"AND e.date >= CURRENT_DATE - 1 MONTH")
 	Long findTotalExpenditureForCoupleLastMonth(@Param("coupleId") Long coupleId);
+
+	@Query("SELECT SUM(e.amount) " +
+		"FROM Expense e " +
+		"WHERE e.couple.coupleId = :coupleId " +
+		"AND e.date BETWEEN :startDate AND :endDate")
+	Long findTotalExpenditureForCoupleGivenMonth(
+		@Param("coupleId") Long coupleId,
+		@Param("startDate") LocalDateTime startDate,
+		@Param("endDate") LocalDateTime endDate);
 
 }

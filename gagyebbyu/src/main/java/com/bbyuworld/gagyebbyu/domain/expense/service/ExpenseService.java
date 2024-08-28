@@ -18,6 +18,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -72,8 +73,17 @@ public class ExpenseService {
 			.map(ExpenseDayDto::from)
 			.collect(Collectors.toList());
 
+		LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), month - 1, 1, 0, 0);
+		LocalDateTime endDate = startDate.plusMonths(1).minusNanos(1);
+
+		Long totalAmountForLastMonth = expenseRepository.findTotalExpenditureForCoupleGivenMonth(couple.getCoupleId(),
+			startDate, endDate);
+		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
+
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
+
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, expenses, dayExpenses);
+			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
