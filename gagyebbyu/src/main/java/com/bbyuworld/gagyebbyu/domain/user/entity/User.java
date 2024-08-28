@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.loan.entity.RatingName;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 
 import jakarta.persistence.CascadeType;
