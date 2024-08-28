@@ -22,6 +22,8 @@ spring:
   jwt:
     issuer: ${jwt.issuer}
     secret_key: ${jwt.secret_key}
+    access_token_expiration_time: 36000000
+    refresh_token_expiration_time: 36000000
 
 
 
@@ -47,7 +49,3 @@ logging:
 
 ssafy:
   api_key: ${api.key}
-
-mail:
-  username: ${naver.mail.username}
-  password: ${naver.mail.password}
