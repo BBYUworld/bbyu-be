@@ -72,8 +72,21 @@ public class ExpenseService {
 			.map(ExpenseDayDto::from)
 			.collect(Collectors.toList());
 
+		LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), month - 1, 1, 0, 0);
+		LocalDateTime endDate = startDate.plusMonths(1).minusNanos(1);
+
+		Long totalAmountForLastMonth = expenseRepository.findTotalExpenditureForCoupleGivenMonth(couple.getCoupleId(),
+			startDate, endDate);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
+
+		System.out.println(totalAmountForLastMonth);
+
+		// Category category = expenseRepository.findTopCategoryForCoupleLastMonth(userId);
+
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, expenses, dayExpenses);
+			targetAmount - totalAmount, null, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
