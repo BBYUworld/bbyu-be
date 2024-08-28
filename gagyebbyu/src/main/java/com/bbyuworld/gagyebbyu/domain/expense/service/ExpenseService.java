@@ -18,6 +18,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -77,16 +78,12 @@ public class ExpenseService {
 
 		Long totalAmountForLastMonth = expenseRepository.findTotalExpenditureForCoupleGivenMonth(couple.getCoupleId(),
 			startDate, endDate);
-		System.out.println(startDate);
-		System.out.println(endDate);
 		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
 
-		System.out.println(totalAmountForLastMonth);
-
-		// Category category = expenseRepository.findTopCategoryForCoupleLastMonth(userId);
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, null, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
+			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
