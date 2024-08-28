@@ -16,6 +16,7 @@ public interface AssetService {
 
     Long getSumUserAssets(Long userId);
 
+
     List<AssetDto> getCoupleAssets(Long userId);
 
     Long getSumCoupleAssets(Long userId);
@@ -30,5 +31,4 @@ public interface AssetService {
     boolean insertNewAccount(AssetAccountDto assetAccountDto, Long userId);
 
     /* 상세정보 출력 */
-
 }

@@ -126,4 +126,11 @@ public class AssetLoanController {
     public ResponseEntity<List<AssetLoanDto>> getCoupleLoans() {
         return ResponseEntity.ok(assetLoanService.getCoupleAssetLoans(UserContext.getUserId()));
     }
+
+    @GetMapping("/sum-user")
+    @RequireJwtToken
+    public ResponseEntity<Long> getSumRemainedAmount() {
+        Long userId = UserContext.getUserId();
+        return ResponseEntity.ok(assetLoanService.getUserRemainedAmount(userId));
+    }
 }
