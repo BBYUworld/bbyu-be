@@ -47,7 +47,3 @@ logging:
 
 ssafy:
   api_key: ${api.key}
-
-mail:
-  username: ${naver.mail.username}
-  password: ${naver.mail.password}
