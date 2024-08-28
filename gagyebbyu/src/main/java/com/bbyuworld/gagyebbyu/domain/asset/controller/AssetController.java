@@ -45,7 +45,7 @@ public class AssetController {
     }
 
     @PatchMapping("/{assetId}/visibility")
-    public void updateAssetVisibility(@PathVariable Long assetId, @RequestParam boolean isHidden) {
+    public void updateAssetVisibility(@PathVariable Long assetId, @RequestParam("isHidden") boolean isHidden) {
         assetService.updateAssetVisibility(assetId, isHidden);
     }
 

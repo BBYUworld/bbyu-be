@@ -37,7 +37,7 @@ public class AssetAccountController {
      */
     @GetMapping("/bank-name")
     @RequireJwtToken
-    public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBank( @Param("bankName")
+    public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBank( @RequestParam("bankName")
         String bankName) {
         return ResponseEntity.ok(assetAccountService.getAssetAccountsByBank(UserContext.getUserId(), bankName));
     }
@@ -51,7 +51,7 @@ public class AssetAccountController {
     @GetMapping("/type")
     @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByType(
-            @Param("accountType") AccountType accountType) {
+            @RequestParam("accountType") AccountType accountType) {
         try {
             return ResponseEntity.ok(assetAccountService.getAssetAccountsByType(UserContext.getUserId(), accountType));
         } catch (IllegalArgumentException e) {
@@ -69,7 +69,7 @@ public class AssetAccountController {
     @GetMapping("/bank/type")
     @RequireJwtToken
     public ResponseEntity<List<AssetAccountDto>> getAssetAccountsByBankAndType(
-            @Param("bankName") String bankName, @Param("accountType") AccountType accountType) {
+            @RequestParam("bankName") String bankName, @RequestParam("accountType") AccountType accountType) {
         try {
             return ResponseEntity.ok(assetAccountService.getAssetAccountByBankAndType(UserContext.getUserId(), bankName, accountType));
         } catch (IllegalArgumentException e) {
@@ -83,7 +83,7 @@ public class AssetAccountController {
      * @param accountTypeStr 위에 적힌 3~4개의 타입
      * @return Long
      */
-    @GetMapping("/sum-type/{accountType}")
+    @GetMapping("/sum-type")
     @RequireJwtToken
     public ResponseEntity<Long> getSumAmountByType(
             @RequestParam("accountType") String accountTypeStr) {
