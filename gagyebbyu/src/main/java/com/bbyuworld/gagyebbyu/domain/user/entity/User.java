@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
+import com.bbyuworld.gagyebbyu.domain.loan.entity.RatingName;
 import com.bbyuworld.gagyebbyu.domain.user.dto.UserDto;
 
 import jakarta.persistence.CascadeType;
@@ -88,6 +89,9 @@ public class User {
 	@Column(name = "region")
 	@Enumerated(EnumType.STRING)
 	private Region region;
+
+	@Column(name = "credit_score")
+	private Integer creditScore;
 
 	@Column
 	@Enumerated(EnumType.STRING)
