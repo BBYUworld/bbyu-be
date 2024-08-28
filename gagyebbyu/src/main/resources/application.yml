@@ -22,6 +22,8 @@ spring:
   jwt:
     issuer: ${jwt.issuer}
     secret_key: ${jwt.secret_key}
+    access_token_expiration_time: ${jwt.access_token_expiration_time}
+    refresh_token_expiration_time: ${jwt.refresh_token_expiration_time}
 
 
 
