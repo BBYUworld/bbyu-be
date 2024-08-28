@@ -2,7 +2,6 @@
 /.idea/.gitignore
 /expenseCategory/.gitignore
 /bfg-1.14.0.jar
-/gagyebbyu/src/main/java/com/bbyuworld/gagyebbyu/domain/expense/entity/Category.java
 /.idea/compiler.xml
 /expenseCategory/model/KoBERT_26_CrossEntropyLoss/config.json
 /.idea/modules/gagyebbyu.main.iml
