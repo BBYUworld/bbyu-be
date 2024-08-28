@@ -69,7 +69,11 @@ public class UserService {
             user.setRefreshToken(token.getRefreshToken());
             user.setLogin(true);
             userRepository.save(user);
-            LoginResponseDto loginResponseDto = LoginResponseDto.builder().token(token).is_first_login(false).build();
+            LoginResponseDto loginResponseDto = LoginResponseDto.builder().
+                    token(token).
+                    is_first_login(false).
+                    userId(user.getUserId()).
+                    build();
             if(user.getAge() == null){
                 loginResponseDto.set_first_login(true);
             }
@@ -100,6 +104,11 @@ public class UserService {
         User user = userRepository.findUserByEmail(email);
         if(user == null)return true;
         return false;
+    }
+
+    public UserDto findUserByEmail(String email){
+        User user = userRepository.findUserByEmail(email);
+        return user.toDto();
     }
 
     @Transactional
@@ -148,8 +157,6 @@ public class UserService {
                 throw new IllegalArgumentException("Unknown account type: " + accountTypeName);
         }
     }
-
-
 
 
 

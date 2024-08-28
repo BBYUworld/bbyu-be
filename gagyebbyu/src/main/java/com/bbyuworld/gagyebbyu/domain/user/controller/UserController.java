@@ -60,6 +60,7 @@ public class UserController {
         return ResponseEntity.ok("로그아웃 성공");
     }
 
+
     @DeleteMapping("/delete")
     @RequireJwtToken
     public ResponseEntity<String> deleteUser(){
@@ -82,6 +83,15 @@ public class UserController {
     public ResponseEntity<List<AccountDto>> findAllUserAccount(){
         Long userId = UserContext.getUserId();
         List<AccountDto> list = accountService.findAllUserAccount(userId);
+        System.out.println("List = "+list);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/couple/account")
+    @RequireJwtToken
+    public ResponseEntity<List<AccountDto>> findAllCoupleAccount(){
+        Long userId = UserContext.getUserId();
+        List<AccountDto> list = accountService.findAllCoupleAccount(userId);
         System.out.println("List = "+list);
         return ResponseEntity.ok(list);
     }
@@ -117,6 +127,13 @@ public class UserController {
         Long userId = UserContext.getUserId();
         userService.saveAdditionalInfo(userId, requestDto);
         return ResponseEntity.ok("good");
+    }
+
+    @GetMapping("/find")
+    @RequireJwtToken
+    public ResponseEntity<UserDto> findUserByEmail(@RequestParam("email")String email){
+        UserDto user = userService.findUserByEmail(email);
+        return ResponseEntity.ok(user);
     }
 
 //    @PostMapping("/email")

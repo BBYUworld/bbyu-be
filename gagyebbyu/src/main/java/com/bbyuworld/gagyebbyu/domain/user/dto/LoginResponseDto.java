@@ -11,4 +11,5 @@ import lombok.*;
 public class LoginResponseDto {
     private JwtToken token;
     private boolean is_first_login;
+    private Long userId;
 }
