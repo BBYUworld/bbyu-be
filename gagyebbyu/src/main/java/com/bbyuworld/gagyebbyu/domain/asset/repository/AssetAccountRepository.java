@@ -4,10 +4,11 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long> {
@@ -56,4 +57,21 @@ public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long
     @EntityGraph(value = "Asset.withUser")
     List<AssetAccount> findByUser_UserIdAndBankNameContainingAndAccountTypeAndIsHiddenFalseOrderByAmountDesc(Long userId, String bankName, AccountType accountType);
 
+    /**
+     * 사용자 ID와 계좌 유형으로 숨겨지지 않은 계좌를 조회합니다.
+     * 결과는 금액 내림차순으로 정렬됩니다.
+     *
+     * @param userId 사용자 ID
+     * @param accountType 계좌 유형
+     * @return 조건에 맞는 계좌 목록
+     */
+    @Query("SELECT SUM(aa.amount) FROM AssetAccount aa " +
+            "WHERE aa.user.userId = :userId " +
+            "AND aa.isHidden = false " +
+            "AND aa.accountType = :accountType " +
+            "AND aa.isEnded = false")
+    Long sumAmountByUserIdAndAccountType(
+            @Param("userId") Long userId,
+            @Param("accountType") AccountType accountType
+    );
 }
