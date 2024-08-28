@@ -3,7 +3,6 @@ package com.bbyuworld.gagyebbyu.domain.analysis.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 
