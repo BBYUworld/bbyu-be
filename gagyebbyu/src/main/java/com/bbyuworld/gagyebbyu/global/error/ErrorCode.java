@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.global.error;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 
 @Getter
@@ -43,7 +44,18 @@ public enum ErrorCode {
 	 * Analysis 관련 에러 코드
 	 */
 	ASSET_NOT_FOUND(BAD_REQUEST, "ANALYSIS-000", "coupleId에 해당하는 Asset이 존재하지 않습니다."),
-	LAST_YEAR_ASSET_NOT_FOUND(BAD_REQUEST, "ANALYSIS-001", "coupleId에 해당하는 전년도 AnnualAsset이 존재하지 않습니다.");
+	LAST_YEAR_ASSET_NOT_FOUND(BAD_REQUEST, "ANALYSIS-001", "coupleId에 해당하는 전년도 AnnualAsset이 존재하지 않습니다."),
+
+	/**
+	 * Deposit 관련 에러 코드
+	 */
+	DEPOSIT_NOT_FOUND(BAD_REQUEST, "DEPOSIT-000", "depositId에 해당하는 Deposit이 존재하지 않습니다."),
+
+	/**
+	 * Savings 관련 에러 코드
+	 */
+	SAVINGS_NOT_FOUND(BAD_REQUEST, "SAVINGS-000", "savingsId에 해당하는 Savings이 존재하지 않습니다."),
+	;
 
 	private final HttpStatus httpStatus;
 	private final String code;
