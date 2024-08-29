@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public final class RecommendLoanDto {
     private Long loan_id;
-    private double asda;
+    private double pred;
 }
