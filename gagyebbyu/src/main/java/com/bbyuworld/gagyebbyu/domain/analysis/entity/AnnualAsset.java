@@ -28,11 +28,11 @@ public class AnnualAsset {
 	@Column(name = "year", nullable = false)
 	private int year;
 
-	@Column(name = "cash_assets", nullable = false)
-	private Long cashAssets;
+	@Column(name = "account_assets", nullable = false)  // 변경된 부분
+	private Long accountAssets;
 
-	@Column(name = "investment_assets", nullable = false)
-	private Long investmentAssets;
+	@Column(name = "stock_assets", nullable = false)    // 변경된 부분
+	private Long stockAssets;
 
 	@Column(name = "real_estate_assets", nullable = false)
 	private Long realEstateAssets;
