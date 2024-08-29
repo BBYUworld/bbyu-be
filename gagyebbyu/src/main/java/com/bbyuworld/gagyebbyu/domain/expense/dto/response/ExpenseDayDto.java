@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public final class ExpenseDayDto {
+	private long expenseId;
 	private String name;
 	private Long amount;
 	private Category category;
@@ -20,6 +21,7 @@ public final class ExpenseDayDto {
 
 	public static ExpenseDayDto from(Expense expense) {
 		return new ExpenseDayDto(
+			expense.getExpenseId(),
 			expense.getUser().getName(),
 			expense.getAmount(),
 			expense.getCategory(),

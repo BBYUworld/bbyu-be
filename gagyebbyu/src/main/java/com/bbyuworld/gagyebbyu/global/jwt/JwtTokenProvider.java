@@ -17,11 +17,11 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.secret_key}")
+    @Value("${spring.jwt.secret_key}")
     private String SECRET_KEY;
-    @Value("${jwt.access_token_expiration_time}")
+    @Value("${spring.jwt.access_token_expiration_time}")
     private Long ACCESS_TOKEN_EXPIRATION_TIME;
-    @Value("${jwt.refresh_token_expiration_time}")
+    @Value("${spring.jwt.refresh_token_expiration_time}")
     private Long REFRESH_TOKEN_EXPIRATION_TIME;
 
     public JwtToken createToken(Long userId){

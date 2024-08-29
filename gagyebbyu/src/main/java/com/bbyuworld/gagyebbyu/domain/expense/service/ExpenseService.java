@@ -1,6 +1,5 @@
 package com.bbyuworld.gagyebbyu.domain.expense.service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseDayDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseMonthDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.response.ExpenseOverviewDto;
+import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Expense;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -27,7 +27,6 @@ import com.bbyuworld.gagyebbyu.domain.webClient.dto.ExpenseCategoryDto;
 import com.bbyuworld.gagyebbyu.domain.webClient.service.ApiService;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.Tuple;
 
 import jakarta.transaction.Transactional;
@@ -49,10 +48,10 @@ public class ExpenseService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-		System.out.println("user id = "+user.getUserId());
+		System.out.println("user id = " + user.getUserId());
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
-		System.out.println("couple id = "+couple.getCoupleId());
+		System.out.println("couple id = " + couple.getCoupleId());
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
@@ -66,7 +65,7 @@ public class ExpenseService {
 			totalAmount += amount;
 			expenses.add(new ExpenseOverviewDto(couple.getCoupleId(), date, amount));
 		}
-		System.out.println("expenses size = "+expenses.size());
+		System.out.println("expenses size = " + expenses.size());
 
 		List<ExpenseDayDto> dayExpenses = expenseRepository.findExpenseByDay(null, month, year, user.getCoupleId(),
 				sort)
@@ -74,8 +73,17 @@ public class ExpenseService {
 			.map(ExpenseDayDto::from)
 			.collect(Collectors.toList());
 
+		LocalDateTime startDate = LocalDateTime.of(LocalDate.now().getYear(), month - 1, 1, 0, 0);
+		LocalDateTime endDate = startDate.plusMonths(1).minusNanos(1);
+
+		Long totalAmountForLastMonth = expenseRepository.findTotalExpenditureForCoupleGivenMonth(couple.getCoupleId(),
+			startDate, endDate);
+		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
+
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month + 1, year);
+
 		return new ExpenseMonthDto(totalAmount, targetAmount,
-			targetAmount - totalAmount, expenses, dayExpenses);
+			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
 	}
 
 	public List<ExpenseDayDto> getDayExpense(long userId, ExpenseParam param) {
@@ -106,7 +114,7 @@ public class ExpenseService {
 
 		ExpenseCategoryDto requestBody = new ExpenseCategoryDto(expenseCreateDto.getPlace());
 		try {
-			String category = apiService.sendPostRequest("http://localhost:8000/ai/expense-category", requestBody);
+			String category = apiService.sendPostRequest("http://3.39.19.140:8000/ai/expense-category", requestBody);
 			expenseRepository.save(expenseCreateDto.toEntity(user, couple, category));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
@@ -141,5 +149,9 @@ public class ExpenseService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
 
 		expense.updateAmount(expenseUpdateDto.getAmount());
+	}
+
+	public Long getUserExpensesForYear(long userId) {
+		return expenseRepository.findTotalExpenditureForYear(userId);
 	}
 }
