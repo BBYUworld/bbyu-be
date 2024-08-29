@@ -23,6 +23,7 @@ import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendSavingsRequ
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.DepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.SavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.DepositRepository;
@@ -51,7 +52,7 @@ public class RecommendService {
 	private final DepositRepository depositRepository;
 	private final LoanRepository loanRepository;
 
-	public List<Map.Entry<Integer, Double>> getLoanRecommend(long userId) {
+	public List<RecommendLoanDto> getLoanRecommend(long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendLoanRequestDto requestDto = new RecommendLoanRequestDto();
@@ -91,13 +92,17 @@ public class RecommendService {
 		requestDto.setTotal_assets(totalDeposit + totalSavings + sum);
 
 		try {
+			List<RecommendLoanDto> results = new ArrayList<>();
 			List<Map.Entry<Integer, Double>> recommmendLoanDtos = apiService.sendLoanPostRequest(
 				"http://localhost:8000/ai/recommend/loan", requestDto);
 			for (Map.Entry<Integer, Double> recommendLoanDto : recommmendLoanDtos) {
 				LoanResponseDto loanResponseDto = loanRepository.findById(recommendLoanDto.getKey().longValue())
 					.map(LoanResponseDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.LOAN_NOT_FOUND));
+				results.add(new RecommendLoanDto(recommendLoanDto.getKey().longValue(), recommendLoanDto.getValue(),
+					loanResponseDto));
 			}
+			return results;
 
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
