@@ -1,5 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.recommend.controller;
 
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.MoneyDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.service.RecommendService;
@@ -50,6 +52,16 @@ public class RecommendController {
 	@RequireJwtToken
 	public ResponseEntity<List<Map.Entry<Integer, Double>>> getSavingsRecommend() {
 		return ResponseEntity.ok(recommendService.getSavingsRecommend(UserContext.getUserId()));
+	}
+
+	/**
+	 * 남녀 공동 비율 및 최적 대출 상품 api
+	 * @return
+	 */
+	@PostMapping(path = "/compare", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<List<RecommendCompareDto>> getCompareRecommend(@RequestBody MoneyDto moneyDto) {
+		return ResponseEntity.ok(recommendService.getCompareRecommend(UserContext.getUserId(), moneyDto.getMoney()));
 	}
 
 

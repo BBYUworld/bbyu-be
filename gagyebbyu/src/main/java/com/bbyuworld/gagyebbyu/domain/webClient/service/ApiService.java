@@ -1,8 +1,10 @@
 package com.bbyuworld.gagyebbyu.domain.webClient.service;
 
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendCompareRequestDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendDepositRequestDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendLoanRequestDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendSavingsRequestDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,10 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Mono;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +136,29 @@ public class ApiService {
 			throw new RuntimeException("Error during API call", e);
 		}
 	}
+	public List<RecommendCompareDto> sendComparePostRequest(String url, RecommendCompareRequestDto requestBody) {
+		try {
+			// WebClient를 사용하여 POST 요청을 보냄
+			String response = this.webClient.post()
+					.uri(url)
+					.body(Mono.just(requestBody), RecommendCompareRequestDto.class)
+					.retrieve()
+					.bodyToMono(String.class)
+					.block();
 
+			// JSON 응답을 처리하기 위한 ObjectMapper
+			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode jsonNode = objectMapper.readTree(response);
+
+			// JSON 응답을 List<RecommendCompareDto> 객체로 변환
+			RecommendCompareDto[] recommendCompareDtoArray = objectMapper.treeToValue(jsonNode, RecommendCompareDto[].class);
+
+			return Arrays.asList(recommendCompareDtoArray);
+
+		} catch (Exception e) {
+			throw new RuntimeException("Error during API call", e);
+		}
+
+	}
 
 }
