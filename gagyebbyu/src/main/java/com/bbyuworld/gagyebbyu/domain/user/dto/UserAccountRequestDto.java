@@ -31,6 +31,8 @@ public class UserAccountRequestDto {
         private int age;
         private int salary;
         private int desiredSpending;
+        private String region;
+        private String occupation;
 
         @Override
         public String toString() {
