@@ -93,6 +93,8 @@ public class AccountService {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
                 if (recNode.isArray()) {
                     return objectMapper.convertValue(recNode, new TypeReference<List<AccountDto>>() {});
                 } else {
@@ -126,6 +128,8 @@ public class AccountService {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
                 if (recNode.isArray()) {
                     return objectMapper.convertValue(recNode, new TypeReference<List<DemandDepositDto>>() {});
                 } else {
@@ -160,6 +164,8 @@ public class AccountService {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = mapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
                 if (recNode != null) {
                     CreateDemandDepositAccountDto dto = mapper.treeToValue(recNode, CreateDemandDepositAccountDto.class);
                     System.out.println("Converted DTO: " + dto);
@@ -200,6 +206,8 @@ public class AccountService {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
                 JsonNode responseRootNode = mapper.readTree(jsonResponse);
                 JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
                 if (recNode != null) {
                     AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
                     System.out.println("Converted DTO: " + dto);
