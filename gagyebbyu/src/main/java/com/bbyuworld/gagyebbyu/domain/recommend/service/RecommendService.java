@@ -21,6 +21,8 @@ import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendSavingsRequ
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.DepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.SavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.DepositRepository;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.SavingsRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.Gender;
@@ -150,7 +152,7 @@ public class RecommendService {
 		}
 	}
 
-	public List<Map.Entry<Integer, Double>> getSavingsRecommend(long userId) {
+	public List<RecommendSavingsDto> getSavingsRecommend(long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -185,7 +187,22 @@ public class RecommendService {
 		requestDto.setNum_cards(cardNum);
 		requestDto.setAnnual_spending(annualSpending);
 		try {
-			return apiService.sendSavingsPostRequest("http://localhost:8000/ai/recommend/savings", requestDto);
+			List<RecommendSavingsDto> results = new ArrayList<>();
+
+			List<Map.Entry<Integer, Double>> recommendDepositDtos = apiService.sendSavingsPostRequest(
+				"http://localhost:8000/ai/recommend/savings", requestDto);
+
+			for (Map.Entry<Integer, Double> entry : recommendDepositDtos) {
+				Integer key = entry.getKey();
+				Double value = entry.getValue();
+
+				SavingsDto savingsDto = savingsRepository.findById(key.longValue())
+					.map(SavingsDto::from)
+					.orElseThrow(() -> new DataNotFoundException(ErrorCode.SAVINGS_NOT_FOUND));
+
+				results.add(new RecommendSavingsDto(key.longValue(), value, savingsDto));
+			}
+			return results;
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
 		}

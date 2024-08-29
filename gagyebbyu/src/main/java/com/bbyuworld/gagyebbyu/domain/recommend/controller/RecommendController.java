@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.MoneyDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.service.RecommendService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
@@ -54,7 +55,7 @@ public class RecommendController {
 	 */
 	@PostMapping(path = "/savings", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<Map.Entry<Integer, Double>>> getSavingsRecommend() {
+	public ResponseEntity<List<RecommendSavingsDto>> getSavingsRecommend() {
 		return ResponseEntity.ok(recommendService.getSavingsRecommend(UserContext.getUserId()));
 	}
 
