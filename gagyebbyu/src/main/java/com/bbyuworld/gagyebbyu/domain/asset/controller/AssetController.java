@@ -67,10 +67,6 @@ public class AssetController {
         return assetService.insertNewCard(assetCardDto, UserContext.getUserId());
     }
 
-//    @GetMapping("/sum-user")
-//    @RequireJwtToken
-//    public Long getSumUserAssets(@Param("type") String type) {
-//        return assetService.getSumUserAssets(UserContext.getUserId(), type);
-//    }
+
 
 }

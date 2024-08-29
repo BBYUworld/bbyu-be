@@ -81,4 +81,13 @@ public class CoupleController {
 		return ResponseEntity.ok(coupleService.getCouple(userId));
 	}
 
+	/**
+	 * 커플 조회 in LoanPage
+	 * @return
+	 */
+	@GetMapping("/loan")
+	@RequireJwtToken
+	public ResponseEntity<CoupleResponseDto> getCoupleInLoan() {
+		return ResponseEntity.ok(coupleService.getCoupleinLoan(UserContext.getUserId()));
+	}
 }
