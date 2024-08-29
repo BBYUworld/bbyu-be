@@ -147,6 +147,10 @@ public class RecommendService {
 		}
 		requestDto.setCredit_score(user.getCreditScore());
 		requestDto.setNum_cards(cardNum);
+		System.out.println("==================================================");
+		System.out.println("user mounthly income: "+user.getMonthlyIncome());
+		System.out.println("user annualSpending: "+annualSpending);
+		System.out.println("==================================================");
 		requestDto.setAnnual_spending(annualSpending);
 
 		try {
@@ -190,6 +194,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
+		System.out.println("==================================================");
+		System.out.println(user.getMonthlyIncome());
+		System.out.println("==================================================");
+
 		requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
