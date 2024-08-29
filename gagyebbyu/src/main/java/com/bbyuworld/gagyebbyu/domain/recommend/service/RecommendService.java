@@ -92,7 +92,7 @@ public class RecommendService {
 		}
 	}
 
-	public List<Map.Entry<Integer, Double>> getDepositRecommend(long userId) {
+	public List<RecommendDepositDto> getDepositRecommend(long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendDepositRequestDto requestDto = new RecommendDepositRequestDto();
@@ -137,11 +137,13 @@ public class RecommendService {
 				Double value = entry.getValue();
 
 				DepositDto depositDto = depositRepository.findById(key.longValue())
-					.map(depositDto::from)
+					.map(DepositDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.DEPOSIT_NOT_FOUND));
 
 				results.add(new RecommendDepositDto(key.longValue(), value, depositDto));
 			}
+
+			return results;
 
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
