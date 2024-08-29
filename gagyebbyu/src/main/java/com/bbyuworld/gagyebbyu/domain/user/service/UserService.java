@@ -124,6 +124,8 @@ public class UserService {
         Long monthlyIncome = dto.getAdditionalInfo().getSalary() / 12L;
         user.setMonthlyIncome(monthlyIncome);
         user.setMonthlyTargetAmount((long) dto.getAdditionalInfo().getDesiredSpending());
+        user.setOccupation(dto.getAdditionalInfo().getOccupation());
+        user.setRegion(dto.getAdditionalInfo().getRegion());
 
         for (AccountDto accountDto : dto.getSelectedAccounts()) {
             AssetAccount assetAccount = new AssetAccount();
