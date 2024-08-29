@@ -152,6 +152,8 @@ public class ExpenseService {
 	}
 
 	public Long getUserExpensesForYear(long userId) {
+		Long answer = expenseRepository.findTotalExpenditureForYear(userId);
+		System.out.println("answer in expense Service: "+answer);
 		return expenseRepository.findTotalExpenditureForYear(userId);
 	}
 }

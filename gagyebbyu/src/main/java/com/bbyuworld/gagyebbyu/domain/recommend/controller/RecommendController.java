@@ -31,7 +31,6 @@ public class RecommendController {
 	@RequireJwtToken
 	public ResponseEntity<List<Map.Entry<Integer, Double>>> getLoanRecommend() {
 		return ResponseEntity.ok(recommendService.getLoanRecommend(UserContext.getUserId()));
-
 	}
 
 	/**
