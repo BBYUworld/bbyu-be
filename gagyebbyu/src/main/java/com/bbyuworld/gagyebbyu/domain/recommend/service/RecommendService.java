@@ -13,6 +13,8 @@ import com.bbyuworld.gagyebbyu.domain.asset.service.assetCard.AssetCardService;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
+import com.bbyuworld.gagyebbyu.domain.loan.dto.response.LoanResponseDto;
+import com.bbyuworld.gagyebbyu.domain.loan.repository.LoanRepository;
 import com.bbyuworld.gagyebbyu.domain.loan.service.LoanService;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendCompareRequestDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendDepositRequestDto;
@@ -47,6 +49,7 @@ public class RecommendService {
 	private final CoupleRepository coupleRepository;
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
+	private final LoanRepository loanRepository;
 
 	public List<Map.Entry<Integer, Double>> getLoanRecommend(long userId) {
 		User user = userRepository.findById(userId)
@@ -88,7 +91,14 @@ public class RecommendService {
 		requestDto.setTotal_assets(totalDeposit + totalSavings + sum);
 
 		try {
-			return apiService.sendLoanPostRequest("http://localhost:8000/ai/recommend/loan", requestDto);
+			List<Map.Entry<Integer, Double>> recommmendLoanDtos = apiService.sendLoanPostRequest(
+				"http://localhost:8000/ai/recommend/loan", requestDto);
+			for (Map.Entry<Integer, Double> recommendLoanDto : recommmendLoanDtos) {
+				LoanResponseDto loanResponseDto = loanRepository.findById(recommendLoanDto.getKey().longValue())
+					.map(LoanResponseDto::from)
+					.orElseThrow(() -> new DataNotFoundException(ErrorCode.LOAN_NOT_FOUND));
+			}
+
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create expense", e);
 		}
@@ -110,7 +120,7 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		requestDto.setDebt(sum);
+		requestDto.setDebt(111111);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -132,7 +142,7 @@ public class RecommendService {
 			List<RecommendDepositDto> results = new ArrayList<>();
 
 			List<Map.Entry<Integer, Double>> recommendDepositDtos = apiService.sendDepositPostRequest(
-				"http://localhost:8000/ai/recommend/deposit", requestDto);
+				"http://3.39.19.140:8001/ai/recommend/deposit", requestDto);
 
 			for (Map.Entry<Integer, Double> entry : recommendDepositDtos) {
 				Integer key = entry.getKey();
