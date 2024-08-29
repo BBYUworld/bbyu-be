@@ -8,4 +8,5 @@ import lombok.Data;
 public class RecommendDepositDto {
 	private long deposit_id;
 	private double pred;
+	private DepositDto depositDto;
 }
