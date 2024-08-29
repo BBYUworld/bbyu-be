@@ -12,7 +12,8 @@ public class HeaderProvider {
         LocalDateTime now = LocalDateTime.now();
         String transmissionDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String transmissionTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
-
+        System.out.println("transmissionDate: " + transmissionDate);
+        System.out.println("transmissionTime: " + transmissionTime);
         ObjectNode headerNode = objectMapper.createObjectNode();
         headerNode.put("apiName", apiName);
         headerNode.put("transmissionDate", transmissionDate);
