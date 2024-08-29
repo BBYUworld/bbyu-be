@@ -13,6 +13,8 @@ import com.bbyuworld.gagyebbyu.domain.asset.service.assetCard.AssetCardService;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
+import com.bbyuworld.gagyebbyu.domain.loan.dto.response.LoanResponseDto;
+import com.bbyuworld.gagyebbyu.domain.loan.repository.LoanRepository;
 import com.bbyuworld.gagyebbyu.domain.loan.service.LoanService;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendCompareRequestDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendDepositRequestDto;
@@ -21,6 +23,7 @@ import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendSavingsRequ
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.DepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.SavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.DepositRepository;
@@ -53,8 +56,9 @@ public class RecommendService {
 	private final CoupleRepository coupleRepository;
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
+	private final LoanRepository loanRepository;
 
-	public List<Map.Entry<Integer, Double>> getLoanRecommend(long userId) {
+	public List<RecommendLoanDto> getLoanRecommend(long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendLoanRequestDto requestDto = new RecommendLoanRequestDto();
@@ -93,77 +97,31 @@ public class RecommendService {
 		requestDto.setTotal_savings(totalSavings);
 		requestDto.setTotal_assets(totalDeposit + totalSavings + sum);
 
-        System.out.println("=====================================");
-        System.out.println(requestDto.getCredit_score());
-        System.out.println(requestDto.getAnnual_spending());
-        System.out.println(requestDto.getNum_cards());
-        System.out.println(requestDto.getTotal_deposit());
-        System.out.println(requestDto.getTotal_savings());
-        System.out.println(requestDto.getTotal_assets());
-        System.out.println("=====================================");
+		try {
+			List<RecommendLoanDto> results = new ArrayList<>();
+			List<Map.Entry<Integer, Double>> recommmendLoanDtos = apiService.sendLoanPostRequest(
+				"http://3.39.19.140:8001/ai/recommend/loan", requestDto);
+			for (Map.Entry<Integer, Double> recommendLoanDto : recommmendLoanDtos) {
+				LoanResponseDto loanResponseDto = loanRepository.findById(recommendLoanDto.getKey().longValue())
+					.map(LoanResponseDto::from)
+					.orElseThrow(() -> new DataNotFoundException(ErrorCode.LOAN_NOT_FOUND));
+				results.add(new RecommendLoanDto(recommendLoanDto.getKey().longValue(), recommendLoanDto.getValue(),
+					loanResponseDto));
+			}
+			return results;
 
-        // 데이터 유효성 검사
-        validateRequestData(requestDto);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create expense", e);
+		}
+	}
 
-        // 요청 데이터 로깅
-        log.info("Loan recommendation request data: {}", requestDto);
-
-        try {
-            return apiService.sendLoanPostRequest("http://3.39.19.140:8001/ai/recommend/loan", requestDto);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create expense", e);
-        }
-    }
-
-    private void validateRequestData(RecommendLoanRequestDto requestDto) {
-        if (requestDto.getUser_id() == null || requestDto.getUser_id() <= 0) {
-            throw new IllegalArgumentException("Invalid user_id");
-        }
-        if (requestDto.getAge() == 0 || requestDto.getAge() <= 0) {
-            throw new IllegalArgumentException("Invalid age");
-        }
-        if (requestDto.getGender() == -1 || (requestDto.getGender() != 0 && requestDto.getGender() != 1)) {
-            throw new IllegalArgumentException("Invalid gender");
-        }
-        if (requestDto.getRegion() == null) {
-            throw new IllegalArgumentException("Region cannot be null");
-        }
-        if (requestDto.getOccupation() == null) {
-            throw new IllegalArgumentException("Occupation cannot be null");
-        }
-        if (requestDto.getAnnual_income() == 0 || requestDto.getAnnual_income() < 0) {
-            throw new IllegalArgumentException("Invalid annual income");
-        }
-        if (requestDto.getDebt() == 0 || requestDto.getDebt() < 0) {
-            throw new IllegalArgumentException("Invalid debt");
-        }
-        if (requestDto.getCredit_score() == 0 || requestDto.getCredit_score() < 0 || requestDto.getCredit_score() > 1000) {
-            throw new IllegalArgumentException("Invalid credit score");
-        }
-        if (requestDto.getAnnual_spending() == 0 || requestDto.getAnnual_spending() < 0) {
-            throw new IllegalArgumentException("Invalid annual spending");
-        }
-        if (requestDto.getNum_cards() == 0 || requestDto.getNum_cards() < 0) {
-            throw new IllegalArgumentException("Invalid number of cards");
-        }
-        if (requestDto.getTotal_deposit() == 0 || requestDto.getTotal_deposit() < 0) {
-            throw new IllegalArgumentException("Invalid total deposit");
-        }
-        if (requestDto.getTotal_savings() == 0 || requestDto.getTotal_savings() < 0) {
-            throw new IllegalArgumentException("Invalid total savings");
-        }
-        if (requestDto.getTotal_assets() == 0 || requestDto.getTotal_assets() < 0) {
-            throw new IllegalArgumentException("Invalid total assets");
-        }
-    }
-
-    public List<RecommendDepositDto> getDepositRecommend(long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-        RecommendDepositRequestDto requestDto = new RecommendDepositRequestDto();
-        Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
-        int cardNum = assetCardService.getCardsNum(userId);
-        Long annualSpending = expenseService.getUserExpensesForYear(userId);
+	public List<RecommendDepositDto> getDepositRecommend(long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+		RecommendDepositRequestDto requestDto = new RecommendDepositRequestDto();
+		Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+		int cardNum = assetCardService.getCardsNum(userId);
+		Long annualSpending = expenseService.getUserExpensesForYear(userId);
 
 		requestDto.setUser_id(userId);
 		requestDto.setAge(user.getAge());
@@ -195,7 +153,7 @@ public class RecommendService {
 			List<RecommendDepositDto> results = new ArrayList<>();
 
 			List<Map.Entry<Integer, Double>> recommendDepositDtos = apiService.sendDepositPostRequest(
-				"http://localhost:8000/ai/recommend/deposit", requestDto);
+				"http://3.39.19.140:8001/ai/recommend/deposit", requestDto);
 
 			for (Map.Entry<Integer, Double> entry : recommendDepositDtos) {
 				Integer key = entry.getKey();
@@ -253,7 +211,7 @@ public class RecommendService {
 			List<RecommendSavingsDto> results = new ArrayList<>();
 
 			List<Map.Entry<Integer, Double>> recommendDepositDtos = apiService.sendSavingsPostRequest(
-				"http://localhost:8000/ai/recommend/savings", requestDto);
+				"http://3.39.19.140:8001/ai/recommend/savings", requestDto);
 
 			for (Map.Entry<Integer, Double> entry : recommendDepositDtos) {
 				Integer key = entry.getKey();
@@ -348,7 +306,7 @@ public class RecommendService {
 		// Python 서버로 POST 요청 전송
 		List<RecommendCompareDto> responseDto;
 		try {
-			responseDto = apiService.sendComparePostRequest("http://localhost:8000/ai/recommend/compare",
+			responseDto = apiService.sendComparePostRequest("http://3.39.19.140:8001/ai/recommend/compare",
 				compareRequestDto);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to get loan recommendation", e);
