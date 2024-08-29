@@ -6,7 +6,9 @@ import com.bbyuworld.gagyebbyu.domain.user.entity.Gender;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class RecommendResponseDto {
 	private long user1Id;

@@ -306,7 +306,7 @@ public class RecommendService {
 		// Python 서버로 POST 요청 전송
 		try {
 			List<RecommendCompareDto> responseDto = apiService.sendComparePostRequest(
-				"http://3.39.19.140:8001/ai/recommend/compare",
+				"http://3.39.19.140:8002/ai/recommend/compare",
 				compareRequestDto);
 
 			List<RecommendDto> coupleLoanRecommends = new ArrayList<>();
