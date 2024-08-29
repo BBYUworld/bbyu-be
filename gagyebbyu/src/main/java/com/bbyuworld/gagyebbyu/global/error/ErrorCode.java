@@ -55,7 +55,11 @@ public enum ErrorCode {
 	 * Savings 관련 에러 코드
 	 */
 	SAVINGS_NOT_FOUND(BAD_REQUEST, "SAVINGS-000", "savingsId에 해당하는 Savings이 존재하지 않습니다."),
-	;
+
+	/**
+	 * Loan 관련 에러 코드
+	 */
+	LOAN_NOT_FOUND(BAD_REQUEST, "LOAN-000", "loanId에 해당하는 Loan이 존재하지 않습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;

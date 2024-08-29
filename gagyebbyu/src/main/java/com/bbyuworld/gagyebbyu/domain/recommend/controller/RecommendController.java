@@ -1,7 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.recommend.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.MoneyDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.service.RecommendService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
@@ -34,7 +34,7 @@ public class RecommendController {
 	 */
 	@PostMapping(path = "/loan", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<Map.Entry<Integer, Double>>> getLoanRecommend() {
+	public ResponseEntity<List<RecommendLoanDto>> getLoanRecommend() {
 		return ResponseEntity.ok(recommendService.getLoanRecommend(UserContext.getUserId()));
 
 	}
