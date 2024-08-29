@@ -14,6 +14,7 @@ import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.service.ExpenseService;
 import com.bbyuworld.gagyebbyu.domain.loan.dto.response.LoanResponseDto;
+import com.bbyuworld.gagyebbyu.domain.loan.entity.Loan;
 import com.bbyuworld.gagyebbyu.domain.loan.repository.LoanRepository;
 import com.bbyuworld.gagyebbyu.domain.loan.service.LoanService;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendCompareRequestDto;
@@ -23,8 +24,12 @@ import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.RecommendSavingsRequ
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.DepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendResponseDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendUser1Dto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendUser2Dto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.SavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.DepositRepository;
 import com.bbyuworld.gagyebbyu.domain.recommend.repository.SavingsRepository;
@@ -223,7 +228,7 @@ public class RecommendService {
 		}
 	}
 
-	public List<RecommendCompareDto> getCompareRecommend(long userId, long money) {
+	public RecommendResponseDto getCompareRecommend(long userId, long money) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -244,6 +249,7 @@ public class RecommendService {
 			user2 = userRepository.findById(couple.getUser1().getUserId())
 				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		}
+
 		RecommendCompareRequestDto compareRequestDto = new RecommendCompareRequestDto();
 		Long maleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user1.getUserId());
 		Long femaleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user2.getUserId());
@@ -298,13 +304,28 @@ public class RecommendService {
 		// 다른 로직이 필요하면 추가적으로 작성 가능
 
 		// Python 서버로 POST 요청 전송
-		List<RecommendCompareDto> responseDto;
 		try {
-			responseDto = apiService.sendComparePostRequest("http://3.39.19.140:8001/ai/recommend/compare",
+			List<RecommendCompareDto> responseDto = apiService.sendComparePostRequest(
+				"http://3.39.19.140:8001/ai/recommend/compare",
 				compareRequestDto);
+
+			List<RecommendDto> coupleLoanRecommends = new ArrayList<>();
+
+			for (RecommendCompareDto dto : responseDto) {
+				Loan user1Loan = loanRepository.findById((long)dto.getMale_loan_id())
+					.orElseThrow(() -> new DataNotFoundException(ErrorCode.LOAN_NOT_FOUND));
+				Loan user2Loan = loanRepository.findById((long)dto.getMale_loan_id())
+					.orElseThrow(() -> new DataNotFoundException(ErrorCode.LOAN_NOT_FOUND));
+
+				coupleLoanRecommends.add(
+					new RecommendDto(dto.getTotal_payment(), RecommendUser1Dto.from(user1Loan, dto),
+						RecommendUser2Dto.from(user2Loan, dto)));
+			}
+
+			return RecommendResponseDto.from(user1, user2, coupleLoanRecommends);
+
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to get loan recommendation", e);
 		}
-		return responseDto;
 	}
 }
