@@ -42,7 +42,7 @@ public class AssetLoanController {
      */
     @GetMapping("/target")
     @RequireJwtToken
-    public ResponseEntity<AssetLoanDto> getUserTargetLoan(@Param("assetId") Long assetId) {
+    public ResponseEntity<AssetLoanDto> getUserTargetLoan(@RequestParam("assetId") Long assetId) {
         return assetLoanService.getUserTargetLoan(UserContext.getUserId(), assetId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -101,7 +101,7 @@ public class AssetLoanController {
      */
     @PostMapping("/update")
     @RequireJwtToken
-    public ResponseEntity<Integer> updateIsEnded(@RequestParam Long assetId, @RequestParam Long remainedAmount) {
+    public ResponseEntity<Integer> updateIsEnded(@RequestParam("assetId") Long assetId, @RequestParam("remainedAmount") Long remainedAmount) {
         return ResponseEntity.ok(assetLoanService.isEndedUpdate(assetId, remainedAmount, UserContext.getUserId()));
     }
 

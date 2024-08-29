@@ -36,8 +36,8 @@ public class LoanController {
      * @param loanName 조회할 대출 상품의 이름
      * @return 조회된 대출 상품 정보 반환
      */
-    @GetMapping("/loan-name/{loanName}")
-    public ResponseEntity<List<LoanResponseDto>> getLoanByLoanName(@PathVariable String loanName) {
+    @GetMapping("/loan-name")
+    public ResponseEntity<List<LoanResponseDto>> getLoanByLoanName(@RequestParam("loanName") String loanName) {
         List<LoanResponseDto> loan = loanService.getLoanByLoanName(loanName);
         System.out.println("getLoanByLoanName");
         return ResponseEntity.ok(loan);
@@ -49,8 +49,8 @@ public class LoanController {
      * @param bankName 조회할 은행의 이름
      * @return 해당 은행의 모든 대출 상품 정보 목록 반환
      */
-    @GetMapping("/bank-name/{bankName}")
-    public ResponseEntity<List<LoanResponseDto>> getLoansByBankName(@PathVariable String bankName) {
+    @GetMapping("/bank-name")
+    public ResponseEntity<List<LoanResponseDto>> getLoansByBankName(@RequestParam("bankName") String bankName) {
         List<LoanResponseDto> loans = loanService.findLoansByBankName(bankName);
         System.out.println("getLoansByBankName");
         return ResponseEntity.ok(loans);
