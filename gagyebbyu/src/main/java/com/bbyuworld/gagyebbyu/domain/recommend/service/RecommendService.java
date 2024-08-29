@@ -94,7 +94,7 @@ public class RecommendService {
 		try {
 			List<RecommendLoanDto> results = new ArrayList<>();
 			List<Map.Entry<Integer, Double>> recommmendLoanDtos = apiService.sendLoanPostRequest(
-				"http://localhost:8000/ai/recommend/loan", requestDto);
+				"http://3.39.19.140:8001/ai/recommend/loan", requestDto);
 			for (Map.Entry<Integer, Double> recommendLoanDto : recommmendLoanDtos) {
 				LoanResponseDto loanResponseDto = loanRepository.findById(recommendLoanDto.getKey().longValue())
 					.map(LoanResponseDto::from)
@@ -125,7 +125,7 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		requestDto.setDebt(111111);
+		requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -205,7 +205,7 @@ public class RecommendService {
 			List<RecommendSavingsDto> results = new ArrayList<>();
 
 			List<Map.Entry<Integer, Double>> recommendDepositDtos = apiService.sendSavingsPostRequest(
-				"http://localhost:8000/ai/recommend/savings", requestDto);
+				"http://3.39.19.140:8001/ai/recommend/savings", requestDto);
 
 			for (Map.Entry<Integer, Double> entry : recommendDepositDtos) {
 				Integer key = entry.getKey();
@@ -300,7 +300,7 @@ public class RecommendService {
 		// Python 서버로 POST 요청 전송
 		List<RecommendCompareDto> responseDto;
 		try {
-			responseDto = apiService.sendComparePostRequest("http://localhost:8000/ai/recommend/compare",
+			responseDto = apiService.sendComparePostRequest("http://3.39.19.140:8001/ai/recommend/compare",
 				compareRequestDto);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to get loan recommendation", e);
