@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.request.MoneyDto;
-import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendCompareDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendDepositDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendLoanDto;
+import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendResponseDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.dto.response.RecommendSavingsDto;
 import com.bbyuworld.gagyebbyu.domain.recommend.service.RecommendService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
@@ -64,7 +64,7 @@ public class RecommendController {
 	 */
 	@PostMapping(path = "/compare", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<RecommendCompareDto>> getCompareRecommend(@RequestBody MoneyDto moneyDto) {
+	public ResponseEntity<RecommendResponseDto> getCompareRecommend(@RequestBody MoneyDto moneyDto) {
 		return ResponseEntity.ok(recommendService.getCompareRecommend(UserContext.getUserId(), moneyDto.getMoney()));
 	}
 
