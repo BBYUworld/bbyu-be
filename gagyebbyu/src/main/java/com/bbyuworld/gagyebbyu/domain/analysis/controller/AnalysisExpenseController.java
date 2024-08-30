@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.param.AnalysisParam;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseResultDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseStatisticsDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.service.CoupleExpenseService;
@@ -28,8 +30,8 @@ public class AnalysisExpenseController {
 	 */
 	@GetMapping(path = "/result", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<CoupleExpenseResultDto> getCoupleExpenseResult() {
-		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseResult(UserContext.getUserId()));
+	public ResponseEntity<CoupleExpenseResultDto> getCoupleExpenseResult(@ModelAttribute AnalysisParam param) {
+		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseResult(UserContext.getUserId(), param));
 	}
 
 	/**
@@ -38,8 +40,9 @@ public class AnalysisExpenseController {
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<CoupleExpenseStatisticsDto>> getCoupleExpenseStatistics() {
-		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseStatistics(UserContext.getUserId()));
+	public ResponseEntity<List<CoupleExpenseStatisticsDto>> getCoupleExpenseStatistics(
+		@ModelAttribute AnalysisParam param) {
+		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseStatistics(UserContext.getUserId(), param));
 	}
 
 }

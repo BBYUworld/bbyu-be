@@ -23,14 +23,14 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Long findTotalExpenditureForMonth(Long coupleId) {
+	public Long findTotalExpenditureForMonth(Long coupleId, Integer month, Integer year) {
 		return jpaQueryFactory
 			.select(expense.amount.sum())
 			.from(expense)
 			.join(expense.couple, couple)
 			.where(
 				expense.couple.coupleId.eq(coupleId),
-				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear())  // 해당 달에 대한 날짜 필터링
+				getMonth(month, year)  // 해당 달에 대한 날짜 필터링
 			)
 			.fetchOne();
 	}
@@ -55,7 +55,22 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
-	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount) {
+	public List<Expense> getExpenseForMonthAndCategory(Long coupleId, Category category, Integer month, Integer year) {
+		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier("desc");
+
+		return jpaQueryFactory.selectFrom(expense)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				expense.category.eq(category),
+				getMonth(month, year)
+			)
+			.orderBy(orderSpecifier)
+			.fetch();
+	}
+
+	@Override
+	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount, Integer month,
+		Integer year) {
 
 		return jpaQueryFactory
 			.select(
@@ -68,7 +83,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 			.join(expense.couple, couple)
 			.where(
 				expense.couple.coupleId.eq(coupleId),
-				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear())
+				getMonth(month, year)
 			)
 			.groupBy(expense.category)
 			.orderBy(expense.amount.sum().desc())
@@ -76,11 +91,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
-	public Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer paramMonth, Integer paramYear) {
-		Integer month = paramMonth == null ?
-			(LocalDate.now().getMonth().getValue() == 1 ? 12 : LocalDate.now().getMonth().getValue() - 1) :
-			paramMonth - 1;
-		Integer year = paramYear == null ? LocalDate.now().getYear() : paramYear;
+	public Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer month, Integer year) {
 
 		return jpaQueryFactory
 			.select(expense.category)
