@@ -197,8 +197,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-
-		requestDto.setDebt(sum);
+		if(sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
