@@ -199,17 +199,18 @@ public class  AnalysisAssetService {
 
         long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
-        long startIncome = (avgIncome / 1000000) * 100;
+        long startIncome = avgIncome / 100000 * 100000 - 1000000;
+        long endIncome = startIncome + 1000000;
 
-        // 디버그 로그 추가
         System.out.println("Calculated startAge: " + startAge);
         System.out.println("Calculated endAge: " + endAge);
         System.out.println("Calculated startIncome: " + startIncome);
+        System.out.println("Calculated enedIncome: " + endIncome);
+
 
         double anotherCoupleAverageAssets = assetRepository.findAverageAssetsForEligibleCouples(
-            startAge, endAge, startIncome * 1000000, startIncome * 1000000 + 100000000);
+            startAge, endAge, startIncome, endIncome);
 
-        // 쿼리 결과 로그 확인
         System.out.println("Another Couple Average Assets: " + anotherCoupleAverageAssets);
 
         long coupleTotalAssets = assetRepository.findTotalAssetsForCouple(couple.getCoupleId());
@@ -225,6 +226,5 @@ public class  AnalysisAssetService {
             lastYearAssets
         );
     }
-
 
 }
