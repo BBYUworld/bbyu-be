@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.asset.entity;
 
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class AssetLoan extends Asset {
 
     @Column(name = "remained_amount", nullable = false)
     private Long remainedAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "loan_type", nullable = false)
+    private LoanType loanType;
 
     @PreUpdate
     public void preUpdate() {

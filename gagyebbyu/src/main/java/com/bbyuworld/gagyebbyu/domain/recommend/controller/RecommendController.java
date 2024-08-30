@@ -28,7 +28,7 @@ public class RecommendController {
 	private final RecommendService recommendService;
 
 	/**
-	 * 대출 추천 api
+	 * 대출 추천 api - user
 	 *
 	 * @return
 	 */
@@ -39,7 +39,7 @@ public class RecommendController {
 	}
 
 	/**
-	 * 예금 추천 api
+	 * 예금 추천 api user
 	 * @return
 	 */
 	@PostMapping(path = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +49,7 @@ public class RecommendController {
 	}
 
 	/**
-	 * 적금 추천 api
+	 * 적금 추천 api - user
 	 * @return
 	 */
 	@PostMapping(path = "/savings", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,7 +59,7 @@ public class RecommendController {
 	}
 
 	/**
-	 * 남녀 공동 비율 및 최적 대출 상품 api
+	 * 남녀 공동 비율 및 최적 대출 상품 api couple
 	 * @return
 	 */
 	@PostMapping(path = "/compare", produces = MediaType.APPLICATION_JSON_VALUE)

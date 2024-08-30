@@ -134,6 +134,7 @@ public class UserService {
             assetAccount.setBankCode(accountDto.getBankCode());
             assetAccount.setAmount(accountDto.getAccountBalance());
             assetAccount.setAccountNumber(accountDto.getAccountNo());
+            assetAccount.setAmount(accountDto.getAccountBalance());
             assetAccount.setAccountType(convertToAccountType(accountDto.getAccountTypeName()));
             assetAccount.setOneTimeTransferLimit(accountDto.getOneTimeTransferLimit());
             assetAccount.setDailyTransferLimit(accountDto.getDailyTransferLimit());

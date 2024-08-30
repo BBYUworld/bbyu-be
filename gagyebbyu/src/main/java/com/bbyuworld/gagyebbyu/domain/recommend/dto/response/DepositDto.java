@@ -17,6 +17,7 @@ public final class DepositDto {
 	private String depositName;
 	private String bankName;
 	private String description;
+	private String accountTypeUniqueNo;
 
 	public static DepositDto from(Deposit deposit) {
 		return new DepositDto(
@@ -28,7 +29,8 @@ public final class DepositDto {
 			deposit.getDepositInterestPaymentMethod(),
 			deposit.getDepositName(),
 			deposit.getBankName(),
-			deposit.getDescription()
+			deposit.getDescription(),
+				deposit.getAccountTypeUniqueNo()
 		);
 	}
 }

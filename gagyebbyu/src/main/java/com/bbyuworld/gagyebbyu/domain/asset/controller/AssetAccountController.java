@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.controller;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount.AssetAccountService;
+import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
 import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/asset-accounts")
 @RequiredArgsConstructor
 public class AssetAccountController {
     private final AssetAccountService assetAccountService;
+    private final AccountService accountService;
 
     /**
      * 사용자 계좌 조회
@@ -93,6 +96,29 @@ public class AssetAccountController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(-1L);
         }
+    }
+
+    @PostMapping("/deposit")
+    @RequireJwtToken
+    public ResponseEntity<String> insertNewDepositAccount(@RequestBody Map<String, String> map){
+        Long userId = UserContext.getUserId();
+        System.out.println("map = "+map);
+        String accountNo = map.get("accountNo"); // 출금할 계좌번호
+        Long amount = Long.parseLong(map.get("amount"));
+        String accountTypeUniqueNo = map.get("accountTypeUniqueNo");
+        String message = accountService.createDepositAccount(userId, accountNo, amount, accountTypeUniqueNo);
+        return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/saving")
+    @RequireJwtToken
+    public ResponseEntity<String> insertNewSavingAccount(@RequestBody Map<String, String> map){
+        Long userId = UserContext.getUserId();
+        String accountTypeUniqueNo = map.get("accountTypeUniqueNo");
+        Long depositBalance = Long.parseLong(map.get("depositBalance"));
+        String withdrawalAccountNo = map.get("withdrawalAccountNo");
+        String message = accountService.createSavingAccount(userId, accountTypeUniqueNo, depositBalance, withdrawalAccountNo);
+        return ResponseEntity.ok(message);
     }
 
 }

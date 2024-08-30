@@ -12,6 +12,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
 
   datasource:
     url: jdbc:mysql://${db.host}:${db.port}/${db.database}
