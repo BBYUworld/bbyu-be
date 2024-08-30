@@ -254,7 +254,7 @@ public class AccountService {
         CreateSavingDto dto = sendPostAboutCreateSavingAccount(userKey, accountTypeUniqueNo, depositBalance, accountTypeUniqueNo);
         AssetAccount assetDepositAccount = new AssetAccount();
         assetAccount.setAmount(assetAccount.getAmount()-depositBalance);
-        assetDepositAccount.setAccountType(AccountType.DEPOSIT);
+        assetDepositAccount.setAccountType(AccountType.SAVINGS);
         assetDepositAccount.setAmount(depositBalance);
         assetDepositAccount.setAccountNumber(dto.getAccountNo());
         assetDepositAccount.setMaturityDate(LocalDate.now());
