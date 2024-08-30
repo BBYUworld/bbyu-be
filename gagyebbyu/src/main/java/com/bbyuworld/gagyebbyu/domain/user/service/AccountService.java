@@ -264,6 +264,7 @@ public class AccountService {
         BigDecimal interestRate = new BigDecimal(dto.getInterestRate());
         assetDepositAccount.setInterestRate(interestRate);
         user.getAssets().add(assetDepositAccount);
+        assetDepositAccount.setUser(user);
         userRepository.save(user);
         return "ok";
     }
