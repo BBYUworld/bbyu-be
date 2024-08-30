@@ -252,6 +252,7 @@ public class AccountService {
         }
         CreateDepositDto dto = sendPostAboutCreateDepositAccount(userKey, accountNo, amount, accountTypeUniqueNo);
         AssetAccount assetDepositAccount = new AssetAccount();
+        assetAccount.setAmount(assetAccount.getAmount()-amount);
         assetDepositAccount.setAccountType(AccountType.DEPOSIT);
         assetDepositAccount.setAmount(amount);
         assetDepositAccount.setAccountNumber(dto.getAccountNo());
