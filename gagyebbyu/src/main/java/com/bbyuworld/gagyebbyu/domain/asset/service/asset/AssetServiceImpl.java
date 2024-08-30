@@ -18,11 +18,23 @@ import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.AccountDto;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
+import com.bbyuworld.gagyebbyu.global.util.HeaderProvider;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +52,9 @@ public class AssetServiceImpl implements AssetService {
     private final AssetAccountRepository assetAccountRepository;
     private final AssetCardRepository assetCardRepository;
     private final AssetLoanRepository assetLoanRepository;
+
+    @Value("${ssafy.api_key}")
+    private String apiKey;
 
     /**
      * 사용자의 전체 자산 내역 정보 제공
@@ -189,9 +204,17 @@ public class AssetServiceImpl implements AssetService {
         assetAccount.setAmount(assetAccountDto.getAmount());
         assetAccount.setIsEnded(assetAccountDto.getIsEnded());
         assetAccount.setIsHidden(assetAccountDto.getIsHidden());
+        if (assetAccountDto.getAccountType().equals(AccountType.SAVINGS.name())) {
 
+        }
+        else if (assetAccountDto.getAccountType().equals(AccountType.DEPOSIT.name())) {
+
+        }else if (assetAccountDto.getAccountType().equals(AccountType.FREE_SAVINGS.name())) {
+
+        }
         assetAccount.setAccountNumber(assetAccountDto.getAccountNumber());
         assetAccount.setAccountType(AccountType.valueOf(assetAccountDto.getAccountType()));
+
         assetAccount.setOneTimeTransferLimit(assetAccountDto.getOneTimeTransferLimit());
         assetAccount.setDailyTransferLimit(assetAccountDto.getDailyTransferLimit());
         assetAccount.setMaturityDate(assetAccountDto.getMaturityDate());
@@ -250,6 +273,49 @@ public class AssetServiceImpl implements AssetService {
                 .isEnded(asset.getIsEnded())
                 .isHidden(asset.getIsHidden())
                 .build();
+    }
+
+    private AccountDto sendPostAboutInquireDepositProducts(String userKey, String accountNo, Long dailyTransferLimit, Long oneTimeTransferLimit){
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/deposit/inquireDepositProducts";
+            String apiName = "createDepositAccount";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            rootNode.put("accountNo", accountNo);
+            rootNode.put("oneTimeTransferLimit", oneTimeTransferLimit);
+            rootNode.put("dailyTransferLimit", dailyTransferLimit);
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
+
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
+                if (recNode != null) {
+                    AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 
 }
