@@ -125,6 +125,14 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public Long getSumCoupleAccountAssets(Long userId){
         User user = userRepository.findUserById(userId);
+        System.out.println("userId = "+userId);
+        Long sum = assetRepository.findCoupleAccount(userId, AssetType.ACCOUNT);
+        if(sum == null){
+            System.out.println("sum = null");
+        }
+        else{
+            System.out.println("sum = "+sum);
+        }
         return assetRepository.findCoupleAccount(userId, AssetType.ACCOUNT);
     }
 
