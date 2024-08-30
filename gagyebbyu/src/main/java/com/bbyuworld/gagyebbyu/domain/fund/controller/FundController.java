@@ -47,8 +47,9 @@ public class FundController {
 	 * @return
 	 */
 	@PostMapping(path = "/{coupleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
 	public ResponseEntity<Void> createFund(@PathVariable long coupleId, @RequestBody FundCreateDto fundCreateDto) {
-		fundService.createFund(coupleId, fundCreateDto);
+		fundService.createFund(UserContext.getUserId(), coupleId, fundCreateDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 

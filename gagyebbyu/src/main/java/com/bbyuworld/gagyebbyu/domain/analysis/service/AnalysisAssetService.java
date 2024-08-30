@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -87,16 +88,49 @@ public class  AnalysisAssetService {
             throw new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND);
         }
 
-        return annualAssetRepository.findByCouple_CoupleId(coupleId).stream()
+        List<AnnualAssetDto> annualAssets = annualAssetRepository.findByCouple_CoupleId(coupleId).stream()
             .map(asset -> new AnnualAssetDto(
                 asset.getYear(),
-                asset.getCashAssets(),
-                asset.getInvestmentAssets(),
+                asset.getAccountAssets(),
+                asset.getStockAssets(),
                 asset.getRealEstateAssets(),
                 asset.getLoanAssets(),
                 asset.getTotalAssets()
             ))
             .collect(Collectors.toList());
+
+        QAsset asset = QAsset.asset;
+
+        Map<AssetType, Long> currentAssets = queryFactory
+            .select(asset.type, asset.amount.sum())
+            .from(asset)
+            .where(asset.couple.coupleId.eq(coupleId))
+            .groupBy(asset.type)
+            .fetch().stream()
+            .collect(Collectors.toMap(
+                tuple -> tuple.get(asset.type),
+                tuple -> tuple.get(asset.amount.sum())
+            ));
+
+        Long currentAccountAssets = currentAssets.getOrDefault(AssetType.ACCOUNT, 0L);
+        Long currentStockAssets = currentAssets.getOrDefault(AssetType.STOCK, 0L);
+        Long currentRealEstateAssets = currentAssets.getOrDefault(AssetType.REAL_ESTATE, 0L);
+        Long currentLoanAssets = currentAssets.getOrDefault(AssetType.LOAN, 0L);
+        Long currentTotalAssets = currentAccountAssets + currentStockAssets + currentRealEstateAssets - currentLoanAssets;
+
+        AnnualAssetDto currentYearAssetDto = new AnnualAssetDto(
+            LocalDate.now().getYear(),
+            currentAccountAssets,
+            currentStockAssets,
+            currentRealEstateAssets,
+            currentLoanAssets,
+            currentTotalAssets
+        );
+
+        annualAssets.add(currentYearAssetDto);
+        annualAssets.sort(Comparator.comparingInt(AnnualAssetDto::getYear));
+
+        return annualAssets;
     }
 
 
@@ -130,9 +164,8 @@ public class  AnalysisAssetService {
         Long currentLoanAssets = currentAssets.getOrDefault(AssetType.LOAN, 0L);
         Long currentTotalAssets = currentCashAssets + currentInvestmentAssets + currentRealEstateAssets - currentLoanAssets;
 
-        // 증감율 계산
-        Long cashChangeRate = calculateChangeRate(lastYearAsset.getCashAssets(), currentCashAssets);
-        Long investmentChangeRate = calculateChangeRate(lastYearAsset.getInvestmentAssets(), currentInvestmentAssets);
+        Long cashChangeRate = calculateChangeRate(lastYearAsset.getAccountAssets(), currentCashAssets);
+        Long investmentChangeRate = calculateChangeRate(lastYearAsset.getStockAssets(), currentInvestmentAssets);
         Long realEstateChangeRate = calculateChangeRate(lastYearAsset.getRealEstateAssets(), currentRealEstateAssets);
         Long loanChangeRate = calculateChangeRate(lastYearAsset.getLoanAssets(), currentLoanAssets);
         Long totalChangeRate = calculateChangeRate(lastYearAsset.getTotalAssets(), currentTotalAssets);
@@ -170,12 +203,29 @@ public class  AnalysisAssetService {
         long startIncome = avgIncome / 100000 * 100000 - 1000000;
         long endIncome = startIncome + 1000000;
 
+        System.out.println("Calculated startAge: " + startAge);
+        System.out.println("Calculated endAge: " + endAge);
+        System.out.println("Calculated startIncome: " + startIncome);
+        System.out.println("Calculated enedIncome: " + endIncome);
+
+
         double anotherCoupleAverageAssets = assetRepository.findAverageAssetsForEligibleCouples(
             startAge, endAge, startIncome, endIncome);
 
+        System.out.println("Another Couple Average Assets: " + anotherCoupleAverageAssets);
+
         long coupleTotalAssets = assetRepository.findTotalAssetsForCouple(couple.getCoupleId());
 
-        return new AnalysisAssetResultDto(startAge, startIncome + 1000000,
-            (long)anotherCoupleAverageAssets, coupleTotalAssets);
+        int lastYear = LocalDate.now().getYear() - 1;
+        long lastYearAssets = annualAssetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId(), lastYear);
+
+        return new AnalysisAssetResultDto(
+            startAge,
+            startIncome,
+            (long) anotherCoupleAverageAssets,
+            coupleTotalAssets,
+            lastYearAssets
+        );
     }
+
 }
