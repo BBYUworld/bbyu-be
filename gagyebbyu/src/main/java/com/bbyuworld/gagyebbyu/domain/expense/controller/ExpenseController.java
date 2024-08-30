@@ -116,4 +116,7 @@ public class ExpenseController {
 		return ResponseEntity.ok().build();
 	}
 
+	@GetMapping(path = "/")
+
+
 }
