@@ -34,6 +34,7 @@ public enum ErrorCode {
 	FUND_NOT_FOUND(BAD_REQUEST, "FUND-000", "fundId에 해당하는 Fund가 존재하지 않습니다."),
 	FUND_NOT_EXIST(BAD_REQUEST, "FUND-001", "부부가 생성한 Fund가 없습니다."),
 	FUND_EXCEED_EMERGENCY(BAD_REQUEST, "FUND-002", "최대 긴급 출금 횟수를 초과하였습니다."),
+	FUND_CHARGE_FAILED(BAD_REQUEST, "FUND-003", "펀딩 입금에 실패했습니다."),
 
 	/**
 	 * Expense 관련 에러 코드
@@ -60,7 +61,13 @@ public enum ErrorCode {
 	/**
 	 * Loan 관련 에러 코드
 	 */
-	LOAN_NOT_FOUND(BAD_REQUEST, "LOAN-000", "loanId에 해당하는 Loan이 존재하지 않습니다.");
+	LOAN_NOT_FOUND(BAD_REQUEST, "LOAN-000", "loanId에 해당하는 Loan이 존재하지 않습니다."),
+
+	/**
+	 * Account 관련 에러 코드
+	 */
+	ACCOUNT_NOT_FOUND(BAD_REQUEST, "ACCOUNT-000", "사용자의 해당 계좌가 금융 api 센터에 등록되지 않았습니다."),
+	HAVE_NOT_ENOUGH_MONEY(BAD_REQUEST, "ACCOUNT-001", "잔액이 부족합니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;

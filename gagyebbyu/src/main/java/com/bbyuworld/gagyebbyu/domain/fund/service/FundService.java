@@ -20,7 +20,9 @@ import com.bbyuworld.gagyebbyu.domain.fund.repository.FundTransactionRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
+import com.bbyuworld.gagyebbyu.domain.webClient.service.ApiService;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandBalanceDto;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DepositDto;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
@@ -34,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FundService {
 
+	private final ApiService apiService;
 	@Value("${ssafy.api_key}")
 	private String apiKey;
 	private final ApiPost apiPost;
@@ -87,13 +90,26 @@ public class FundService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+		//잔액 조회
 		DemandBalanceDto demandBalanceDto = accountService.findDemandBalance(userId,
 			fundTransactionCreateDto.getAccountNo());
 
-		System.out.println(demandBalanceDto);
+		fundConditionService.accountIsExist(demandBalanceDto);
+
+		fundConditionService.chargeIsAvailable(demandBalanceDto.getAccountBalance(),
+			fundTransactionCreateDto.getAmount());
 
 		if (fundTransactionCreateDto.getType() == TransactionType.MINUS) {
 			fundConditionService.isExceededEmergency(fund.getEmergency());
+		}
+
+		DepositDto depositDto = accountService.updateDeposit(userId, fundTransactionCreateDto.getAccountNo(),
+			String.valueOf(fundTransactionCreateDto.getAmount()), "(펀딩):입금");
+
+		System.out.println(depositDto);
+
+		if (depositDto == null) {
+			throw new DataNotFoundException(ErrorCode.FUND_CHARGE_FAILED);
 		}
 
 		fundTransactionRepository.save(fundTransactionCreateDto.toEntity(user, fund));
