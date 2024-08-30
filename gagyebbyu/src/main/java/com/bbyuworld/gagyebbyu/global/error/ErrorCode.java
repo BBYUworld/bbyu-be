@@ -39,6 +39,7 @@ public enum ErrorCode {
 	 * Expense 관련 에러 코드
 	 */
 	EXPENSE_NOT_FOUND(BAD_REQUEST, "EXPENSE-000", "expenseId에 해당하는 Expense가 존재하지 않습니다."),
+	CATEGORY_NOT_FOUND(BAD_REQUEST, "EXPENSE-001", "해당하는 Category는 없습니다. 알맞게 입력해주세요."),
 
 	/**
 	 * Analysis 관련 에러 코드
