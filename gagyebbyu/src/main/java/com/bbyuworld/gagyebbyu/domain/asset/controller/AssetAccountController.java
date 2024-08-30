@@ -110,4 +110,15 @@ public class AssetAccountController {
         return ResponseEntity.ok(message);
     }
 
+    @PostMapping("/saving")
+    @RequireJwtToken
+    public ResponseEntity<String> insertNewSavingAccount(@RequestBody Map<String, String> map){
+        Long userId = UserContext.getUserId();
+        String accountTypeUniqueNo = map.get("accountTypeUniqueNo");
+        Long depositBalance = Long.parseLong(map.get("depositBalance"));
+        String withdrawalAccountNo = map.get("withdrawalAccountNo");
+        String message = accountService.createSavingAccount(userId, accountTypeUniqueNo, depositBalance, withdrawalAccountNo);
+        return ResponseEntity.ok(message);
+    }
+
 }
