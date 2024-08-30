@@ -1,10 +1,12 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.param.AnalysisParam;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseResultDto;
 import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseStatisticsDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
@@ -27,7 +29,7 @@ public class CoupleExpenseService {
 	private final CoupleRepository coupleRepository;
 	private final ExpenseRepository expenseRepository;
 
-	public CoupleExpenseResultDto getCoupleExpenseResult(long userId) {
+	public CoupleExpenseResultDto getCoupleExpenseResult(long userId, AnalysisParam param) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -47,30 +49,37 @@ public class CoupleExpenseService {
 		double anotherCoupleMonthExpenseAvg = expenseRepository.findAverageExpenditureForEligibleCouples(
 			startAge, endAge, startIncome, endIncome);
 
-		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), null, null);
+		Integer month = param.getMonth() == null ? LocalDateTime.now().getMonthValue() : param.getMonth();
+		Integer year = param.getYear() == null ? LocalDateTime.now().getYear() : param.getYear();
 
-		long coupleMonthExpense = expenseRepository.findTotalExpenditureForCoupleLastMonth(couple.getCoupleId());
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
+
+		long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
 
 		return new CoupleExpenseResultDto(category, startAge, startIncome + 1000000,
 			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
 
 	}
 
-	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId) {
+	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId, AnalysisParam param) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId());
+		Integer month = param.getMonth() == null ? LocalDateTime.now().getMonthValue() : param.getMonth();
+		Integer year = param.getYear() == null ? LocalDateTime.now().getYear() : param.getYear();
 
-		if (totalAmount == 0) {
+		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(),
+			month, year);
+
+		if (totalAmount == null) {
 			return null;
 		}
 
 		return expenseRepository.findCategoryWiseExpenditureForMonth(couple.getCoupleId(),
-				totalAmount).stream()
+				totalAmount, month, year).stream()
 			.map(tuple -> new CoupleExpenseStatisticsDto(
 				tuple.get(0, Category.class),
 				tuple.get(1, Long.class),

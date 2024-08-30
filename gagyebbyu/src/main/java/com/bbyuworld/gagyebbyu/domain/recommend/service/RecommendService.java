@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
@@ -42,10 +44,6 @@ import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +60,7 @@ public class RecommendService {
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
 	private final LoanRepository loanRepository;
+	private final AssetRepository assetRepository;
 
 	public List<RecommendLoanDto> getLoanRecommend(long userId) {
 		User user = userRepository.findById(userId)
@@ -152,10 +151,6 @@ public class RecommendService {
 		}
 		requestDto.setCredit_score(user.getCreditScore());
 		requestDto.setNum_cards(cardNum);
-		System.out.println("==================================================");
-		System.out.println("user mounthly income: "+user.getMonthlyIncome());
-		System.out.println("user annualSpending: "+annualSpending);
-		System.out.println("==================================================");
 		requestDto.setAnnual_spending(annualSpending);
 
 		try {
@@ -199,9 +194,6 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		System.out.println("==================================================");
-		System.out.println(user.getMonthlyIncome());
-		System.out.println("==================================================");
 
 		requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
@@ -243,6 +235,7 @@ public class RecommendService {
 	}
 
 	public RecommendResponseDto getCompareRecommend(long userId, long money) {
+
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -263,7 +256,7 @@ public class RecommendService {
 			user2 = userRepository.findById(couple.getUser1().getUserId())
 				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		}
-
+		
 		RecommendCompareRequestDto compareRequestDto = new RecommendCompareRequestDto();
 		Long maleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user1.getUserId());
 		Long femaleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user2.getUserId());
@@ -312,10 +305,13 @@ public class RecommendService {
 		compareRequestDto.setFemale_debt(femaleSum); // 여성 부채 설정
 		compareRequestDto.setTarget_amount(money);
 		compareRequestDto.setStress_rate(0.0075);
-		compareRequestDto.setMale_credit_score(maleCreditScore); // 남성 신용 점수 설정
+		compareRequestDto.setMale_credit_score(maleCreditScore);
 		compareRequestDto.setFemale_credit_score(femaleCreditScore);
 
-		// 다른 로직이 필요하면 추가적으로 작성 가능
+		Long male_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"), user1.getUserId());
+		Long female_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"), user2.getUserId());
+		compareRequestDto.setMortgage_loan_amount_female(female_mortgage);
+		compareRequestDto.setMortgage_loan_amount_male(male_mortgage);
 
 		// Python 서버로 POST 요청 전송
 		try {

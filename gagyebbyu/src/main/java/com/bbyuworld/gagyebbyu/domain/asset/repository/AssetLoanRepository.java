@@ -1,6 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.asset.repository;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,6 +25,10 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     /*  */
     @Query("SELECT SUM(a.remainedAmount) FROM AssetLoan a WHERE a.user.userId = :userId AND a.isHidden = false")
     Long sumRemainedAmountByUser_UserIdAndIsHiddenFalse(Long userId);
+
+
+    List<AssetLoan> findByUser_UserIdAndLoanType(Long userId, LoanType loanType);
+
 
     /* 남은 금액별 정렬 */
     @EntityGraph(value = "Asset.withUser")
@@ -54,4 +59,19 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     /* 부부의 대출 조회 */
     @EntityGraph(value = "Asset.withUser")
     List<AssetLoan> findAllByCouple_CoupleIdOrderByAmountDesc(@Param("coupleId")Long coupleId);
+
+    /* 실제 사용 -> user Id에 맞는 대출 정보 출력 by type */
+    @Query("SELECT SUM(al.amount) FROM AssetLoan al " +
+            "WHERE al.loanType = :loanType AND al.user.userId = :userId")
+    Long findTotalAmountByLoanTypeAndUser_UserId(@Param("loanType") LoanType loanType, @Param("userId") Long userId);
+
+    /* test를 위한 코드 */
+    @Query("SELECT SUM(al.amount) FROM AssetLoan al " +
+            "WHERE al.loanType = :loanType")
+    Long findTotalAmountByLoanType(@Param("loanType") LoanType loanType);
+
+    @Query("SELECT SUM(al.amount) FROM AssetLoan al " +
+            "WHERE al.user.userId = :userId")
+    Long findTotalAmountByUser_UserId(@Param("userId") Long userId);
+
 }

@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.asset.dto;
 
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -34,4 +35,5 @@ public class AssetLoanDto extends AssetDto {
     private String loanName;
     private BigDecimal interestRate;
     private Long remainedAmount;
+    private LoanType loan_type_name;
 }

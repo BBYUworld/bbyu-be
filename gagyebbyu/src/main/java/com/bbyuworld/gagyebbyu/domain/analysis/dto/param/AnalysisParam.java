@@ -1,17 +1,11 @@
-package com.bbyuworld.gagyebbyu.domain.expense.dto.param;
+package com.bbyuworld.gagyebbyu.domain.analysis.dto.param;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public final class ExpenseParam {
-
-	/**
-	 * default 현재 일
-	 * month : 1, 2, 3, 4, 5, 6, 7, 8, ...
-	 */
-	private Integer day;
+public final class AnalysisParam {
 
 	/**
 	 * default 현재 달
@@ -24,10 +18,4 @@ public final class ExpenseParam {
 	 * year : 2024, 2023, 2021, ...
 	 */
 	private Integer year;
-
-	/**
-	 * default : asc
-	 * sort : asc, desc
-	 */
-	private String sort;
 }

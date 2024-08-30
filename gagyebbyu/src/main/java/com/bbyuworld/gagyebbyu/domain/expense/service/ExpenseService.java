@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.CategoryDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
@@ -26,6 +27,7 @@ import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.domain.webClient.dto.ExpenseCategoryDto;
 import com.bbyuworld.gagyebbyu.domain.webClient.service.ApiService;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.BadRequestException;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.querydsl.core.Tuple;
 
@@ -48,10 +50,10 @@ public class ExpenseService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
-		System.out.println("user id = " + user.getUserId());
+
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
-		System.out.println("couple id = " + couple.getCoupleId());
+
 		List<Tuple> expenseTuples = expenseRepository.findExpenseByMonth(month, year, user.getCoupleId(), sort);
 
 		long totalAmount = 0;
@@ -80,7 +82,7 @@ public class ExpenseService {
 			startDate, endDate);
 		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
 
-		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month + 1, year);
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 
 		return new ExpenseMonthDto(totalAmount, targetAmount,
 			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
@@ -152,8 +154,29 @@ public class ExpenseService {
 	}
 
 	public Long getUserExpensesForYear(long userId) {
-		Long answer = expenseRepository.findTotalExpenditureForYear(userId);
-		System.out.println("answer in expense Service: "+answer);
-		return expenseRepository.findTotalExpenditureForYear(userId);
+		Long totalExpenseForYear = expenseRepository.findTotalExpenditureForYear(userId);
+		return totalExpenseForYear != null ? totalExpenseForYear : 0L;
+	}
+
+	public List<ExpenseDayDto> getExpenseForMonthAndCategory(long userId, ExpenseParam param, CategoryDto categoryDto) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+		Integer month = param.getMonth() != null ? param.getMonth() : LocalDateTime.now().getMonthValue();
+		Integer year = param.getYear() != null ? param.getYear() : LocalDateTime.now().getYear();
+
+		if (categoryDto.getCategory() == null) {
+			throw new BadRequestException(ErrorCode.CATEGORY_NOT_FOUND);
+		}
+
+		return expenseRepository.getExpenseForMonthAndCategory(couple.getCoupleId(), categoryDto.getCategory(), month,
+				year)
+			.stream()
+			.map(ExpenseDayDto::from)
+			.collect(Collectors.toList());
+
 	}
 }
