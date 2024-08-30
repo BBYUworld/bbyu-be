@@ -1,7 +1,7 @@
 package com.bbyuworld.gagyebbyu.domain.asset.repository;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.Asset;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetType;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -43,5 +43,15 @@ public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustom
     @Modifying
     @Query("UPDATE Asset a SET a.couple.coupleId = :coupleId WHERE a.user.userId = :user1Id OR a.user.userId = :user2Id")
     void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId, @Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
+
+    /**
+     * 사용자가 가입한 loan의 type name 이 주택담보대출인 값 출력
+     *
+     * @param userId 사용자 ID
+     * @return 조건에 맞는 계좌 목록
+     */
+
+//    @Query("select sum(a.amount) from AssetLoan a where a.user.userId=:userId and a.loanTypeName=:loanType")
+//    Long getUsersMortgate(@Param("userId") long userId, @Param("loanType") LoanType loanType);
 
     }
