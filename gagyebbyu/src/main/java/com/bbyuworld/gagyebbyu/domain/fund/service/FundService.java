@@ -19,6 +19,8 @@ import com.bbyuworld.gagyebbyu.domain.fund.repository.FundRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.repository.FundTransactionRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.domain.user.service.AccountService;
+import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandBalanceDto;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
@@ -40,6 +42,7 @@ public class FundService {
 	private final UserRepository userRepository;
 	private final FundTransactionRepository fundTransactionRepository;
 	private final FundConditionService fundConditionService;
+	private final AccountService accountService;
 
 	public FundOverViewDto getFund(long coupleId) {
 		Fund fund = fundRepository.findByCouple_CoupleIdAndIsEndedIsFalseAndIsDeletedFalse(coupleId)
@@ -71,11 +74,23 @@ public class FundService {
 	@Transactional
 	public FundStatusDto createFundTransaction(long fundId, long userId,
 		FundTransactionCreateDto fundTransactionCreateDto) {
+
+		// List<AccountDto> accounts = accountService.findAllUserAccount(userId);
+		//
+		// for (AccountDto account : accounts) {
+		// 	System.out.println(account);
+		// }
+
 		Fund fund = fundRepository.findById(fundId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.FUND_NOT_FOUND));
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		DemandBalanceDto demandBalanceDto = accountService.findDemandBalance(userId,
+			fundTransactionCreateDto.getAccountNo());
+
+		System.out.println(demandBalanceDto);
 
 		if (fundTransactionCreateDto.getType() == TransactionType.MINUS) {
 			fundConditionService.isExceededEmergency(fund.getEmergency());
