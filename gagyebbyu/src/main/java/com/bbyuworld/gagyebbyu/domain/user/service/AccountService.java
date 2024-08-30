@@ -244,6 +244,9 @@ public class AccountService {
         User user = userRepository.findUserById(userId);
         String userKey = user.getApiKey();
         AssetAccount assetAccount =assetAccountRepository.findAssetAccountByAccountNo(accountNo);
+        if(assetAccount == null){
+            return "계좌 없음";
+        }
         if(assetAccount.getAmount() - amount < 0){
             return "잔액 부족";
         }

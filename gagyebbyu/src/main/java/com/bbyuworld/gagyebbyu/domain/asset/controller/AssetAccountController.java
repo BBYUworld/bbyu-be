@@ -100,8 +100,9 @@ public class AssetAccountController {
 
     @PostMapping("/deposit")
     @RequireJwtToken
-    public ResponseEntity<String> insertNewDepositAccount(Map<String, String> map){
+    public ResponseEntity<String> insertNewDepositAccount(@RequestBody Map<String, String> map){
         Long userId = UserContext.getUserId();
+        System.out.println("map = "+map);
         String accountNo = map.get("accountNo"); // 출금할 계좌번호
         Long amount = Long.parseLong(map.get("amount"));
         String accountTypeUniqueNo = map.get("accountTypeUniqueNo");
