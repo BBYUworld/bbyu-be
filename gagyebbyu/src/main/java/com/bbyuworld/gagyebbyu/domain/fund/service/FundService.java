@@ -118,6 +118,9 @@ public class FundService {
 			DepositDto depositDto = accountService.updateDeposit(userId, fundTransactionCreateDto.getAccountNo(),
 				String.valueOf(fundTransactionCreateDto.getAmount()), "(펀딩):입금");
 
+			if (depositDto == null) {
+				throw new DataNotFoundException(ErrorCode.ACCOUNT_NOT_FOUND);
+			}
 			account.setAmount(account.getAmount() + fundTransactionCreateDto.getAmount());
 		}
 
