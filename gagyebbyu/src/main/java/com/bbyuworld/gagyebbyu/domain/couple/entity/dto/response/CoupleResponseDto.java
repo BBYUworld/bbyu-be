@@ -16,6 +16,8 @@ public class CoupleResponseDto {
 	private Long monthlyTargetAmount;
 	private String user1Name;
 	private String user2Name;
+	private String user1RatingName;
+	private String user2RatingName;
 	private Long marriedPeriod;
 
 	public static CoupleResponseDto from(Couple couple, Long marriedPeriod) {
@@ -26,6 +28,8 @@ public class CoupleResponseDto {
 			couple.getMonthlyTargetAmount(),
 			couple.getUser1().getName(),
 			couple.getUser2().getName(),
+			couple.getUser1().getRatingName(),
+			couple.getUser2().getRatingName(),
 			marriedPeriod
 		);
 	}

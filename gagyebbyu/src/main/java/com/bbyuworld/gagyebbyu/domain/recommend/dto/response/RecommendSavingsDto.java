@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class RecommendSavingsDto {
-    private long savings_id;
-    private double pred;
+	private long savings_id;
+	private double pred;
+	private SavingsDto savingsDto;
 }

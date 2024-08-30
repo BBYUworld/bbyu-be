@@ -45,7 +45,7 @@ public class AssetController {
     }
 
     @PatchMapping("/{assetId}/visibility")
-    public void updateAssetVisibility(@PathVariable Long assetId, @RequestParam boolean isHidden) {
+    public void updateAssetVisibility(@PathVariable Long assetId, @RequestParam("isHidden") boolean isHidden) {
         assetService.updateAssetVisibility(assetId, isHidden);
     }
 
@@ -67,10 +67,6 @@ public class AssetController {
         return assetService.insertNewCard(assetCardDto, UserContext.getUserId());
     }
 
-//    @GetMapping("/sum-user")
-//    @RequireJwtToken
-//    public Long getSumUserAssets(@Param("type") String type) {
-//        return assetService.getSumUserAssets(UserContext.getUserId(), type);
-//    }
+
 
 }

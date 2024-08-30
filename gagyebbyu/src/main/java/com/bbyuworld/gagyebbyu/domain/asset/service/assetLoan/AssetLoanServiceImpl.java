@@ -3,7 +3,6 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
-import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
@@ -13,7 +12,6 @@ import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -146,7 +144,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
         Long coupleId = user.getCoupleId();
 
-        return assetLoanRepository.findAllByCouple_CoupleId(coupleId).stream()
+        return assetLoanRepository.findAllByCouple_CoupleIdOrderByAmountDesc(coupleId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -166,6 +164,10 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .assetId(assetLoan.getAssetId())
                 .userId(assetLoan.getUser().getUserId())
                 .coupleId(assetLoan.getCouple() != null ? assetLoan.getCouple().getCoupleId() : null)
+                .user1Id(assetLoan.getCouple() != null ? assetLoan.getCouple().getUser1().getUserId() : null)
+                .user2Id(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser2().getUserId() : null)
+                .user1Name(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser1().getName() : null)
+                .user2Name(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser2().getName() : null)
                 .type(String.valueOf(assetLoan.getType()))
                 .bankName(assetLoan.getBankName())
                 .bankCode(assetLoan.getBankCode())

@@ -1,8 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.asset.repository;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
-import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -55,5 +53,5 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
 
     /* 부부의 대출 조회 */
     @EntityGraph(value = "Asset.withUser")
-    List<AssetLoan> findAllByCouple_CoupleId(@Param("coupleId")Long coupleId);
+    List<AssetLoan> findAllByCouple_CoupleIdOrderByAmountDesc(@Param("coupleId")Long coupleId);
 }

@@ -86,4 +86,19 @@ public class CoupleService {
 		return CoupleResponseDto.from(couple, ChronoUnit.DAYS.between(couple.getMarriedAt(), LocalDate.now()) + 1);
 	}
 
+	/**
+	 * get Couple in Loan
+	 * @param userId 유저의 아이디
+	 * @return 커플 DTO 리턴
+	 */
+	public CoupleResponseDto getCoupleinLoan(long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+		Couple couple = coupleRepository.findById(user.getCoupleId())
+				.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+
+		return CoupleResponseDto.from(couple, 1L);
+	}
+
 }
