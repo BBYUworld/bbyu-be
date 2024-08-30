@@ -255,13 +255,14 @@ public class AccountService {
         assetDepositAccount.setAccountType(AccountType.DEPOSIT);
         assetDepositAccount.setAmount(amount);
         assetDepositAccount.setAccountNumber(dto.getAccountNo());
-        assetDepositAccount.setMaturityDate(LocalDate.parse(dto.getAccountCreateDate()));
+        assetDepositAccount.setMaturityDate(LocalDate.now());
         assetDepositAccount.setTerm(Integer.valueOf(dto.getSubscriptionPeriod()));
         assetDepositAccount.setBankCode(dto.getBankCode());
         assetDepositAccount.setCreatedAt(LocalDateTime.now());
         assetDepositAccount.setUpdatedAt(LocalDateTime.now());
         assetDepositAccount.setBankName(dto.getBankName());
-        assetDepositAccount.setInterestRate(BigDecimal.valueOf(Long.parseLong(dto.getInterestRate())));
+        BigDecimal interestRate = new BigDecimal(dto.getInterestRate());
+        assetDepositAccount.setInterestRate(interestRate);
         user.getAssets().add(assetDepositAccount);
         userRepository.save(user);
         return "ok";
