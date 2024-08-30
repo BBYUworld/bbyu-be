@@ -2,6 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -46,8 +47,8 @@ public class CoupleExpenseService {
 		long startIncome = avgIncome / 100000 * 100000 - 1000000;
 		long endIncome = startIncome + 1000000;
 
-		double anotherCoupleMonthExpenseAvg = expenseRepository.findAverageExpenditureForEligibleCouples(
-			startAge, endAge, startIncome, endIncome);
+		long anotherCoupleMonthExpenseAvg = Optional.ofNullable(expenseRepository.findAverageExpenditureForEligibleCouples(startAge, endAge, startIncome, endIncome))
+			.orElse(0.0).longValue();
 
 		Integer month = param.getMonth() == null ? LocalDateTime.now().getMonthValue() : param.getMonth();
 		Integer year = param.getYear() == null ? LocalDateTime.now().getYear() : param.getYear();
@@ -57,9 +58,10 @@ public class CoupleExpenseService {
 		long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
 
 		return new CoupleExpenseResultDto(category, startAge, startIncome + 1000000,
-			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
-
+			anotherCoupleMonthExpenseAvg, coupleMonthExpense);
 	}
+
+
 
 	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId, AnalysisParam param) {
 		User user = userRepository.findById(userId)
