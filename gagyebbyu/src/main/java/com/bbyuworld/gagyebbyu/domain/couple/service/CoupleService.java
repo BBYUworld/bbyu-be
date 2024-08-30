@@ -55,7 +55,7 @@ public class CoupleService {
 		user2.updateCoupleId(couple.getCoupleId());
 
 		expenseRepository.updateExpenseCouple(couple, couple.getUser1().getUserId(), user2.getUserId());
-		
+
 		assetRepository.updateAssetsByCouple_CoupleId(coupleId, couple.getUser1().getUserId(), user2.getUserId());
 	}
 

@@ -3,6 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.fund.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
@@ -20,6 +21,7 @@ import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
+import com.bbyuworld.gagyebbyu.global.util.ApiPost;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class FundService {
+
+	@Value("${ssafy.api_key}")
+	private String apiKey;
+	private final ApiPost apiPost;
 	private final FundRepository fundRepository;
 	private final CoupleRepository coupleRepository;
 	private final UserRepository userRepository;
@@ -43,7 +49,10 @@ public class FundService {
 	}
 
 	@Transactional
-	public void createFund(long coupleId, FundCreateDto fundCreateDto) {
+	public void createFund(long userId, long coupleId, FundCreateDto fundCreateDto) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
 		Couple couple = coupleRepository.findById(coupleId)
 			.orElseThrow(() -> new DataNotFoundException((ErrorCode.COUPLE_NOT_FOUND)));
 
