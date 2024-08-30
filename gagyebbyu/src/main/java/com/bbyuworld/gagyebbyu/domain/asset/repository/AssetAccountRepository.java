@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long> {
+public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long>, AssetAccountRepositoryCustom {
 
     /**
      * 사용자 ID로 숨겨지지 않은 모든 계좌를 조회합니다.

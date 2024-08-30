@@ -1,8 +1,14 @@
 package com.bbyuworld.gagyebbyu.domain.user.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bbyuworld.gagyebbyu.domain.asset.dto.CreateDepositDto;
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -40,7 +46,7 @@ public class AccountService {
 	private final AssetRepository assetRepository;
 	private final CoupleRepository coupleRepository;
 	private final UserRepository userRepository;
-	private final AssetAccountRepository assetAcountRepository;
+	private final AssetAccountRepository assetAccountRepository;
 
 	public List<DemandDepositDto> findAllDemandDeposit() {
 		return sendPostAboutFindAllProducts();
@@ -190,6 +196,7 @@ public class AccountService {
         }
         return null;
     }
+
     private AccountDto sendPostAboutUpdateTransferLimit(String userKey, String accountNo, Long dailyTransferLimit, Long oneTimeTransferLimit){
         try(CloseableHttpClient client = HttpClients.createDefault()){
             String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateTransferLimit";
@@ -216,6 +223,73 @@ public class AccountService {
                 if(recNode == null) return null;
                 if (recNode != null) {
                     AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+    public String createDepositAccount(Long userId, String accountNo, Long amount, String accountTypeUniqueNo){
+        User user = userRepository.findUserById(userId);
+        String userKey = user.getApiKey();
+        AssetAccount assetAccount =assetAccountRepository.findAssetAccountByAccountNo(accountNo);
+        if(assetAccount.getAmount() - amount < 0){
+            return "잔액 부족";
+        }
+        CreateDepositDto dto = sendPostAboutCreateDepositAccount(userKey, accountNo, amount, accountTypeUniqueNo);
+        AssetAccount assetDepositAccount = new AssetAccount();
+        assetDepositAccount.setAccountType(AccountType.DEPOSIT);
+        assetDepositAccount.setAmount(amount);
+        assetDepositAccount.setAccountNumber(dto.getAccountNo());
+        assetDepositAccount.setMaturityDate(LocalDate.parse(dto.getAccountCreateDate()));
+        assetDepositAccount.setTerm(Integer.valueOf(dto.getSubscriptionPeriod()));
+        assetDepositAccount.setBankCode(dto.getBankCode());
+        assetDepositAccount.setCreatedAt(LocalDateTime.now());
+        assetDepositAccount.setUpdatedAt(LocalDateTime.now());
+        assetDepositAccount.setBankName(dto.getBankName());
+        assetDepositAccount.setInterestRate(BigDecimal.valueOf(Long.parseLong(dto.getInterestRate())));
+        user.getAssets().add(assetDepositAccount);
+        userRepository.save(user);
+        return "ok";
+    }
+
+    private CreateDepositDto sendPostAboutCreateDepositAccount(String userKey, String accountNo, Long amount, String accountTypeUniqueNo){
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/deposit/createDepositAccount";
+            String apiName = "createDepositAccount";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            rootNode.put("withdrawalAccountNo", accountNo);
+            rootNode.put("accountTypeUniqueNo", accountTypeUniqueNo);
+            rootNode.put("depositBalance", String.valueOf(amount));
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
+
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
+                if (recNode != null) {
+                    CreateDepositDto dto = mapper.treeToValue(recNode, CreateDepositDto.class);
                     System.out.println("Converted DTO: " + dto);
                     return dto;
                 } else {
