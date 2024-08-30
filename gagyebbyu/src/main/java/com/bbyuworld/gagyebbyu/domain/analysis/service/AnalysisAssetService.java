@@ -45,7 +45,7 @@ public class  AnalysisAssetService {
             throw new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND);
         }
 
-		QAsset asset = QAsset.asset;
+	QAsset asset = QAsset.asset;
 
         Integer totalAmount = queryFactory
             .select(asset.amount.sum().intValue())
