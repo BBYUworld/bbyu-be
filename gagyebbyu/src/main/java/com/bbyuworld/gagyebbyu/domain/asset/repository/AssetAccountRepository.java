@@ -12,7 +12,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 
 @Repository
-public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long> {
+public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long>, AssetAccountRepositoryCustom {
 
 	/**
 	 * 사용자 특정 계좌 조회

@@ -45,10 +45,13 @@ public class Deposit {
 	@Column(name = "description", nullable = false, length = 255)
 	private String description;
 
+	@Column(name = "account_type_unique_no")
+	private String accountTypeUniqueNo;
+
 	@Builder
 	public Deposit(double depositInterestRate, int termMonths, long minDepositAmount,
 		long maxDepositAmount, String depositInterestPaymentMethod, String depositName,
-		String bankName, String description) {
+		String bankName, String description, String accountTypeUniqueNo) {
 		this.depositInterestRate = depositInterestRate;
 		this.termMonths = termMonths;
 		this.minDepositAmount = minDepositAmount;
@@ -57,5 +60,6 @@ public class Deposit {
 		this.depositName = depositName;
 		this.bankName = bankName;
 		this.description = description;
+		this.accountTypeUniqueNo = accountTypeUniqueNo;
 	}
 }
