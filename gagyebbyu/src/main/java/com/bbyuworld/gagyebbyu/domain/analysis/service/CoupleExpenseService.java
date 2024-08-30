@@ -1,6 +1,5 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,22 +61,25 @@ public class CoupleExpenseService {
 
 	}
 
-	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId) {
+	public List<CoupleExpenseStatisticsDto> getCoupleExpenseStatistics(long userId, AnalysisParam param) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(),
-			LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear());
+		Integer month = param.getMonth() == null ? LocalDateTime.now().getMonthValue() : param.getMonth();
+		Integer year = param.getYear() == null ? LocalDateTime.now().getYear() : param.getYear();
 
-		if (totalAmount == 0) {
+		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(),
+			month, year);
+
+		if (totalAmount == null) {
 			return null;
 		}
 
 		return expenseRepository.findCategoryWiseExpenditureForMonth(couple.getCoupleId(),
-				totalAmount).stream()
+				totalAmount, month, year).stream()
 			.map(tuple -> new CoupleExpenseStatisticsDto(
 				tuple.get(0, Category.class),
 				tuple.get(1, Long.class),

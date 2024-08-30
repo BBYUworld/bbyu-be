@@ -40,8 +40,9 @@ public class AnalysisExpenseController {
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
-	public ResponseEntity<List<CoupleExpenseStatisticsDto>> getCoupleExpenseStatistics() {
-		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseStatistics(UserContext.getUserId()));
+	public ResponseEntity<List<CoupleExpenseStatisticsDto>> getCoupleExpenseStatistics(
+		@ModelAttribute AnalysisParam param) {
+		return ResponseEntity.ok(coupleExpenseService.getCoupleExpenseStatistics(UserContext.getUserId(), param));
 	}
 
 }

@@ -55,7 +55,8 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
-	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount) {
+	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount, Integer month,
+		Integer year) {
 
 		return jpaQueryFactory
 			.select(
@@ -68,7 +69,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 			.join(expense.couple, couple)
 			.where(
 				expense.couple.coupleId.eq(coupleId),
-				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear())
+				getMonth(month, year)
 			)
 			.groupBy(expense.category)
 			.orderBy(expense.amount.sum().desc())

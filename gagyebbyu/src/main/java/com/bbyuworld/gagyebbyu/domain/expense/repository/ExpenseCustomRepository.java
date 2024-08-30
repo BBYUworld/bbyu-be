@@ -19,7 +19,7 @@ public interface ExpenseCustomRepository {
 
 	Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer paramMonth, Integer ParamYear);
 
-	List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount);
+	List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount, Integer month, Integer year);
 
 	Long findTotalExpenditureForMonth(Long coupleId, Integer month, Integer year);
 
