@@ -14,6 +14,7 @@ public class FundTransactionCreateDto {
 
 	private long amount;
 	private TransactionType type;
+	private String accountNo;
 
 	public FundTransaction toEntity(User user, Fund fund) {
 		return FundTransaction.builder()

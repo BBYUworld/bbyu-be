@@ -3,14 +3,14 @@ package com.bbyuworld.gagyebbyu.domain.couple.service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleUpdateDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.response.CoupleResponseDto;
-import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.expense.repository.ExpenseRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -56,8 +56,7 @@ public class CoupleService {
 
 		expenseRepository.updateExpenseCouple(couple, couple.getUser1().getUserId(), user2.getUserId());
 
-		//자산도 추후 추가
-		assetRepository.updateAssetsByCouple_CoupleId(coupleId, couple.getUser1().getUserId(), user2.getUserId() );
+		assetRepository.updateAssetsByCouple_CoupleId(coupleId, couple.getUser1().getUserId(), user2.getUserId());
 	}
 
 	@Transactional
@@ -93,10 +92,10 @@ public class CoupleService {
 	 */
 	public CoupleResponseDto getCoupleinLoan(long userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		Couple couple = coupleRepository.findById(user.getCoupleId())
-				.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
 		return CoupleResponseDto.from(couple, 1L);
 	}
