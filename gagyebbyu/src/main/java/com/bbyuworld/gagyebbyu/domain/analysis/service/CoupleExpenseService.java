@@ -44,7 +44,7 @@ public class CoupleExpenseService {
 
 		long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
-		long startIncome = avgIncome / 100000 * 100000 - 1000000;
+		long startIncome = (avgIncome / 100000 * 100000 - 1000000) * 10000;
 		long endIncome = startIncome + 1000000;
 
 		long anotherCoupleMonthExpenseAvg = Optional.ofNullable(expenseRepository.findAverageExpenditureForEligibleCouples(startAge, endAge, startIncome, endIncome))
