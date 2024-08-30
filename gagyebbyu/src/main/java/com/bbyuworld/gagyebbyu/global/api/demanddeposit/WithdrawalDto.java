@@ -12,5 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class WithdrawalDto {
-	private int id;
+	private String transactionUniqueNo;
+	private String transactionDate;
 }
