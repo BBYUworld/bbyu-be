@@ -9,6 +9,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
@@ -119,6 +120,12 @@ public class AssetServiceImpl implements AssetService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
         return assetRepository.sumAmountByCouple_CoupleIdAndIsHiddenFalse(user.getCoupleId());
+    }
+
+    @Override
+    public Long getSumCoupleAccountAssets(Long userId){
+        User user = userRepository.findUserById(userId);
+        return assetRepository.findCoupleAccount(userId, AssetType.ACCOUNT);
     }
 
     /**

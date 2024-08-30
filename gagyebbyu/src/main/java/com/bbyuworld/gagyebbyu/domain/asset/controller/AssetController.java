@@ -44,6 +44,12 @@ public class AssetController {
         return assetService.getSumCoupleAssets(UserContext.getUserId());
     }
 
+    @GetMapping("/couple/account/sum")
+    public Long getCoupleAssetAccountSum() {
+        Long userId = UserContext.getUserId();
+        return assetService.getSumCoupleAccountAssets(userId);
+    }
+
     @PatchMapping("/{assetId}/visibility")
     public void updateAssetVisibility(@PathVariable Long assetId, @RequestParam("isHidden") boolean isHidden) {
         assetService.updateAssetVisibility(assetId, isHidden);
