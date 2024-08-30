@@ -36,10 +36,4 @@ public class FundConditionService {
 			throw new BadRequestException(ErrorCode.HAVE_NOT_ENOUGH_MONEY);
 		}
 	}
-
-	public void isExceededMoney(int amount, Fund fund) {
-		if (fund.getCurrentAmount() < amount) {
-			throw new BadRequestException(ErrorCode.HAVE_NOT_ENOUGH_MONEY);
-		}
-	}
 }

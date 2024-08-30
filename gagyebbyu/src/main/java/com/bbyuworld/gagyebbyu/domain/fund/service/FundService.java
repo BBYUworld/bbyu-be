@@ -27,6 +27,7 @@ import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DemandBalanceDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.DepositDto;
 import com.bbyuworld.gagyebbyu.global.api.demanddeposit.WithdrawalDto;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.BadRequestException;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
 
@@ -88,7 +89,14 @@ public class FundService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
+		AssetAccount account = assetAccountRepository.findAssetAccountByAccountNumberAndUser_UserId(
+			fundTransactionCreateDto.getAccountNo(), userId);
+
 		if (fundTransactionCreateDto.getType() == TransactionType.PLUS) {
+			if (account.getDailyTransferLimit() < fundTransactionCreateDto.getAmount()) {
+				throw new BadRequestException(ErrorCode.ONE_TIME_TRANSFER_LIMIT);
+			}
+
 			DemandBalanceDto demandBalanceDto = accountService.findDemandBalance(userId,
 				fundTransactionCreateDto.getAccountNo());
 
@@ -101,8 +109,6 @@ public class FundService {
 				fundTransactionCreateDto.getAccountNo(),
 				String.valueOf(fundTransactionCreateDto.getAmount()), "(펀딩):충전");
 
-			AssetAccount account = assetAccountRepository.findAssetAccountByAccountNumberAndUser_UserId(
-				fundTransactionCreateDto.getAccountNo(), userId);
 			account.setAmount(account.getAmount() - fundTransactionCreateDto.getAmount());
 		}
 
@@ -112,8 +118,6 @@ public class FundService {
 			DepositDto depositDto = accountService.updateDeposit(userId, fundTransactionCreateDto.getAccountNo(),
 				String.valueOf(fundTransactionCreateDto.getAmount()), "(펀딩):입금");
 
-			AssetAccount account = assetAccountRepository.findAssetAccountByAccountNumberAndUser_UserId(
-				fundTransactionCreateDto.getAccountNo(), userId);
 			account.setAmount(account.getAmount() + fundTransactionCreateDto.getAmount());
 		}
 

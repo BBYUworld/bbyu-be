@@ -67,7 +67,8 @@ public enum ErrorCode {
 	 * Account 관련 에러 코드
 	 */
 	ACCOUNT_NOT_FOUND(BAD_REQUEST, "ACCOUNT-000", "사용자의 해당 계좌가 금융 api 센터에 등록되지 않았습니다."),
-	HAVE_NOT_ENOUGH_MONEY(BAD_REQUEST, "ACCOUNT-001", "잔액이 부족합니다.");
+	HAVE_NOT_ENOUGH_MONEY(BAD_REQUEST, "ACCOUNT-001", "잔액이 부족합니다."),
+	ONE_TIME_TRANSFER_LIMIT(BAD_REQUEST, "ACCOUNT-002", "최대 이체 금액을 넘었습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;
