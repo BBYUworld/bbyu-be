@@ -55,6 +55,20 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
+	public List<Expense> getExpenseForMonthAndCategory(Long coupleId, Category category, Integer month, Integer year) {
+		OrderSpecifier<?> orderSpecifier = getDateOrderSpecifier("desc");
+
+		return jpaQueryFactory.selectFrom(expense)
+			.where(
+				expense.couple.coupleId.eq(coupleId),
+				expense.category.eq(category),
+				getMonth(month, year)
+			)
+			.orderBy(orderSpecifier)
+			.fetch();
+	}
+
+	@Override
 	public List<Tuple> findCategoryWiseExpenditureForMonth(Long coupleId, Long totalAmount, Integer month,
 		Integer year) {
 

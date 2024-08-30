@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bbyuworld.gagyebbyu.domain.expense.dto.param.ExpenseParam;
+import com.bbyuworld.gagyebbyu.domain.expense.dto.request.CategoryDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseMemoCreateDto;
 import com.bbyuworld.gagyebbyu.domain.expense.dto.request.ExpenseTargetCreateDto;
@@ -116,7 +117,12 @@ public class ExpenseController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping(path = "/")
-
+	@GetMapping(path = "/category", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequireJwtToken
+	public ResponseEntity<List<ExpenseDayDto>> getExpenseForMonthAndCategory(@ModelAttribute ExpenseParam param,
+		@RequestBody CategoryDto categoryDto) {
+		return ResponseEntity.ok(
+			expenseService.getExpenseForMonthAndCategory(UserContext.getUserId(), param, categoryDto));
+	}
 
 }

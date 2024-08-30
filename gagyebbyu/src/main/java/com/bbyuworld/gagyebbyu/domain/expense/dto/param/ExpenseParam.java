@@ -30,14 +30,4 @@ public final class ExpenseParam {
 	 * sort : asc, desc
 	 */
 	private String sort;
-
-	@Override
-	public String toString() {
-		return "ExpenseParam{" +
-				"day=" + day +
-				", month=" + month +
-				", year=" + year +
-				", sort='" + sort + '\'' +
-				"}\n";
-	}
 }
