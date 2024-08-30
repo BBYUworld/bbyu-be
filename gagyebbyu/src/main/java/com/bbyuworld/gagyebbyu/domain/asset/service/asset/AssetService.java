@@ -30,5 +30,6 @@ public interface AssetService {
     boolean insertNewCard(AssetCardDto assetCardDto, Long userId);
     boolean insertNewAccount(AssetAccountDto assetAccountDto, Long userId);
 
-    /* 상세정보 출력 */
+    /* 주택담보대출의 총 액 반환 */
+    long getSumMortgage(Long userId);
 }

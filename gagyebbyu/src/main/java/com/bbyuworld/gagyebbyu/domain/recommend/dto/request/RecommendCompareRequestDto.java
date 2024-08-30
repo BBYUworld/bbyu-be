@@ -16,4 +16,6 @@ public class RecommendCompareRequestDto {
 	private double stress_rate;
 	private long male_credit_score;
 	private long female_credit_score;
+	private long mortgage_loan_amount_female;
+	private long mortgage_loan_amount_male;
 }

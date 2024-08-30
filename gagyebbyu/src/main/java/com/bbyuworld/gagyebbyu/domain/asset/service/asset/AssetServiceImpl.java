@@ -10,6 +10,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCardRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
@@ -20,13 +21,11 @@ import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
 import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -201,6 +200,17 @@ public class AssetServiceImpl implements AssetService {
         assetRepository.save(assetAccount);
 
         return true;
+    }
+
+    /**
+     * user id에 맞는 주택 담보 대출의 총액 값 반환
+     *
+     * @param userId 사용자의 user id
+     * @return user id에 맞는 주택 담보 대출의 총액 값 반환
+     */
+    @Override
+    public long getSumMortgage(Long userId) {
+        return assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"),userId);
     }
 
     /**

@@ -180,6 +180,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .loanName(assetLoan.getLoanName())
                 .interestRate(assetLoan.getInterestRate())
                 .remainedAmount(assetLoan.getRemainedAmount())
+                .loan_type_name(assetLoan.getLoanType())
                 .build();
     }
 }
