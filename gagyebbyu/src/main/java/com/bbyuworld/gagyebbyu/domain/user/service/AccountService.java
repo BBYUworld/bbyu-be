@@ -130,102 +130,106 @@ public class AccountService {
 			String jsonBody = objectMapper.writeValueAsString(rootNode);
 			httpPost.setEntity(new StringEntity(jsonBody));
 
-			try (CloseableHttpResponse response = client.execute(httpPost)) {
-				String jsonResponse = EntityUtils.toString(response.getEntity());
-				JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
-				JsonNode recNode = responseRootNode.get("REC");
-				if (recNode.isArray()) {
-					return objectMapper.convertValue(recNode, new TypeReference<List<DemandDepositDto>>() {
-					});
-				} else {
-					return new ArrayList<>();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = objectMapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
+                if (recNode.isArray()) {
+                    return objectMapper.convertValue(recNode, new TypeReference<List<DemandDepositDto>>() {});
+                } else {
+                    return new ArrayList<>();
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private CreateDemandDepositAccountDto sendPostAboutCreateUserAccount(String userKey, String uniqueNo){
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/createDemandDepositAccount";
+            String apiName = "createDemandDepositAccount";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            rootNode.put("accountTypeUniqueNo", uniqueNo);
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
 
-	private CreateDemandDepositAccountDto sendPostAboutCreateUserAccount(String userKey, String uniqueNo) {
-		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/createDemandDepositAccount";
-			String apiName = "createDemandDepositAccount";
-			ObjectMapper mapper = new ObjectMapper();
-			HttpPost httpPost = new HttpPost(url);
-			ObjectNode rootNode = mapper.createObjectNode();
-			ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
-			headerNode.put("userKey", userKey);
-			rootNode.set("Header", headerNode);
-			rootNode.put("accountTypeUniqueNo", uniqueNo);
-			httpPost.setHeader("Content-Type", "application/json");
-			String jsonBody = mapper.writeValueAsString(rootNode);
-			System.out.println("Request Body: " + jsonBody);
-			httpPost.setEntity(new StringEntity(jsonBody));
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
+                if (recNode != null) {
+                    CreateDemandDepositAccountDto dto = mapper.treeToValue(recNode, CreateDemandDepositAccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+    private AccountDto sendPostAboutUpdateTransferLimit(String userKey, String accountNo, Long dailyTransferLimit, Long oneTimeTransferLimit){
+        try(CloseableHttpClient client = HttpClients.createDefault()){
+            String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateTransferLimit";
+            String apiName = "updateTransferLimit";
+            ObjectMapper mapper = new ObjectMapper();
+            HttpPost httpPost = new HttpPost(url);
+            ObjectNode rootNode = mapper.createObjectNode();
+            ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
+            headerNode.put("userKey", userKey);
+            rootNode.set("Header", headerNode);
+            rootNode.put("accountNo", accountNo);
+            rootNode.put("oneTimeTransferLimit", oneTimeTransferLimit);
+            rootNode.put("dailyTransferLimit", dailyTransferLimit);
+            httpPost.setHeader("Content-Type", "application/json");
+            String jsonBody = mapper.writeValueAsString(rootNode);
+            System.out.println("Request Body: " + jsonBody);
+            httpPost.setEntity(new StringEntity(jsonBody));
 
-			try (CloseableHttpResponse response = client.execute(httpPost)) {
-				String jsonResponse = EntityUtils.toString(response.getEntity());
-				JsonNode responseRootNode = mapper.readTree(jsonResponse);
-				JsonNode recNode = responseRootNode.get("REC");
-				if (recNode != null) {
-					CreateDemandDepositAccountDto dto = mapper.treeToValue(recNode,
-						CreateDemandDepositAccountDto.class);
-					System.out.println("Converted DTO: " + dto);
-					return dto;
-				} else {
-					System.out.println("REC node is null in the response");
-					return null;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-
-	private AccountDto sendPostAboutUpdateTransferLimit(String userKey, String accountNo, Long dailyTransferLimit,
-		Long oneTimeTransferLimit) {
-		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateTransferLimit";
-			String apiName = "updateTransferLimit";
-			ObjectMapper mapper = new ObjectMapper();
-			HttpPost httpPost = new HttpPost(url);
-			ObjectNode rootNode = mapper.createObjectNode();
-			ObjectNode headerNode = HeaderProvider.createHeaderNode(apiName, mapper, apiKey);
-			headerNode.put("userKey", userKey);
-			rootNode.set("Header", headerNode);
-			rootNode.put("accountNo", accountNo);
-			rootNode.put("oneTimeTransferLimit", oneTimeTransferLimit);
-			rootNode.put("dailyTransferLimit", dailyTransferLimit);
-			httpPost.setHeader("Content-Type", "application/json");
-			String jsonBody = mapper.writeValueAsString(rootNode);
-			System.out.println("Request Body: " + jsonBody);
-			httpPost.setEntity(new StringEntity(jsonBody));
-
-			try (CloseableHttpResponse response = client.execute(httpPost)) {
-				String jsonResponse = EntityUtils.toString(response.getEntity());
-				JsonNode responseRootNode = mapper.readTree(jsonResponse);
-				JsonNode recNode = responseRootNode.get("REC");
-				if (recNode != null) {
-					AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
-					System.out.println("Converted DTO: " + dto);
-					return dto;
-				} else {
-					System.out.println("REC node is null in the response");
-					return null;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return null;
-	}
+            try(CloseableHttpResponse response = client.execute(httpPost)){
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                JsonNode responseRootNode = mapper.readTree(jsonResponse);
+                JsonNode recNode = responseRootNode.get("REC");
+                System.out.println("json Response = "+jsonResponse);
+                if(recNode == null) return null;
+                if (recNode != null) {
+                    AccountDto dto = mapper.treeToValue(recNode, AccountDto.class);
+                    System.out.println("Converted DTO: " + dto);
+                    return dto;
+                } else {
+                    System.out.println("REC node is null in the response");
+                    return null;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
 }

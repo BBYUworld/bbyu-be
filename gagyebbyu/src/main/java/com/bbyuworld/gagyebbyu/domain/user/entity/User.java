@@ -97,10 +97,10 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Occupation occupation;
 
-	@Column(name = "late_payment", nullable = false)
+	@Column(name = "late_payment")
 	Boolean latePayment = false;
 
-	@Column(name = "financial_accident", nullable = false)
+	@Column(name = "financial_accident")
 	Integer financialAccident = 0;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
