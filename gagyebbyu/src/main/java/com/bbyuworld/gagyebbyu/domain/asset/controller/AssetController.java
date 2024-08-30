@@ -45,6 +45,7 @@ public class AssetController {
     }
 
     @GetMapping("/couple/account/sum")
+    @RequireJwtToken
     public Long getCoupleAssetAccountSum() {
         Long userId = UserContext.getUserId();
         return assetService.getSumCoupleAccountAssets(userId);
