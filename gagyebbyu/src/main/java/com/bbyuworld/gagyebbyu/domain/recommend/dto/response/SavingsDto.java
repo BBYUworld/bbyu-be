@@ -31,4 +31,19 @@ public final class SavingsDto {
 			savings.getDescription()
 		);
 	}
+
+	@Override
+	public String toString() {
+		return "SavingsDto{" +
+				"savingsId=" + savingsId +
+				", savingsInterestRate=" + savingsInterestRate +
+				", termMonths=" + termMonths +
+				", minSavingsAmount=" + minSavingsAmount +
+				", maxSavingsAmount=" + maxSavingsAmount +
+				", savingsInterestPaymentMethod='" + savingsInterestPaymentMethod + '\'' +
+				", savingsName='" + savingsName + '\'' +
+				", bankName='" + bankName + '\'' +
+				", description='" + description + '\'' +
+				"}\n";
+	}
 }
