@@ -251,7 +251,7 @@ public class AccountService {
         if(assetAccount.getAmount() - depositBalance < 0){
             return "잔액 부족";
         }
-        CreateSavingDto dto = sendPostAboutCreateSavingAccount(userKey, accountTypeUniqueNo, depositBalance, accountTypeUniqueNo);
+        CreateSavingDto dto = sendPostAboutCreateSavingAccount(userKey, accountTypeUniqueNo, depositBalance, withdrawalAccountNo);
         AssetAccount assetDepositAccount = new AssetAccount();
         assetAccount.setAmount(assetAccount.getAmount()-depositBalance);
         assetDepositAccount.setAccountType(AccountType.SAVINGS);
