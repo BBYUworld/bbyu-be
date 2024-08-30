@@ -36,7 +36,6 @@ public class RecommendController {
 	@RequireJwtToken
 	public ResponseEntity<List<RecommendLoanDto>> getLoanRecommend() {
 		return ResponseEntity.ok(recommendService.getLoanRecommend(UserContext.getUserId()));
-
 	}
 
 	/**

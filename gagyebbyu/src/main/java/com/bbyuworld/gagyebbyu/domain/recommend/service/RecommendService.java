@@ -41,9 +41,15 @@ import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class RecommendService {
 	final UserRepository userRepository;
 	final LoanService loanService;
@@ -146,6 +152,10 @@ public class RecommendService {
 		}
 		requestDto.setCredit_score(user.getCreditScore());
 		requestDto.setNum_cards(cardNum);
+		System.out.println("==================================================");
+		System.out.println("user mounthly income: "+user.getMonthlyIncome());
+		System.out.println("user annualSpending: "+annualSpending);
+		System.out.println("==================================================");
 		requestDto.setAnnual_spending(annualSpending);
 
 		try {
@@ -189,6 +199,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
+		System.out.println("==================================================");
+		System.out.println(user.getMonthlyIncome());
+		System.out.println("==================================================");
+
 		requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {

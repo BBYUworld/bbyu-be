@@ -20,6 +20,8 @@ public class AssetLoanDto extends AssetDto {
     private Long user2Id;
     private String user1Name;
     private String user2Name;
+    private String user1ratingName;
+    private String user2ratingName;
     private String type;
     private String bankName;
     private String bankCode;
