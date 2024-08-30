@@ -46,7 +46,7 @@ public class AssetCustomRepositoryImpl implements AssetCustomRepository {
         NumberExpression<Long> averageIncome = couple.user1.monthlyIncome.add(couple.user2.monthlyIncome).divide(2);
         BooleanExpression incomeCondition = averageIncome.between(startIncome, endIncome);
 
-        // AssetType에 따라 금액을 조정합니다.
+        // AssetType 에 따라 금액을 조정합니다.
         NumberExpression<Long> adjustedAmount = Expressions.cases()
                 .when(asset.type.eq(AssetType.LOAN)).then(asset.amount.negate())
                 .otherwise(asset.amount);
