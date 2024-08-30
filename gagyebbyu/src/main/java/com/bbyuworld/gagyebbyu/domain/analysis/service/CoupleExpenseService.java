@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,8 +55,7 @@ public class CoupleExpenseService {
 
 		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 
-		long coupleMonthExpense = expenseRepository.findTotalExpenditureForCoupleLastMonth(couple.getCoupleId(), month,
-			year);
+		long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
 
 		return new CoupleExpenseResultDto(category, startAge, startIncome + 1000000,
 			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
@@ -69,7 +69,8 @@ public class CoupleExpenseService {
 		Couple couple = coupleRepository.findById(user.getCoupleId())
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND));
 
-		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId());
+		Long totalAmount = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(),
+			LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear());
 
 		if (totalAmount == 0) {
 			return null;
