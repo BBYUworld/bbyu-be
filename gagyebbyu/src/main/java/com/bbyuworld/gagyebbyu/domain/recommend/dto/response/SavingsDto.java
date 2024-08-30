@@ -17,6 +17,7 @@ public final class SavingsDto {
 	private String savingsName;
 	private String bankName;
 	private String description;
+	private String accountTypeUniqueNo;
 
 	public static SavingsDto from(Savings savings) {
 		return new SavingsDto(
@@ -28,7 +29,8 @@ public final class SavingsDto {
 			savings.getSavingsInterestPaymentMethod(),
 			savings.getSavingsName(),
 			savings.getBankName(),
-			savings.getDescription()
+			savings.getDescription(),
+				savings.getAccountTypeUniqueNo()
 		);
 	}
 
