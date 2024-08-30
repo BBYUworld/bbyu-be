@@ -76,11 +76,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
-	public Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer paramMonth, Integer paramYear) {
-		Integer month = paramMonth == null ?
-			(LocalDate.now().getMonth().getValue() == 1 ? 12 : LocalDate.now().getMonth().getValue() - 1) :
-			paramMonth - 1;
-		Integer year = paramYear == null ? LocalDate.now().getYear() : paramYear;
+	public Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer month, Integer year) {
 
 		return jpaQueryFactory
 			.select(expense.category)

@@ -80,7 +80,7 @@ public class ExpenseService {
 			startDate, endDate);
 		totalAmountForLastMonth = totalAmountForLastMonth != null ? totalAmountForLastMonth : 0L;
 
-		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month + 1, year);
+		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 
 		return new ExpenseMonthDto(totalAmount, targetAmount,
 			targetAmount - totalAmount, category, totalAmountForLastMonth - totalAmount, expenses, dayExpenses);
@@ -153,7 +153,7 @@ public class ExpenseService {
 
 	public Long getUserExpensesForYear(long userId) {
 		Long answer = expenseRepository.findTotalExpenditureForYear(userId);
-		System.out.println("answer in expense Service: "+answer);
+		System.out.println("answer in expense Service: " + answer);
 		return expenseRepository.findTotalExpenditureForYear(userId);
 	}
 }
