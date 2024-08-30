@@ -13,7 +13,7 @@ public class CreateSavingDto {
     private String bankName;
     private String accountNo;
     private String withdrawalBankCode;
-    private String withdrawalBankAccountNo;
+    private String withdrawalAccountNo;
     private String accountName;
     private String interestRate;
     private String subscriptionPeriod;
