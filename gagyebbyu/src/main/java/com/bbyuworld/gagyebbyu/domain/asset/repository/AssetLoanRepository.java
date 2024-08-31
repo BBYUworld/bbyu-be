@@ -26,6 +26,8 @@ public interface AssetLoanRepository extends JpaRepository<AssetLoan, Long> {
     @Query("SELECT SUM(a.remainedAmount) FROM AssetLoan a WHERE a.user.userId = :userId AND a.isHidden = false")
     Long sumRemainedAmountByUser_UserIdAndIsHiddenFalse(Long userId);
 
+    @EntityGraph(value = "Asset.withUser")
+    List<AssetLoan> findAllByUser_UserIdAndIsHiddenFalse(Long userId);
 
     List<AssetLoan> findByUser_UserIdAndLoanType(Long userId, LoanType loanType);
 

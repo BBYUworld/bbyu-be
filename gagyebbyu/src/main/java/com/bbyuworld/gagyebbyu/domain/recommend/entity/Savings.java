@@ -45,10 +45,13 @@ public class Savings {
 	@Column(name = "description", nullable = false, length = 255)
 	private String description;
 
+	@Column(name = "account_type_unique_no")
+	private String accountTypeUniqueNo;
+
 	@Builder
 	public Savings(double savingsInterestRate, int termMonths, long minSavingsAmount,
 		long maxSavingsAmount, String savingsInterestPaymentMethod, String savingsName,
-		String bankName, String description) {
+		String bankName, String description, String accountTypeUniqueNo) {
 		this.savingsInterestRate = savingsInterestRate;
 		this.termMonths = termMonths;
 		this.minSavingsAmount = minSavingsAmount;
@@ -57,5 +60,6 @@ public class Savings {
 		this.savingsName = savingsName;
 		this.bankName = bankName;
 		this.description = description;
+		this.accountTypeUniqueNo = accountTypeUniqueNo;
 	}
 }

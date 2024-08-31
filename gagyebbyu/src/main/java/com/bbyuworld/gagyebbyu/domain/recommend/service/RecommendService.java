@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
@@ -135,7 +136,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		requestDto.setDebt(sum);
+		if(sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -166,7 +170,7 @@ public class RecommendService {
 				DepositDto depositDto = depositRepository.findById(key.longValue())
 					.map(DepositDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.DEPOSIT_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + depositDto);
 				results.add(new RecommendDepositDto(key.longValue(), value, depositDto));
 			}
 
@@ -194,8 +198,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-
-		requestDto.setDebt(sum);
+		if(sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -225,7 +231,7 @@ public class RecommendService {
 				SavingsDto savingsDto = savingsRepository.findById(key.longValue())
 					.map(SavingsDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.SAVINGS_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + savingsDto);
 				results.add(new RecommendSavingsDto(key.longValue(), value, savingsDto));
 			}
 			return results;
@@ -258,8 +264,19 @@ public class RecommendService {
 		}
 		
 		RecommendCompareRequestDto compareRequestDto = new RecommendCompareRequestDto();
-		Long maleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user1.getUserId());
-		Long femaleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user2.getUserId());
+		List<AssetLoan> maleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user1.getUserId());
+		List<AssetLoan> femaleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user2.getUserId());
+		long maleSum=0;
+		long femaleSum=0;
+
+		for(AssetLoan assetLoan : maleList) {
+			maleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		}
+		for(AssetLoan assetLoan : femaleList) {
+			femaleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		}
+		maleSum/=5;
+		femaleSum/=5;
 
 		int maleCreditScore = 0;
 		int femaleCreditScore = 0;

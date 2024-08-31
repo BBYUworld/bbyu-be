@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Repository
-public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustomRepository {
+public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustomRepository, AssetRepositoryCustom {
     /* 사용자의 전체 자산 내역 정보 제공 */
     List<Asset> findAllByUser_UserIdAndIsHiddenFalse(Long userId);
 

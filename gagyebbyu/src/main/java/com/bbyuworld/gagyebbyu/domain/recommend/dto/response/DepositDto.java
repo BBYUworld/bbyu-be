@@ -33,4 +33,20 @@ public final class DepositDto {
 				deposit.getAccountTypeUniqueNo()
 		);
 	}
+
+	@Override
+	public String toString() {
+		return "DepositDto{" +
+				"depositId=" + depositId +
+				", depositInterestRate=" + depositInterestRate +
+				", termMonths=" + termMonths +
+				", minDepositAmount=" + minDepositAmount +
+				", maxDepositAmount=" + maxDepositAmount +
+				", depositInterestPaymentMethod='" + depositInterestPaymentMethod + '\'' +
+				", depositName='" + depositName + '\'' +
+				", bankName='" + bankName + '\'' +
+				", description='" + description + '\'' +
+				", accountTypeUniqueNo='" + accountTypeUniqueNo + '\'' +
+				"}\n";
+	}
 }
