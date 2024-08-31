@@ -56,7 +56,7 @@ public class CoupleExpenseService {
 
 		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 
-		long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
+		Long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
 
 		return new CoupleExpenseResultDto(category, startAge, startIncome,
 			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
