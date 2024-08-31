@@ -137,7 +137,7 @@
 
 ## 📊 ERD 다이어그램
 
-![ERD다이어그램](README_assets/ERD.png)
+![ERD다이어그램](README_assets/ERD.PNG)
 
 <br/>
 
@@ -151,9 +151,6 @@
 
 ![API명세서](README_assets/플로우차트.png)
 
-## 🖼️ 와이어프레임
-
-![와이어프레임](README_assets/20_와이어프레임.png)
 
 ## ⚙ 사용 기술
 
