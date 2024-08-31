@@ -264,20 +264,14 @@ public class RecommendService {
 		long maleSum=0;
 		long femaleSum=0;
 
-		if(maleList!=null) {
-			for (AssetLoan assetLoan : maleList) {
-				maleSum = (long) (assetLoan.getAmount() * (1 + (0.01 * Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
-			}
-			maleSum/=5;
+		for(AssetLoan assetLoan : maleList) {
+			maleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
 		}
-
-		if(femaleList!=null) {
-			for(AssetLoan assetLoan : femaleList) {
-				femaleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
-			}
-			femaleSum/=5;
+		for(AssetLoan assetLoan : femaleList) {
+			femaleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
 		}
-
+		maleSum/=5;
+		femaleSum/=5;
 
 		int maleCreditScore = 0;
 		int femaleCreditScore = 0;
