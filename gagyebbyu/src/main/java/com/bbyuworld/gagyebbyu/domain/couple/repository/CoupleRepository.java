@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 
-@Repository
-public interface CoupleRepository extends JpaRepository<Couple, Long> {
+public interface CoupleRepository extends JpaRepository<Couple, Long>, CoupleRepositoryCustom {
 }
 
 

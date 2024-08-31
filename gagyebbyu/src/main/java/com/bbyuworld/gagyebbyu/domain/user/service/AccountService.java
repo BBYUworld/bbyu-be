@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.bbyuworld.gagyebbyu.domain.asset.dto.CreateDepositDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.CreateSavingDto;
@@ -423,6 +424,8 @@ public class AccountService {
 		assetDepositAccount.setBankCode(dto.getBankCode());
 		assetDepositAccount.setCreatedAt(LocalDateTime.now());
 		assetDepositAccount.setUpdatedAt(LocalDateTime.now());
+		Couple couple = coupleRepository.findCoupleByCoupleId(user.getCoupleId());
+		assetDepositAccount.setCouple(couple);
 		assetDepositAccount.setBankName(dto.getBankName());
 		BigDecimal interestRate = new BigDecimal(dto.getInterestRate());
 		assetDepositAccount.setInterestRate(interestRate);
@@ -496,6 +499,8 @@ public class AccountService {
 		assetDepositAccount.setCreatedAt(LocalDateTime.now());
 		assetDepositAccount.setUpdatedAt(LocalDateTime.now());
 		assetDepositAccount.setBankName(dto.getBankName());
+		Couple couple = coupleRepository.findCoupleByCoupleId(user.getCoupleId());
+		assetDepositAccount.setCouple(couple);
 		BigDecimal interestRate = new BigDecimal(dto.getInterestRate());
 		assetDepositAccount.setInterestRate(interestRate);
 		user.getAssets().add(assetDepositAccount);
