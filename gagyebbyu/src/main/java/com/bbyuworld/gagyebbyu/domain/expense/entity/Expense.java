@@ -74,4 +74,8 @@ public class Expense {
 	public void updateAmount(Long amount) {
 		this.amount = amount;
 	}
+
+	public void updateCategory(Category category) {
+		this.category = category;
+	}
 }

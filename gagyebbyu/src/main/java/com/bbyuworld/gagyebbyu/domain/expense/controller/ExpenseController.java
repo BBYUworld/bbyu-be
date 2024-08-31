@@ -110,6 +110,19 @@ public class ExpenseController {
 		return ResponseEntity.ok().build();
 	}
 
+	/**
+	 * 사용자 지출 카테고리 수정
+	 * @param expenseId
+	 * @return
+	 */
+	@PatchMapping(path = "/category/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateExpenseCategory(@PathVariable long expenseId,
+		@RequestBody CategoryDto categoryDto) {
+		expenseService.updateExpenseCategory(expenseId, categoryDto);
+		return ResponseEntity.ok().build();
+	}
+
+
 	@GetMapping(path = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequireJwtToken
 	public ResponseEntity<ExpenseMonthDto> getTest() {

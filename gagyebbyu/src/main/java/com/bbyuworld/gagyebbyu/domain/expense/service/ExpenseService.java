@@ -153,6 +153,17 @@ public class ExpenseService {
 		expense.updateAmount(expenseUpdateDto.getAmount());
 	}
 
+	@Transactional
+	public void updateExpenseCategory(long expenseId, CategoryDto categoryDto) {
+
+		Expense expense = expenseRepository.findById(expenseId)
+			.orElseThrow(() -> new DataNotFoundException(ErrorCode.EXPENSE_NOT_FOUND));
+
+		expense.updateCategory(categoryDto.getCategory());
+	}
+
+
+
 	public Long getUserExpensesForYear(long userId) {
 		Long totalExpenseForYear = expenseRepository.findTotalExpenditureForYear(userId);
 		return totalExpenseForYear != null ? totalExpenseForYear : 0L;
