@@ -47,7 +47,7 @@ public class AnalysisAssetService {
 			throw new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND);
 		}
 
-	QAsset asset = QAsset.asset;
+		QAsset asset = QAsset.asset;
 
 		Integer totalAmount = queryFactory
 			.select(asset.amount.sum().intValue())
@@ -216,9 +216,10 @@ public class AnalysisAssetService {
 		System.out.println("Another Couple Average Assets: " + anotherCoupleAverageAssets);
 
 		long coupleTotalAssets = assetRepository.findTotalAssetsForCouple(couple.getCoupleId());
+		System.out.println(coupleTotalAssets);
 
 		int lastYear = LocalDate.now().getYear() - 1;
-		long lastYearAssets = annualAssetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId(), lastYear);
+		Long lastYearAssets = annualAssetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId(), lastYear);
 
 		return new AnalysisAssetResultDto(
 			startAge,

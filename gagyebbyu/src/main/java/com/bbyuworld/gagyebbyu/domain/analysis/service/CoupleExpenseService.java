@@ -43,6 +43,8 @@ public class CoupleExpenseService {
 
 		long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
+		System.out.println();
+
 		long startIncome = avgIncome / 100 * 100;
 		long endIncome = startIncome + 100;
 
