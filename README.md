@@ -81,6 +81,15 @@
 | Gradle | 7.3 |
 | Uvicorn | 0.30.6 |
 
+## 실행 방법
+| 도구 | 방법 |
+|------|------|
+|Spring boot | AWS, Docker |
+|FastAPI | AWS, Docker |
+|MySql | AWS, Docker |
+|Jenkins | AWS, Docker |
+|Flutter | APK build |
+
 <br/>
 <br/>
 
