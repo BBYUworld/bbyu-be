@@ -2,94 +2,13 @@
 
 ## 😎 개요
 
+<p style="margin-left: 30px;">
+    <img src="README_assets/가계쀼로고.png" alt="gagyebbyu Logo" width="110" />
+</p>
+
 - 팀명: **쀼의세계**
-- 서비스명: **가계쀼**
+- 서비스명: **가계쀼: 신혼부부 공동 자산 관리 애플리케이션**
 - 개발기간: **2024년 8월 16일 ~ 8월 31일**
-
-<br/>
-
-## 👨‍👩‍👧‍👦 팀원
-
-- 서지흔 (팀장, Frontend, Backend)
-- 박정의 (Frontend, Backend, AI)
-- 유병주 (Frontend, Backend)
-- 윤정섭 (AI, Backend)
-- 임동길 (Frontend, Backend, Infra)
-
-<br/>
-
-## ⚙ 사용 기술
-
-**FE**
-
-<img src="https://img.shields.io/badge/Flutter-61DAFB?style=for-the-badge&logo=React&logoColor=black">
-
-**BE**
-
-<img src="https://img.shields.io/badge/IntellijIdea-000000?style=for-the-badge&logo=intellijidea&logoColor=white">
-
-<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
-
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-
-<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
-
-<img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"/>
-
-**AI**
-
-<img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
-
-<img src="https://img.shields.io/badge/Pytorch-D24939?style=for-the-badge&logo=pytorch&logoColor=white">
-
-**DevOps**
-
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-
-<img src="https://img.shields.io/badge/Jenkins-3178C6?style=for-the-badge&logo=jenkins&logoColor=white"/>
-
-**협업**
-
-<img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
-
-<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
-
-<br/>
-<br/>
-
-## 개발환경
-
-| 분야     | 기술 스택      | 버전      |
-| -------- | -------------- | --------- |
-| Backend  | Java           | 17        |
-|          | Spring Boot    | 3.3.2     |
-|          | JPA            | 5.0.0     |
-| Database | MySQL          | 8.0       |
-| AI       | PyTorch        | 2.4.0     |
-|          | TensorFlow     | 2.17.0    |
-|          | FastAPI        | 0.112.2   |
-|          | Python         | 3.9, 3.12 |
-| Frontend | Flutter        | 3.24.1    |
-|          | Dart           | 3.5.1     |
-| DevOps   | Docker         | 27.1.2    |
-|          | Docker Compose | 2.1.0     |
-
-## 빌드 및 배포 환경
-
-| 도구    | 버전   |
-| ------- | ------ |
-| Gradle  | 7.3    |
-| Uvicorn | 0.30.6 |
-
-## 실행 방법
-
-| 도구        | 방법        |
-| ----------- | ----------- |
-| Spring boot | AWS, Docker |
-| FastAPI     | AWS, Docker |
-| MySql       | AWS, Docker |
-| Jenkins     | AWS, Docker |
-| Flutter     | APK build   |
 
 <br/>
 <br/>
@@ -99,6 +18,7 @@
 - 신혼 부부들의 공동 자산 관리 경험 부족
 - 경험 부족으로 인해 개인과 공동 재무의 균형 유지 어려움
 - 서로 다른 재무 습관 갈등 해소
+-
 
 <br/>
 
@@ -134,79 +54,13 @@
 | ✨ 커플신청                            | 📌 커플연결                              | 📌 자산연결                            |
 | ![ ](./README_assets/커플신청.gif)     | ![ ](./README_assets/커플연결.gif)       | ![ ](./README_assets/자산연결.gif)     |
 | 🔑 펀딩생성                            | 🔍 펀딩입금                              | 🔍 펀딩출금                            |
-| ![ ](./README_assets/펀드생성.gif)     | ![ ](./README_assets/펀드입금.gif)       | ![ ](./README_assets/펀드출금.gif)     |
+| ![ ](./README_assets/펀딩생성.gif)     | ![ ](./README_assets/펀드입금.gif)       | ![ ](./README_assets/펀드출금.gif)     |
 | 💚 개인대출추천                        | 👶 개인예적금추천                        | 👶 부부대출추천                        |
 | ![ ](./README_assets/개인대출추천.gif) | ![ ](./README_assets/개인예적금추천.gif) | ![ ](./README_assets/부부대출추천.gif) |
 | 📖 가계부리스트                        | 👱‍♀️ 가계부캘린더                          | 👱‍♀️ 소비통계                            |
 | ![ ](./README_assets/가계부리스트.gif) | ![ ](./README_assets/가계부캘린더.gif)   | ![ ](./README_assets/소비통계.gif)     |
-| 🚪 자산리포트                          | 👂                                       | 👂                                     |
-| ![ ](./README_assets/자산리포트.gif)   | ![ ](./README_assets/.gif)               | ![ ](./img/OX게임.gif)                 |
-
-- 소셜 로그인 (구글, 카카오)
-  ![메인_로그인](README_assets/1_메인_로그인.gif)
-- 인기 챌린지 - 마우스 오버시 재생
-  ![메인_인기챌린지](README_assets/2_메인_인기챌린지.gif)
-- 키워드 및 유튜브 쇼츠 url로 바로 검색 가능
-  ![메인_검색_키워드](README_assets/3_메인_검색_키워드.gif)
-  ![메인_검색_링크](README_assets/4_메인_검색_링크.gif)
-- 쇼츠 url 아닐 시 에러 메시지 표시
-  ![메인_검색_에러](README_assets/5_메인_검색_에러.gif)
-
-<br/>
-
-### 2. 상세 페이지
-
-- 원본 영상 및 상세 정보 확인
-- 즐겨찾기
-- 해당 영상을 연습한 유저 랭킹 확인 및 간단한 프로필 정보 확인
-  - 유튜브 링크 공유시 확인 가능
-    ![상세페이지](README_assets/6_상세페이지.gif)
-
-<br/>
-
-### 3. 검색 페이지
-
-- 키워드 및 쇼츠 url로 검색 가능
-- 최근 검색어 자동 저장 및 삭제
-- DB에 학습된 영상 강조 표시, 추가로 유튜브 조회수 상위 기준으로 표시
-  ![검색페이지](README_assets/7_검색페이지.gif)
-
-<br/>
-
-### 4. 연습 페이지
-
-- 재생 속도, 좌우 반전, 음량 조절, 카메라 변경, 타이머 기능 제공
-- 초보자를 위한 가이드 ON / OFF 기능
-- 실시간으로 점수 계산하여 화면에 표시
-  ![연습페이지](README_assets/8_연습페이지.gif)
-
-<br/>
-
-### 5. 결과 페이지
-
-- 일치율 점수 확인
-- 일치율 그래프에서 시간 클릭시 해당 영상 시간으로 이동하여 확인
-- 일치율 가장 높은 구간이 썸네일로 저장
-- 제목 편집
-- 카카오톡, 유튜브 소셜 공유
-- 영상 다운로드 및 삭제
-  ![결과페이지](README_assets/9_결과페이지.gif)
-
-<br/>
-
-### 6. 프로필 페이지
-
-- 연습한 영상 점수별, 업로드 날짜별로 정렬하여 확인
-- 즐겨찾기한 영상 확인
-- 프로필 편집
-- 로그아웃, 탈퇴
-  ![프로필페이지](README_assets/10_프로필페이지.gif)
-
-<br/>
-
-## 🧱 배포 아키텍쳐
-
-![배포아키텍쳐](README_assets/11_배포아키텍쳐.png)
+| 🚪 자산리포트                          |                                          |                                        |
+| ![ ](./README_assets/자산리포트.gif)   |                                          |                                        |
 
 <br/>
 
@@ -260,6 +114,89 @@
 
 <br/>
 
+## 💬 플로우 차트
+
+![API명세서](README_assets/플로우차트.png)
+
 ## 🖼️ 와이어프레임
 
 ![와이어프레임](README_assets/20_와이어프레임.png)
+
+## ⚙ 사용 기술
+
+**FE**
+
+<img src="https://img.shields.io/badge/Flutter-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+
+**BE**
+
+<img src="https://img.shields.io/badge/IntellijIdea-000000?style=for-the-badge&logo=intellijidea&logoColor=white">
+
+<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+
+<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+
+<img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"/>
+
+**AI**
+
+<img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
+
+<img src="https://img.shields.io/badge/Pytorch-D24939?style=for-the-badge&logo=pytorch&logoColor=white">
+
+**DevOps**
+
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+
+<img src="https://img.shields.io/badge/Jenkins-3178C6?style=for-the-badge&logo=jenkins&logoColor=white"/>
+
+**협업**
+
+<img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
+
+<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
+<br/>
+
+## 개발환경
+
+| 분야     | 기술 스택      | 버전      |
+| -------- | -------------- | --------- |
+| Backend  | Java           | 17        |
+|          | Spring Boot    | 3.3.2     |
+|          | JPA            | 5.0.0     |
+| Database | MySQL          | 8.0       |
+| AI       | PyTorch        | 2.4.0     |
+|          | TensorFlow     | 2.17.0    |
+|          | FastAPI        | 0.112.2   |
+|          | Python         | 3.9, 3.12 |
+| Frontend | Flutter        | 3.24.1    |
+|          | Dart           | 3.5.1     |
+| DevOps   | Docker         | 27.1.2    |
+|          | Docker Compose | 2.1.0     |
+
+## 빌드 및 배포 환경
+
+| 도구    | 버전   |
+| ------- | ------ |
+| Gradle  | 7.3    |
+| Uvicorn | 0.30.6 |
+
+## 실행 방법
+
+| 도구        | 방법        |
+| ----------- | ----------- |
+| Spring boot | AWS, Docker |
+| FastAPI     | AWS, Docker |
+| MySql       | AWS, Docker |
+| Jenkins     | AWS, Docker |
+| Flutter     | APK build   |
+
+## <img src="README_assets/가계쀼.png" alt="gagyebbyu Logo" width="35" /> 팀원소개
+
+| <img src="./README_assets/서지흔.png" width="100%" height="100"> | <img src="./README_assets/박정의.jpg" width="100%" height="100"> | <img src="./README_assets/유병주.png" width="100%" height="100"> | <img src="./README_assets/윤정섭.png" width="100%" height="100"> | <img src="./README_assets/임동길.png" width="100%" height="100"> |
+| :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
+|                              서지흔                              |                              박정의                              |                              유병주                              |                              윤정섭                              |                              임동길                              |
+|                     팀장, Backend, Frontend                      |                      Backend, Frontend, AI                       |                        Backend, Frontend                         |                           AI, Backend                            |                     Infra, Backend, Frontend                     |
