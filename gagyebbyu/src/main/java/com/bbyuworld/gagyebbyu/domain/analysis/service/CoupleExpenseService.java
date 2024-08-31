@@ -48,11 +48,11 @@ public class CoupleExpenseService {
 		long startIncome = avgIncome / 100 * 100;
 		long endIncome = startIncome + 100;
 
-		double anotherCoupleMonthExpenseAvg = expenseRepository.findAverageExpenditureForEligibleCouples(
-			startAge, endAge, startIncome, endIncome);
-
 		Integer month = param.getMonth() == null ? LocalDateTime.now().getMonthValue() : param.getMonth();
 		Integer year = param.getYear() == null ? LocalDateTime.now().getYear() : param.getYear();
+
+		double anotherCoupleMonthExpenseAvg = expenseRepository.findAverageExpenditureForEligibleCouples(
+			startAge, endAge, startIncome, endIncome, month, year);
 
 		Category category = expenseRepository.findTopCategoryForCoupleLastMonth(couple.getCoupleId(), month, year);
 

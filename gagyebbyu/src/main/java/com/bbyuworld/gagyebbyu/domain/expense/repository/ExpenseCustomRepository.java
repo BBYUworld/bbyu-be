@@ -15,7 +15,8 @@ public interface ExpenseCustomRepository {
 
 	List<Expense> findExpenseByDay(Integer day, Integer month, Integer year, long coupeId, String sort);
 
-	Double findAverageExpenditureForEligibleCouples(int startAge, int endAge, long startIncome, long endIncome);
+	Double findAverageExpenditureForEligibleCouples(int startAge, int endAge, long startIncome, long endIncome,
+		Integer month, Integer year);
 
 	Category findTopCategoryForCoupleLastMonth(Long coupleId, Integer paramMonth, Integer ParamYear);
 

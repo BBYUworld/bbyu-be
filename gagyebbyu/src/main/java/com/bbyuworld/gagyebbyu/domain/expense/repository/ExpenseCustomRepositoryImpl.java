@@ -108,7 +108,8 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 	}
 
 	@Override
-	public Double findAverageExpenditureForEligibleCouples(int startAge, int endAge, long startIncome, long endIncome) {
+	public Double findAverageExpenditureForEligibleCouples(int startAge, int endAge, long startIncome, long endIncome,
+		Integer month, Integer year) {
 
 		NumberExpression<Integer> averageAge = couple.user1.age.add(couple.user2.age).divide(2);
 		BooleanExpression ageCondition = averageAge.between(startAge, endAge);
@@ -123,7 +124,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository {
 			.from(expense)
 			.join(expense.couple, couple)
 			.where(ageCondition, incomeCondition,
-				getMonth(LocalDate.now().getMonth().getValue() - 1, LocalDate.now().getYear()))
+				getMonth(month, year))
 			.fetchOne();
 	}
 
