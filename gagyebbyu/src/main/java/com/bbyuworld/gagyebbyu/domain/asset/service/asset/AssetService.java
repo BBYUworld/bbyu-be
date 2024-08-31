@@ -24,7 +24,7 @@ public interface AssetService {
     void updateAssetVisibility(Long assetId, boolean isHidden);
 
     void updateUserAssetsToCouple(Couple couple, Long user1Id, Long user2Id);
-
+    Long getSumCoupleAccountAssets(Long userId);
     /* INSERT 이 있어야 함 */
     boolean insertNewLoan(AssetLoanDto assetLoanDtoDto, Long userId);
     boolean insertNewCard(AssetCardDto assetCardDto, Long userId);

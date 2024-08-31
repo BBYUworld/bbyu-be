@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
-import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount.AssetAccountService;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetCard.AssetCardService;
@@ -61,15 +60,16 @@ public class RecommendService {
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
 	private final LoanRepository loanRepository;
-	private final AssetRepository assetRepository;
 
 	public List<RecommendLoanDto> getLoanRecommend(long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendLoanRequestDto requestDto = new RecommendLoanRequestDto();
 		Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
-		Long totalDeposit = assetAccountService.getSumAmountByType(userId, AccountType.DEPOSIT);
-		Long totalSavings = assetAccountService.getSumAmountByType(userId, AccountType.SAVINGS);
+		Long totalDeposit = assetAccountService.getSumAmountByType(userId, AccountType.DEPOSIT) == null ? 0 :
+			assetAccountService.getSumAmountByType(userId, AccountType.DEPOSIT);
+		Long totalSavings = assetAccountService.getSumAmountByType(userId, AccountType.SAVINGS) == null ? 0 :
+			assetAccountService.getSumAmountByType(userId, AccountType.SAVINGS);
 		int cardNum = assetCardService.getCardsNum(userId);
 		Long annualSpending = expenseService.getUserExpensesForYear(userId);
 
@@ -136,7 +136,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		requestDto.setDebt(sum);
+		if (sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -167,7 +170,7 @@ public class RecommendService {
 				DepositDto depositDto = depositRepository.findById(key.longValue())
 					.map(DepositDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.DEPOSIT_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + depositDto);
 				results.add(new RecommendDepositDto(key.longValue(), value, depositDto));
 			}
 
@@ -195,8 +198,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-
-		requestDto.setDebt(sum);
+		if (sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -226,7 +231,7 @@ public class RecommendService {
 				SavingsDto savingsDto = savingsRepository.findById(key.longValue())
 					.map(SavingsDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.SAVINGS_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + savingsDto);
 				results.add(new RecommendSavingsDto(key.longValue(), value, savingsDto));
 			}
 			return results;
@@ -257,21 +262,23 @@ public class RecommendService {
 			user2 = userRepository.findById(couple.getUser1().getUserId())
 				.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		}
-		
+
 		RecommendCompareRequestDto compareRequestDto = new RecommendCompareRequestDto();
 		List<AssetLoan> maleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user1.getUserId());
 		List<AssetLoan> femaleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user2.getUserId());
-		long maleSum=0;
-		long femaleSum=0;
+		long maleSum = 0;
+		long femaleSum = 0;
 
-		for(AssetLoan assetLoan : maleList) {
-			maleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		for (AssetLoan assetLoan : maleList) {
+			maleSum = (long)(assetLoan.getAmount() * (1
+				+ (0.01 * Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
 		}
-		for(AssetLoan assetLoan : femaleList) {
-			femaleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		for (AssetLoan assetLoan : femaleList) {
+			femaleSum = (long)(assetLoan.getAmount() * (1
+				+ (0.01 * Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
 		}
-		maleSum/=5;
-		femaleSum/=5;
+		maleSum /= 5;
+		femaleSum /= 5;
 
 		int maleCreditScore = 0;
 		int femaleCreditScore = 0;
@@ -320,8 +327,10 @@ public class RecommendService {
 		compareRequestDto.setMale_credit_score(maleCreditScore);
 		compareRequestDto.setFemale_credit_score(femaleCreditScore);
 
-		Long male_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"), user1.getUserId());
-		Long female_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"), user2.getUserId());
+		Long male_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"),
+			user1.getUserId());
+		Long female_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"),
+			user2.getUserId());
 		compareRequestDto.setMortgage_loan_amount_female(female_mortgage);
 		compareRequestDto.setMortgage_loan_amount_male(male_mortgage);
 
