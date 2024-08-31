@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
 import org.springframework.stereotype.Service;
@@ -263,8 +264,19 @@ public class RecommendService {
 		}
 		
 		RecommendCompareRequestDto compareRequestDto = new RecommendCompareRequestDto();
-		Long maleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user1.getUserId());
-		Long femaleSum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(user2.getUserId());
+		List<AssetLoan> maleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user1.getUserId());
+		List<AssetLoan> femaleList = assetLoanRepository.findAllByUser_UserIdAndIsHiddenFalse(user2.getUserId());
+		long maleSum=0;
+		long femaleSum=0;
+
+		for(AssetLoan assetLoan : maleList) {
+			maleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		}
+		for(AssetLoan assetLoan : femaleList) {
+			femaleSum = (long) (assetLoan.getAmount()*(1 + (0.01* Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
+		}
+		maleSum/=5;
+		femaleSum/=5;
 
 		int maleCreditScore = 0;
 		int femaleCreditScore = 0;

@@ -45,8 +45,7 @@ public class  AnalysisAssetService {
             throw new DataNotFoundException(ErrorCode.COUPLE_NOT_FOUND);
         }
 
-
-        QAsset asset = QAsset.asset;
+	QAsset asset = QAsset.asset;
 
         Integer totalAmount = queryFactory
             .select(asset.amount.sum().intValue())
@@ -200,8 +199,8 @@ public class  AnalysisAssetService {
 
         long avgIncome = (couple.getUser1().getMonthlyIncome() + couple.getUser2().getMonthlyIncome()) / 2;
 
-        long startIncome = avgIncome / 100000 * 100000 - 1000000;
-        long endIncome = startIncome + 1000000;
+		long startIncome = (avgIncome / 100000 * 100000 - 1000000) * 10000;
+		long endIncome = startIncome + 1000000;
 
         System.out.println("Calculated startAge: " + startAge);
         System.out.println("Calculated endAge: " + endAge);
