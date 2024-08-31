@@ -280,6 +280,8 @@ public class RecommendService {
 		}
 		maleSum /= 5;
 		femaleSum /= 5;
+		System.out.println(maleSum);
+		System.out.println(femaleSum);
 
 		int maleCreditScore = 0;
 		int femaleCreditScore = 0;
@@ -335,7 +337,6 @@ public class RecommendService {
 		compareRequestDto.setFemale_mortgage_loan_amount(female_mortgage == null ? 0 : female_mortgage);
 		compareRequestDto.setMale_mortgage_loan_amount(male_mortgage == null ? 0 : male_mortgage);
 
-		// Python 서버로 POST 요청 전송
 		try {
 			List<RecommendCompareDto> responseDto = apiService.sendComparePostRequest(
 				"http://3.39.19.140:8002/ai/recommend/compare",
