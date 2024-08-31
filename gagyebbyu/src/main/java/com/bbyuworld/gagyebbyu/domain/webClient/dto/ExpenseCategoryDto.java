@@ -12,4 +12,6 @@ public class ExpenseCategoryDto {
 		this.place = place;
 	}
 
+
+
 }
