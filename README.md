@@ -82,8 +82,6 @@
 
   ![DeepFM 모델 구조](README_assets/deepFM.png)
 
-- 구현
-  ![keypoints_예시](README_assets/학습.png)
 
 <br/>
 
