@@ -58,6 +58,10 @@ public class CoupleExpenseService {
 
 		Long coupleMonthExpense = expenseRepository.findTotalExpenditureForMonth(couple.getCoupleId(), month, year);
 
+		if (coupleMonthExpense == null) {
+			coupleMonthExpense = 0L;
+		}
+
 		return new CoupleExpenseResultDto(category, startAge, startIncome,
 			(long)anotherCoupleMonthExpenseAvg, coupleMonthExpense);
 
@@ -77,7 +81,7 @@ public class CoupleExpenseService {
 			month, year);
 
 		if (totalAmount == null) {
-			return null;
+			null;
 		}
 
 		return expenseRepository.findCategoryWiseExpenditureForMonth(couple.getCoupleId(),

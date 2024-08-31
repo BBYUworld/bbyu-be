@@ -219,7 +219,9 @@ public class AnalysisAssetService {
 		System.out.println(coupleTotalAssets);
 
 		int lastYear = LocalDate.now().getYear() - 1;
-		Long lastYearAssets = annualAssetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId(), lastYear);
+		Long lastYearAssets =
+			annualAssetRepository.findTotalAssetsForCoupleLastYear(couple.getCoupleId(), lastYear) == null ? 0L :
+				lastYear;
 
 		return new AnalysisAssetResultDto(
 			startAge,
