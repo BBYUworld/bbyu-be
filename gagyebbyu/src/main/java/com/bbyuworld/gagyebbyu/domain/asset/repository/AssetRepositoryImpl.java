@@ -23,7 +23,6 @@ public class AssetRepositoryImpl implements AssetRepositoryCustom{
                 .join(asset.couple, couple)
                 .where(
                         user.userId.eq(userId)
-                                .and(asset.type.eq(assetType))
                 )
                 .fetchOne();
     }

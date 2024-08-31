@@ -9,6 +9,7 @@ import com.bbyuworld.gagyebbyu.global.jwt.RequireJwtToken;
 import com.bbyuworld.gagyebbyu.global.jwt.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,6 +75,9 @@ public class AssetController {
         return assetService.insertNewCard(assetCardDto, UserContext.getUserId());
     }
 
+    @GetMapping("/couple/all")
+    public ResponseEntity<String> getAllCoupleAssets() {
 
-
+        return null;
+    }
 }
