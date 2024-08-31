@@ -81,7 +81,7 @@ public class CoupleExpenseService {
 			month, year);
 
 		if (totalAmount == null) {
-			null;
+			return null;
 		}
 
 		return expenseRepository.findCategoryWiseExpenditureForMonth(couple.getCoupleId(),
