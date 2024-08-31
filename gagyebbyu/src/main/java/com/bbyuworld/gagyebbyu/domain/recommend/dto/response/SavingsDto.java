@@ -17,6 +17,7 @@ public final class SavingsDto {
 	private String savingsName;
 	private String bankName;
 	private String description;
+	private String accountTypeUniqueNo;
 
 	public static SavingsDto from(Savings savings) {
 		return new SavingsDto(
@@ -28,7 +29,23 @@ public final class SavingsDto {
 			savings.getSavingsInterestPaymentMethod(),
 			savings.getSavingsName(),
 			savings.getBankName(),
-			savings.getDescription()
+			savings.getDescription(),
+				savings.getAccountTypeUniqueNo()
 		);
+	}
+
+	@Override
+	public String toString() {
+		return "SavingsDto{" +
+				"savingsId=" + savingsId +
+				", savingsInterestRate=" + savingsInterestRate +
+				", termMonths=" + termMonths +
+				", minSavingsAmount=" + minSavingsAmount +
+				", maxSavingsAmount=" + maxSavingsAmount +
+				", savingsInterestPaymentMethod='" + savingsInterestPaymentMethod + '\'' +
+				", savingsName='" + savingsName + '\'' +
+				", bankName='" + bankName + '\'' +
+				", description='" + description + '\'' +
+				"}\n";
 	}
 }

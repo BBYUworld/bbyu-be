@@ -136,7 +136,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-		requestDto.setDebt(sum);
+		if(sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -167,7 +170,7 @@ public class RecommendService {
 				DepositDto depositDto = depositRepository.findById(key.longValue())
 					.map(DepositDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.DEPOSIT_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + depositDto);
 				results.add(new RecommendDepositDto(key.longValue(), value, depositDto));
 			}
 
@@ -195,8 +198,10 @@ public class RecommendService {
 		requestDto.setLate_payment(user.getLatePayment() ? 1 : 0);
 		requestDto.setFinancial_accident(user.getFinancialAccident());
 		requestDto.setAnnual_income(user.getMonthlyIncome() * 12);
-
-		requestDto.setDebt(sum);
+		if(sum == null)
+			requestDto.setDebt(0);
+		else
+			requestDto.setDebt(sum);
 		if (user.getCreditScore() == null) {
 			if (user.getRatingName().equals("A")) {
 				user.setCreditScore(800);
@@ -226,7 +231,7 @@ public class RecommendService {
 				SavingsDto savingsDto = savingsRepository.findById(key.longValue())
 					.map(SavingsDto::from)
 					.orElseThrow(() -> new DataNotFoundException(ErrorCode.SAVINGS_NOT_FOUND));
-
+				System.out.println("Recommend Deposit Dto = " + savingsDto);
 				results.add(new RecommendSavingsDto(key.longValue(), value, savingsDto));
 			}
 			return results;

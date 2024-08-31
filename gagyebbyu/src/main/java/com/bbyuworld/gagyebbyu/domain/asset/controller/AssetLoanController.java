@@ -131,6 +131,12 @@ public class AssetLoanController {
     @RequireJwtToken
     public ResponseEntity<Long> getSumRemainedAmount() {
         Long userId = UserContext.getUserId();
-        return ResponseEntity.ok(assetLoanService.getUserRemainedAmount(userId));
+        Long sum = assetLoanService.getUserRemainedAmount(userId);
+        if(sum == null){
+            return ResponseEntity.ok(0L);
+        }
+        else{
+            return ResponseEntity.ok(sum);
+        }
     }
 }
