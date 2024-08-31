@@ -143,7 +143,7 @@
 
 ## 💬 API 명세서
 
-![API명세서](README_assets/19_API명세서.jpg)
+![API명세서](README_assets/API명세서.gif)
 
 <br/>
 
