@@ -54,6 +54,32 @@
 
 <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
+<br/>
+<br/>
+
+## 개발환경
+
+| 분야 | 기술 스택 | 버전 |
+|------|-----------|------|
+| Backend | Java | 17 |
+|  | Spring Boot | 3.3.2 |
+|  | JPA | 5.0.0 |
+| Database | MySQL | 8.0 |
+| AI | PyTorch | 2.4.0 |
+|  | TensorFlow | 2.17.0 |
+|  | FastAPI | 0.112.2 |
+|  | Python | 3.9, 3.12 |
+| Frontend | Flutter | 3.24.1 |
+|  | Dart | 3.5.1 |
+| DevOps | Docker | 27.1.2 |
+|  | Docker Compose | 2.1.0 |
+
+## 빌드 및 배포 환경
+
+| 도구 | 버전 |
+|------|------|
+| Gradle | 7.3 |
+| Uvicorn | 0.30.6 |
 
 <br/>
 <br/>
