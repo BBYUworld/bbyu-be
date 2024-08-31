@@ -101,6 +101,41 @@
 - 추천 진행 시 2024년 9월 1일부터 적용되는 스트레스 DSR 반영
 
   ![image.png](README_assets/공동추천결과.png)
+  
+<br/>
+
+## AI 지출 내역 카테고리 분류 자동화
+
+### 1. 학습
+- 데이터: 한국 전화번호부 사이트 업체명
+- 라벨링: 총 19개
+
+
+![라벨링](README_assets/label.PNG)
+
+
+<br/>
+
+### 2. KoBERT 모델
+-	Model: KoBERT
+한국어 버전의 자연어 처리 모델. 
+위키피디아나 뉴스 등에서 수집한 수백만 개 한국어 문장의 대규모 말뭉치(Corpus)를 학습하였으며, 한국어의 불규칙한 언어 변화의 특성을 반영하기 위해 데이터 기반 토큰화기법을 적용하여 기존 대비 27%의 토큰만으로 2.6% 이상의 성능 향상을 이끌어 낸 모델
+-	Max Seq Len: 26
+-	Loss Function: CrossEntropyLoss
+
+  ![KoBERT 모델 구조](README_assets/kobert.png)
+
+
+<br/>
+
+### 3. 추천 결과
+
+- 장소 입력시 카테고리와 예측 확률 반환
+
+  ![결과](README_assets/expenseCategoryResult.PNG)
+
+<br/>
+
 
 ## 📊 ERD 다이어그램
 
