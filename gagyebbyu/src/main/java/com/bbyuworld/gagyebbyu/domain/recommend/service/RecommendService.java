@@ -270,6 +270,7 @@ public class RecommendService {
 		long femaleSum = 0;
 
 		for (AssetLoan assetLoan : maleList) {
+			System.out.println(assetLoan.getAmount());
 			maleSum = (long)(assetLoan.getAmount() * (1
 				+ (0.01 * Double.parseDouble(String.valueOf(assetLoan.getInterestRate())) + 0.0075) * 5));
 		}
@@ -331,8 +332,8 @@ public class RecommendService {
 			user1.getUserId());
 		Long female_mortgage = assetLoanRepository.findTotalAmountByLoanTypeAndUser_UserId(LoanType.valueOf("주택담보대출"),
 			user2.getUserId());
-		compareRequestDto.setMortgage_loan_amount_female(female_mortgage);
-		compareRequestDto.setMortgage_loan_amount_male(male_mortgage);
+		compareRequestDto.setFemale_mortgage_loan_amount(female_mortgage == null ? 0 : female_mortgage);
+		compareRequestDto.setMale_mortgage_loan_amount(male_mortgage == null ? 0 : male_mortgage);
 
 		// Python 서버로 POST 요청 전송
 		try {
