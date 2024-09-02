@@ -18,7 +18,6 @@
 - 신혼 부부들의 공동 자산 관리 경험 부족
 - 경험 부족으로 인해 개인과 공동 재무의 균형 유지 어려움
 - 서로 다른 재무 습관 갈등 해소
--
 
 <br/>
 
@@ -226,7 +225,7 @@
 
 ## <img src="README_assets/가계쀼.png" alt="gagyebbyu Logo" width="35" /> 팀원소개
 
-| <img src="./README_assets/서지흔.png" width="100%" height="100"> | <img src="./README_assets/박정의.jpg" width="100%" height="100"> | <img src="./README_assets/유병주.png" width="100%" height="100"> | <img src="./README_assets/윤정섭.png" width="100%" height="100"> | <img src="./README_assets/임동길.png" width="100%" height="100"> |
+| <img src="./README_assets/서지흔.png" width="80" height="100"> | <img src="./README_assets/박정의.jpg" width="80" height="100"> | <img src="./README_assets/유병주.png" width="80" height="100"> | <img src="./README_assets/윤정섭.png" width="80" height="100"> | <img src="./README_assets/임동길.png" width="80" height="100"> |
 | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
 |                              서지흔                              |                              박정의                              |                              유병주                              |                              윤정섭                              |                              임동길                              |
 |                     팀장, Backend, Frontend                      |                      Backend, Frontend, AI                       |                        Backend, Frontend                         |                           AI, Backend                            |                     Infra, Backend, Frontend                     |
