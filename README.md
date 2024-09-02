@@ -81,7 +81,6 @@
 
   ![DeepFM 모델 구조](README_assets/deepFM.png)
 
-
 <br/>
 
 ### 3. 추천 결과
@@ -98,30 +97,29 @@
 - 추천 진행 시 2024년 9월 1일부터 적용되는 스트레스 DSR 반영
 
   ![image.png](README_assets/공동추천결과.png)
-  
+
 <br/>
 
 ## AI 지출 내역 카테고리 분류 자동화
 
 ### 1. 학습
+
 - 데이터: 한국 전화번호부 사이트 업체명
 - 라벨링: 총 19개
 
-
 ![라벨링](README_assets/label.PNG)
-
 
 <br/>
 
 ### 2. KoBERT 모델
--	Model: KoBERT
-한국어 버전의 자연어 처리 모델. 
-위키피디아나 뉴스 등에서 수집한 수백만 개 한국어 문장의 대규모 말뭉치(Corpus)를 학습하였으며, 한국어의 불규칙한 언어 변화의 특성을 반영하기 위해 데이터 기반 토큰화기법을 적용하여 기존 대비 27%의 토큰만으로 2.6% 이상의 성능 향상을 이끌어 낸 모델
--	Max Seq Len: 26
--	Loss Function: CrossEntropyLoss
 
-  ![KoBERT 모델 구조](README_assets/kobert.png)
+- Model: KoBERT
+  한국어 버전의 자연어 처리 모델.
+  위키피디아나 뉴스 등에서 수집한 수백만 개 한국어 문장의 대규모 말뭉치(Corpus)를 학습하였으며, 한국어의 불규칙한 언어 변화의 특성을 반영하기 위해 데이터 기반 토큰화기법을 적용하여 기존 대비 27%의 토큰만으로 2.6% 이상의 성능 향상을 이끌어 낸 모델
+- Max Seq Len: 26
+- Loss Function: CrossEntropyLoss
 
+![KoBERT 모델 구조](README_assets/kobert.png)
 
 <br/>
 
@@ -132,7 +130,6 @@
   ![결과](README_assets/expenseCategoryResult.PNG)
 
 <br/>
-
 
 ## 📊 ERD 다이어그램
 
@@ -150,12 +147,15 @@
 
 ![API명세서](README_assets/플로우차트.png)
 
-
 ## ⚙ 사용 기술
 
 **FE**
 
+<img src="https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white">
+
 <img src="https://img.shields.io/badge/Flutter-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+
+<img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
 
 **BE**
 
@@ -183,7 +183,7 @@
 
 **협업**
 
-<img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
+<img src="https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white">
 
 <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
@@ -226,6 +226,6 @@
 ## <img src="README_assets/가계쀼.png" alt="gagyebbyu Logo" width="35" /> 팀원소개
 
 | <img src="./README_assets/서지흔.png" width="80" height="100"> | <img src="./README_assets/박정의.jpg" width="80" height="100"> | <img src="./README_assets/유병주.png" width="80" height="100"> | <img src="./README_assets/윤정섭.png" width="80" height="100"> | <img src="./README_assets/임동길.png" width="80" height="100"> |
-| :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
-|                              서지흔                              |                              박정의                              |                              유병주                              |                              윤정섭                              |                              임동길                              |
-|                     팀장, Backend, Frontend                      |                      Backend, Frontend, AI                       |                        Backend, Frontend                         |                           AI, Backend                            |                     Infra, Backend, Frontend                     |
+| :------------------------------------------------------------: | :------------------------------------------------------------: | :------------------------------------------------------------: | :------------------------------------------------------------: | :------------------------------------------------------------: |
+|                             서지흔                             |                             박정의                             |                             유병주                             |                             윤정섭                             |                             임동길                             |
+|                    팀장, Backend, Frontend                     |                     Backend, Frontend, AI                      |                       Backend, Frontend                        |                          AI, Backend                           |                    Infra, Backend, Frontend                    |
