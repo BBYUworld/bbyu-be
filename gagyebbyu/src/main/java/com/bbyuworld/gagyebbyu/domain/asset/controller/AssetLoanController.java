@@ -56,7 +56,7 @@ public class AssetLoanController {
     @GetMapping("/order-remain-desc")
     @RequireJwtToken
     public ResponseEntity<List<AssetLoanDto>> getOrderByRemainAmountDesc() {
-        return ResponseEntity.ok(assetLoanService.getOrderByRemainAmountDesc(UserContext.getUserId()));
+        return ResponseEntity.ok(assetLoanService.getOrderByAmountDesc(UserContext.getUserId()));
     }
 
     /**
@@ -67,7 +67,7 @@ public class AssetLoanController {
     @GetMapping("/order-remain-asc")
     @RequireJwtToken
     public ResponseEntity<List<AssetLoanDto>> getOrderByRemainAmountAsc() {
-        return ResponseEntity.ok(assetLoanService.getOrderByRemainAmountAsc(UserContext.getUserId()));
+        return ResponseEntity.ok(assetLoanService.getOrderByAmountAsc(UserContext.getUserId()));
     }
 
     /**
@@ -102,7 +102,7 @@ public class AssetLoanController {
     @PostMapping("/update")
     @RequireJwtToken
     public ResponseEntity<Integer> updateIsEnded(@RequestParam("assetId") Long assetId, @RequestParam("remainedAmount") Long remainedAmount) {
-        return ResponseEntity.ok(assetLoanService.isEndedUpdate(assetId, remainedAmount, UserContext.getUserId()));
+        return ResponseEntity.ok(assetLoanService.updateAmountAndCheckIsEnded(assetId, remainedAmount, UserContext.getUserId()));
     }
 
     /**
@@ -131,7 +131,7 @@ public class AssetLoanController {
     @RequireJwtToken
     public ResponseEntity<Long> getSumRemainedAmount() {
         Long userId = UserContext.getUserId();
-        Long sum = assetLoanService.getUserRemainedAmount(userId);
+        Long sum = assetLoanService.getUserTotalAmount(userId);
         if(sum == null){
             return ResponseEntity.ok(0L);
         }

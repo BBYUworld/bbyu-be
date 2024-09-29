@@ -34,6 +34,7 @@ public class AssetLoanDto extends AssetDto {
 
     private String loanName;
     private BigDecimal interestRate;
-    private Long remainedAmount;
+    private Long initialAmount;
+    private Long currentAmount;
     private LoanType loan_type_name;
 }

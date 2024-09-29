@@ -22,8 +22,8 @@ public class AssetLoan extends Asset {
     @Column(name = "interest_rate", nullable = false)
     private BigDecimal interestRate;
 
-    @Column(name = "remained_amount", nullable = false)
-    private Long remainedAmount;
+    @Column(name = "initial_amount", nullable = false)
+    private Long initialAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "loan_type", nullable = false)
@@ -31,7 +31,7 @@ public class AssetLoan extends Asset {
 
     @PreUpdate
     public void preUpdate() {
-        if (this.remainedAmount <= 0) {
+        if (this.initialAmount <= 0) {
             this.setIsEnded(true);
             this.setIsHidden(true);
         }

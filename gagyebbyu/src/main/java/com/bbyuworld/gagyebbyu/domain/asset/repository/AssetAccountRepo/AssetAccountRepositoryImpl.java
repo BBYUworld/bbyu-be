@@ -1,6 +1,7 @@
-package com.bbyuworld.gagyebbyu.domain.asset.repository;
+package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo.AssetAccountRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,7 @@ import static com.bbyuworld.gagyebbyu.domain.asset.entity.QAssetAccount.assetAcc
 
 @Repository
 @RequiredArgsConstructor
-public class AssetAccountRepositoryImpl implements AssetAccountRepositoryCustom{
+public class AssetAccountRepositoryImpl implements AssetAccountRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
 

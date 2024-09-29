@@ -1,16 +1,12 @@
-package com.bbyuworld.gagyebbyu.domain.asset.repository;
+package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCardRepo;
 
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface AssetCardRepository extends JpaRepository<AssetCard, Long> {

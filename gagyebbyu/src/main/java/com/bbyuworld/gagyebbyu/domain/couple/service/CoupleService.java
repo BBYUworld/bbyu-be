@@ -5,7 +5,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Service;
 
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepo.AssetRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleConnectDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.dto.request.CoupleCreateDto;

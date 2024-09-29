@@ -16,7 +16,7 @@ import com.bbyuworld.gagyebbyu.domain.analysis.entity.AnnualAsset;
 import com.bbyuworld.gagyebbyu.domain.analysis.repository.AnnualAssetRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.QAsset;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepo.AssetRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;

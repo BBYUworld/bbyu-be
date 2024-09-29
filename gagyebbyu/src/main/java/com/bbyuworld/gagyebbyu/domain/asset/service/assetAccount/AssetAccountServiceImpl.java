@@ -3,7 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo.AssetAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

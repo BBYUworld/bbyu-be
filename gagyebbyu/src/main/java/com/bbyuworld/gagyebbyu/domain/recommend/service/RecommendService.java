@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.LoanType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepo.AssetLoanRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetAccount.AssetAccountService;
 import com.bbyuworld.gagyebbyu.domain.asset.service.assetCard.AssetCardService;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
@@ -65,7 +65,7 @@ public class RecommendService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendLoanRequestDto requestDto = new RecommendLoanRequestDto();
-		Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+		Long sum = assetLoanRepository.findTotalAmountByUser_UserId(userId);
 		Long totalDeposit = assetAccountService.getSumAmountByType(userId, AccountType.DEPOSIT) == null ? 0 :
 			assetAccountService.getSumAmountByType(userId, AccountType.DEPOSIT);
 		Long totalSavings = assetAccountService.getSumAmountByType(userId, AccountType.SAVINGS) == null ? 0 :
@@ -124,7 +124,7 @@ public class RecommendService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 		RecommendDepositRequestDto requestDto = new RecommendDepositRequestDto();
-		Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+		Long sum = assetLoanRepository.findTotalAmountByUser_UserId(userId);
 		int cardNum = assetCardService.getCardsNum(userId);
 		Long annualSpending = expenseService.getUserExpensesForYear(userId);
 
@@ -186,7 +186,7 @@ public class RecommendService {
 			.orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
 
 		RecommendSavingsRequestDto requestDto = new RecommendSavingsRequestDto();
-		Long sum = assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+		Long sum = assetLoanRepository.findTotalAmountByUser_UserId(userId);
 		int cardNum = assetCardService.getCardsNum(userId);
 		Long annualSpending = expenseService.getUserExpensesForYear(userId);
 

@@ -1,4 +1,4 @@
-package com.bbyuworld.gagyebbyu.domain.asset.repository;
+package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo;
 
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
 

@@ -1,4 +1,4 @@
-package com.bbyuworld.gagyebbyu.domain.asset.repository;
+package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo;
 
 import com.bbyuworld.gagyebbyu.domain.analysis.repository.AnnualAssetRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.logging.Logger;
 
 import static com.bbyuworld.gagyebbyu.domain.asset.entity.QAsset.asset;

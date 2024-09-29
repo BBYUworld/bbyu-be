@@ -1,7 +1,8 @@
-package com.bbyuworld.gagyebbyu.domain.asset.repository;
+package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo;
 
 import java.util.List;
 
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo.AssetAccountRepositoryCustom;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -20,12 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bbyuworld.gagyebbyu.domain.asset.dto.CreateDepositDto;
-import com.bbyuworld.gagyebbyu.domain.asset.dto.CreateSavingDto;
-import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
-import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepo.AssetRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;

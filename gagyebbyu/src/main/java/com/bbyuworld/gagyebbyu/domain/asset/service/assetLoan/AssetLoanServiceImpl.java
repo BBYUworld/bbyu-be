@@ -2,7 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetLoan;
 
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetLoan;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetLoanRepo.AssetLoanRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
 import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
@@ -27,7 +27,7 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     /**
      * 사용자의 특정 loan 상품을 불러오기 위함
      *
-     * @param userId 모든건 사용자 id 기반
+     * @param userId  모든건 사용자 id 기반
      * @param assetId 특정 assetId
      * @return 특정 loan 상품
      */
@@ -51,36 +51,10 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     }
 
     /**
-     * 남은 대출금 정렬 내림차순
+     * 현재 대출금 정렬 내림차순
      *
      * @param userId 모든건 사용자 id 기반
      * @return 갚을 대출액이 많은 순 정렬
-     */
-    @Override
-    public List<AssetLoanDto> getOrderByRemainAmountDesc(Long userId) {
-        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByRemainedAmountDesc(userId).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 남은 대출금 정렬 오름차순
-     *
-     * @param userId 모든건 사용자 id 기반
-     * @return 갚을 대출액이 적은ㄴ 순 정렬
-     */
-    @Override
-    public List<AssetLoanDto> getOrderByRemainAmountAsc(Long userId) {
-        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByRemainedAmountAsc(userId).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 대출금이 많은순 정렬
-     *
-     * @param userId 모든건 사용자 id 기반
-     * @return 대출 리스트
      */
     @Override
     public List<AssetLoanDto> getOrderByAmountDesc(Long userId) {
@@ -90,9 +64,10 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     }
 
     /**
-     * 대출금이 적은 순 정렬
+     * 현재 대출금 정렬 오름차순
+     *
      * @param userId 모든건 사용자 id 기반
-     * @return 대출 리스트
+     * @return 갚을 대출액이 적은 순 정렬
      */
     @Override
     public List<AssetLoanDto> getOrderByAmountAsc(Long userId) {
@@ -102,16 +77,42 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     }
 
     /**
-     * 대출 다 갚을 경우 hidden 변경
+     * 초기 대출금이 많은순 정렬
      *
-     * @param assetId 특정 assetId
-     * @param remainedAmount 남은 대출금
      * @param userId 모든건 사용자 id 기반
-     * @return hidden 을 변경
+     * @return 대출 리스트
      */
     @Override
-    public int isEndedUpdate(Long assetId, Long remainedAmount, Long userId) {
-        return assetLoanRepository.updateRemainedAmountAndCheckIsEnded(assetId, remainedAmount, UserContext.getUserId());
+    public List<AssetLoanDto> getOrderByInitialAmountDesc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByInitialAmountDesc(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 초기 대출금이 적은 순 정렬
+     *
+     * @param userId 모든건 사용자 id 기반
+     * @return 대출 리스트
+     */
+    @Override
+    public List<AssetLoanDto> getOrderByInitialAmountAsc(Long userId) {
+        return assetLoanRepository.findAllByUser_UserIdAndIsEndedFalseOrderByInitialAmountAsc(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 대출 현재 금액 업데이트 및 종료 여부 확인
+     *
+     * @param assetId 특정 assetId
+     * @param amount  현재 대출금
+     * @param userId  모든건 사용자 id 기반
+     * @return 업데이트된 행의 수
+     */
+    @Override
+    public int updateAmountAndCheckIsEnded(Long assetId, Long amount, Long userId) {
+        return assetLoanRepository.updateAmountAndCheckIsEnded(assetId, amount, UserContext.getUserId());
     }
 
     /**
@@ -128,12 +129,12 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     }
 
     @Override
-    public AssetLoanDto getTargetAssetLoan(Long assetId){
+    public AssetLoanDto getTargetAssetLoan(Long assetId) {
         return convertToDto(assetLoanRepository.findByAssetId(assetId));
     }
 
     /**
-     * 부부 공콩의 대출 반환
+     * 부부 공통의 대출 반환
      *
      * @param userId 사용자 id
      * @return 사용자와 사용자 부부의 대출 반환
@@ -150,14 +151,15 @@ public class AssetLoanServiceImpl implements AssetLoanService {
     }
 
     /**
-     * @param userId
-     * @return
+     * 사용자의 현재 총 대출 금액 조회
+     *
+     * @param userId 사용자 id
+     * @return 현재 총 대출 금액
      */
     @Override
-    public Long getUserRemainedAmount(Long userId) {
-        return assetLoanRepository.sumRemainedAmountByUser_UserIdAndIsHiddenFalse(userId);
+    public Long getUserTotalAmount(Long userId) {
+        return assetLoanRepository.findTotalAmountByUser_UserId(userId);
     }
-
 
     private AssetLoanDto convertToDto(AssetLoan assetLoan) {
         return AssetLoanDto.builder()
@@ -165,9 +167,9 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .userId(assetLoan.getUser().getUserId())
                 .coupleId(assetLoan.getCouple() != null ? assetLoan.getCouple().getCoupleId() : null)
                 .user1Id(assetLoan.getCouple() != null ? assetLoan.getCouple().getUser1().getUserId() : null)
-                .user2Id(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser2().getUserId() : null)
-                .user1Name(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser1().getName() : null)
-                .user2Name(assetLoan.getCouple() != null ?assetLoan.getCouple().getUser2().getName() : null)
+                .user2Id(assetLoan.getCouple() != null ? assetLoan.getCouple().getUser2().getUserId() : null)
+                .user1Name(assetLoan.getCouple() != null ? assetLoan.getCouple().getUser1().getName() : null)
+                .user2Name(assetLoan.getCouple() != null ? assetLoan.getCouple().getUser2().getName() : null)
                 .type(String.valueOf(assetLoan.getType()))
                 .bankName(assetLoan.getBankName())
                 .bankCode(assetLoan.getBankCode())
@@ -175,12 +177,6 @@ public class AssetLoanServiceImpl implements AssetLoanService {
                 .createdAt(assetLoan.getCreatedAt())
                 .updatedAt(assetLoan.getUpdatedAt())
                 .isEnded(assetLoan.getIsEnded())
-                .isHidden(assetLoan.getIsHidden())
-                // AssetLoan 특정 필드
-                .loanName(assetLoan.getLoanName())
-                .interestRate(assetLoan.getInterestRate())
-                .remainedAmount(assetLoan.getRemainedAmount())
-                .loan_type_name(assetLoan.getLoanType())
                 .build();
     }
 }

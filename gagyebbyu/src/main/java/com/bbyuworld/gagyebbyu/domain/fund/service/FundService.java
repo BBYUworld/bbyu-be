@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo.AssetAccountRepository;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.couple.repository.CoupleRepository;
 import com.bbyuworld.gagyebbyu.domain.fund.dto.request.FundCreateDto;

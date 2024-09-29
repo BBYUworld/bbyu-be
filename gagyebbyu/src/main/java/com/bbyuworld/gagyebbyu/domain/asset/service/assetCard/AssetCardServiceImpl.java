@@ -3,7 +3,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.service.assetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetCardDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetCard;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.CardType;
-import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCardRepository;
+import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCardRepo.AssetCardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

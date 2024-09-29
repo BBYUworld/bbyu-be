@@ -9,15 +9,15 @@ public interface AssetLoanService {
     Optional<AssetLoanDto> getUserTargetLoan(Long userId, Long assetId);
     List<AssetLoanDto> getUserLoans(Long userId);
 
-    /* 남은 금액별 정렬 */
-    List<AssetLoanDto> getOrderByRemainAmountDesc(Long userId);
-    List<AssetLoanDto> getOrderByRemainAmountAsc(Long userId);
-
-    /* 대출금 정렬 */
+    /* 현재 금액별 정렬 */
     List<AssetLoanDto> getOrderByAmountDesc(Long userId);
     List<AssetLoanDto> getOrderByAmountAsc(Long userId);
 
-    int isEndedUpdate(Long assetId, Long remainedAmount,Long userId);
+    /* 초기 대출금 정렬 */
+    List<AssetLoanDto> getOrderByInitialAmountDesc(Long userId);
+    List<AssetLoanDto> getOrderByInitialAmountAsc(Long userId);
+
+    int updateAmountAndCheckIsEnded(Long assetId, Long amount, Long userId);
 
     List<AssetLoanDto> getEndedLoans(Long userId);
 
@@ -25,5 +25,5 @@ public interface AssetLoanService {
 
     List<AssetLoanDto> getCoupleAssetLoans(Long userId);
 
-    Long getUserRemainedAmount(Long userId);
+    Long getUserTotalAmount(Long userId);
 }
