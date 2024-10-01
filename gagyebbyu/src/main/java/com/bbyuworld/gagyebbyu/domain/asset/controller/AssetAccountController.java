@@ -98,6 +98,21 @@ public class AssetAccountController {
         }
     }
 
+    /**
+     * 입출금 계좌, 예금, 적금, (주식?) 의 자산 목록을 반환
+     *
+     * @return List 형식의 예적금, 입출금, 주식 계좌들
+     */
+    @GetMapping("/couple")
+    @RequireJwtToken
+    public ResponseEntity<List<AssetAccountDto>> getCoupleAssetList( ) {
+        try {
+            return ResponseEntity.ok(assetAccountService.getCoupleAssetAccounts(UserContext.getUserId()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/deposit")
     @RequireJwtToken
     public ResponseEntity<String> insertNewDepositAccount(@RequestBody Map<String, String> map){

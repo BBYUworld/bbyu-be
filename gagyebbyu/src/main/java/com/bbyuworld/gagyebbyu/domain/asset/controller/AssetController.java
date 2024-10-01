@@ -2,6 +2,8 @@ package com.bbyuworld.gagyebbyu.domain.asset.controller;
 
 import java.util.List;
 
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,6 +65,20 @@ public class AssetController {
 	public Long getCoupleAssetAccountSum() {
 		Long userId = UserContext.getUserId();
 		return assetService.getSumCoupleAccountAssets(userId);
+	}
+
+	@GetMapping("/couple/account/{assetType}")
+	@RequireJwtToken
+	public ResponseEntity<List<AssetDto>> getCoupleAssetList(@PathVariable String assetType) {
+		Long userId = UserContext.getUserId();
+		AssetType type;
+		try {
+			type = AssetType.valueOf(assetType.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		List<AssetDto> assets = assetService.getCoupleAssetList(userId, type);
+		return ResponseEntity.ok(assets);
 	}
 
 	@PatchMapping("/{assetId}/visibility")

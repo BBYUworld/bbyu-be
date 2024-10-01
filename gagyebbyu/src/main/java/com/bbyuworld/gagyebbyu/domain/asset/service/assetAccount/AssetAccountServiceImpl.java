@@ -4,6 +4,10 @@ import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetAccountDto;
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.enums.AccountType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepo.AssetAccountRepository;
+import com.bbyuworld.gagyebbyu.domain.user.entity.User;
+import com.bbyuworld.gagyebbyu.domain.user.repository.UserRepository;
+import com.bbyuworld.gagyebbyu.global.error.ErrorCode;
+import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AssetAccountServiceImpl implements AssetAccountService {
     private final AssetAccountRepository assetAccountRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<AssetAccountDto> getAllAssetAccounts(Long userId) {
@@ -39,6 +44,20 @@ public class AssetAccountServiceImpl implements AssetAccountService {
     @Override
     public List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String bankName, AccountType accountType) {
         return assetAccountRepository.findByUser_UserIdAndBankNameContainingAndAccountTypeAndIsHiddenFalseOrderByAmountDesc(userId, bankName, accountType).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<AssetAccountDto> getCoupleAssetAccounts(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        return assetAccountRepository.findAllByCouple_CoupleIdAndIsHiddenFalse(user.getCoupleId()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

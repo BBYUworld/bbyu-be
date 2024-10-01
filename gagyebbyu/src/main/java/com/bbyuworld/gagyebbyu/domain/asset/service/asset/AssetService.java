@@ -7,6 +7,7 @@ import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetCardDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetLoanDto;
 import com.bbyuworld.gagyebbyu.domain.asset.dto.AssetResponseDto;
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 
 public interface AssetService {
@@ -25,6 +26,9 @@ public interface AssetService {
 	void updateUserAssetsToCouple(Couple couple, Long user1Id, Long user2Id);
 
 	Long getSumCoupleAccountAssets(Long userId);
+
+	/*타입에 맞는 자산 리스트 출력*/
+	List<AssetDto> getCoupleAssetList(Long coupleId, AssetType assetType);
 
 	/* INSERT 이 있어야 함 */
 	boolean insertNewLoan(AssetLoanDto assetLoanDtoDto, Long userId);

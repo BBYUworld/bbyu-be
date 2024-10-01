@@ -162,6 +162,20 @@ public class AssetServiceImpl implements AssetService {
     }
 
     /**
+     * @param userId 커플 번호
+     * @return 자산 타입에 맞는 자산 목록 반환
+     */
+    @Override
+    public List<AssetDto> getCoupleAssetList(Long userId,AssetType assetType) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        return assetRepository.findAllByCouple_CoupleIdAndTypeAndIsHiddenFalse(user.getCoupleId(),assetType).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 자산 보이기 변경 -> is_hidden 변경 -> false: 자산 보임 / true: 자산 숨김& 삭제
      *
      * @param assetId  사용자의 번호

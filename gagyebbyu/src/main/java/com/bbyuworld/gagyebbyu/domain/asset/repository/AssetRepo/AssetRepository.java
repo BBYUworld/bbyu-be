@@ -2,6 +2,7 @@ package com.bbyuworld.gagyebbyu.domain.asset.repository.AssetRepo;
 
 import java.util.List;
 
+import com.bbyuworld.gagyebbyu.domain.asset.enums.AssetType;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo.AssetCustomRepository;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetCustomRepo.AssetRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,6 +43,9 @@ public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustom
 	Long getUserSumamount(@Param("userId") Long userId, @Param("type") String type);
 
 
+	/*사용자의 자산 타입에 맞는 자산 리스트 출력*/
+	List<Asset> findAllByCouple_CoupleIdAndTypeAndIsHiddenFalse(Long coupleId, AssetType type);
+
 	/* 자산 추가 -> type 에 맞는 asset_ 하위 테이블에도 추가 save 써서 넘어가기 */
 
 	/* 자산 보이기 변경 -> is_hidden 변경 -> false: 자산 보임 / true: 자산 숨김& 삭제 */
@@ -55,12 +59,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>, AssetCustom
 	void updateAssetsByCouple_CoupleId(@Param("coupleId") Long coupleId, @Param("user1Id") Long user1Id,
 		@Param("user2Id") Long user2Id);
 
-	/**
-	 * 사용자가 가입한 loan의 type name 이 주택담보대출인 값 출력
-	 *
-	 * @param userId 사용자 ID
-	 * @return 조건에 맞는 계좌 목록
-	 */
+
 
 	//    @Query("select sum(a.amount) from AssetLoan a where a.user.userId=:userId and a.loanTypeName=:loanType")
 	//    Long getUsersMortgate(@Param("userId") long userId, @Param("loanType") LoanType loanType);

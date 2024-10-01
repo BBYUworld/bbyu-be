@@ -88,4 +88,12 @@ public interface AssetAccountRepository extends JpaRepository<AssetAccount, Long
 		@Param("userId") Long userId,
 		@Param("accountType") AccountType accountType
 	);
+
+	/**
+	 * 커플아이디에 맞춰 AssetAccount 가져오기
+	 *
+	 * @param coupleId
+	 * @return
+	 */
+	List<AssetAccount> findAllByCouple_CoupleIdAndIsHiddenFalse(Long coupleId);
 }

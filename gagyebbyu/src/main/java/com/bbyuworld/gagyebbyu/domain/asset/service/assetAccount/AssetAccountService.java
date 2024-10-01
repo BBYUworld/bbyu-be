@@ -12,5 +12,7 @@ public interface AssetAccountService {
     List<AssetAccountDto> getAssetAccountsByType(Long userId, AccountType accountType);
     List<AssetAccountDto> getAssetAccountByBankAndType(Long userId, String Bank, AccountType accountType);
 
+    List<AssetAccountDto> getCoupleAssetAccounts(Long userId);
+
     Long getSumAmountByType(Long userId, AccountType accountType);
 }
