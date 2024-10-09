@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import com.bbyuworld.gagyebbyu.domain.asset.entity.AssetAccount;
 import com.bbyuworld.gagyebbyu.domain.asset.repository.AssetAccountRepository;
@@ -31,7 +35,6 @@ import com.bbyuworld.gagyebbyu.global.error.type.BadRequestException;
 import com.bbyuworld.gagyebbyu.global.error.type.DataNotFoundException;
 import com.bbyuworld.gagyebbyu.global.util.ApiPost;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,7 +82,11 @@ public class FundService {
 
 	}
 
-	@Transactional
+	@Transactional(
+		isolation = Isolation.REPEATABLE_READ,
+		propagation	 = Propagation.REQUIRED,
+		rollbackFor = { Exception.class }
+	)
 	public FundStatusDto createFundTransaction(long fundId, long userId,
 		FundTransactionCreateDto fundTransactionCreateDto) {
 
