@@ -1,5 +1,6 @@
 package com.bbyuworld.gagyebbyu.domain.analysis.entity;
 
+import com.bbyuworld.gagyebbyu.domain.analysis.dto.response.CoupleExpenseResultDto;
 import com.bbyuworld.gagyebbyu.domain.couple.entity.Couple;
 import com.bbyuworld.gagyebbyu.domain.expense.entity.Category;
 import com.bbyuworld.gagyebbyu.domain.user.entity.User;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -57,5 +59,19 @@ public class MonthlyExpense {
 
 	@Column(name = "couple_month_expense", nullable = false)
 	private long coupleMonthExpense;
+
+	@Builder
+	public MonthlyExpense(Couple couple, int month, int year,
+		CoupleExpenseResultDto coupleExpenseResultDto) {
+		this.couple = couple;
+		this.month = month;
+		this.year = year;
+		this.anotherCoupleMonthExpenseAvg = coupleExpenseResultDto.getAnotherCoupleMonthExpenseAvg();
+		this.coupleMonthExpense = coupleExpenseResultDto.getCoupleMonthExpense();
+		this.monthlyIncome = coupleExpenseResultDto.getMonthlyIncome();
+		this.averageAge = coupleExpenseResultDto.getAverageAge();
+		this.category = coupleExpenseResultDto.getCategory();
+
+	}
 
 }
